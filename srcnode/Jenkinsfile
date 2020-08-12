@@ -1,0 +1,45 @@
+node {
+    currentBuild.result = "SUCCESS"
+    try {
+        stage('Checkout'){
+                checkout scm
+            }
+//            stage("composer_update") {
+//                // Run composer update
+//                sh 'composer update'
+//            }
+//            stage("unittest") {
+//                // Run PHPUnit
+//                sh 'vendor/bin/phpunit'
+//            }
+            // Create new deployment assets
+            switch (env.BRANCH_NAME) {
+                case "master":
+                    stage("deploycode") {
+                        sh 'rsync -avzhP --delete --exclude=.git/ --exclude=Jenkinsifle $WORKSPACE/ root@192.168.1.112:/var/www/example.local/'
+                    //    sh 'ssh root@210.211.125.213 "chown -R nginx:nginx /var/www/example.local"'
+                    }
+                    break
+                case "develop":
+                    stage("deploycode") {
+                        sh 'rsync -azhP -e "ssh -p 2222" --exclude=.git/ --exclude=.vscode --exclude=Jenkinsifle $WORKSPACE/ educa@113.190.234.17:/home/educa/educa.vn/nodejs/service'
+                        sh 'ssh educa@113.190.234.17 -p 2222 "cd /home/educa/educa.vn/nodejs/service && npm install"'
+                        sh 'ssh educa@113.190.234.17 -p 2222 "pm2 restart service"'
+                    }
+                    break
+                default:
+                    // No deployments for other branches
+                    break
+            }
+    }
+    catch (err) {
+            currentBuild.result = "FAILURE"
+
+                mail body: "project build error is here: ${env.BUILD_URL}" ,
+                from: 'dungnv@edupiakid.vn',
+                replyTo: 'dungnv@edupiakid.vn',
+                subject: 'project build failed',
+                to: 'dungnv@ditech.vn'
+            throw err
+        }    
+}

@@ -1,0 +1,2150 @@
+{
+    "tray": {
+        "true": [
+            "tray"
+        ],
+        "false": [
+            "play",
+            "trey",
+            "pray",
+            "ray's",
+            "stray",
+            "spray",
+            "chase",
+            "trace",
+            "troy",
+            "trade"
+        ]
+    },
+    "plane": {
+        "true": [
+            "plane"
+        ],
+        "false": [
+            "play",
+            "plum",
+            "planes",
+            "plain",
+            "plant",
+            "plan",
+            "planner"
+        ]
+    },
+    "play": {
+        "true": [
+            "play"
+        ],
+        "false": []
+    },
+    "feather": {
+        "true": [
+            "feather"
+        ],
+        "false": [
+            "fathom",
+            "weather",
+            "forever",
+            "fisa",
+            "seether"
+        ]
+    },
+    "elbow": {
+        "true": [
+            "elbow"
+        ],
+        "false": [
+            "ebo",
+            "able",
+            "purple"
+        ]
+    },
+    "egg": {
+        "true": [
+            "egg"
+        ],
+        "false": [
+            "add",
+            "iggy",
+            "act",
+            "heck",
+            "icky"
+        ]
+    },
+    "octopus": {
+        "true": [
+            "octopus"
+        ],
+        "false": [
+            "octopi",
+            "octave",
+            "opposite",
+            "october",
+            "occupy",
+            "apposite",
+            "optic"
+        ]
+    },
+    "ring": {
+        "true": [
+            "ring"
+        ],
+        "false": [
+            "bring",
+            "spring"
+        ]
+    },
+    "yatch": {
+        "true": [
+            "yatch"
+        ],
+        "false": [
+            "jeff",
+            "yeah",
+            "youch",
+            "judge",
+            "yacht"
+        ]
+    },
+    "ostric": {
+        "true": [
+            "ostric"
+        ],
+        "false": [
+            "okay",
+            "oscar",
+            "austra",
+            "oster"
+        ]
+    },
+    "kangaroo": {
+        "true": [
+            "kangaroo"
+        ],
+        "false": [
+            "kanga",
+            "kangoo"
+        ]
+    },
+    "vase": {
+        "true": [
+            "vase"
+        ],
+        "false": [
+            "vans",
+            "vasa",
+            "wake",
+            "versa",
+            "based",
+            "wase",
+            "waze",
+            "vice",
+            "vise",
+            "base"
+        ]
+    },
+    "branch": {
+        "true": [
+            "branch"
+        ],
+        "false": [
+            "but",
+            "barack",
+            "french",
+            "brands",
+            "braids",
+            "ranch"
+        ]
+    },
+    "three": {
+        "true": [
+            "three"
+        ],
+        "false": [
+            "free",
+            "tree",
+            "i",
+            "is",
+            "my",
+            "three.3"
+        ]
+    },
+    "pea": {
+        "true": [
+            "pea"
+        ],
+        "false": [
+            "p",
+            "be",
+            "pee"
+        ]
+    },
+    "cheese": {
+        "true": [
+            "cheese"
+        ],
+        "false": [
+            "chase",
+            "trees",
+            "chess",
+            "tree"
+        ]
+    },
+    "robot": {
+        "true": [
+            "robot"
+        ],
+        "false": [
+            "remote",
+            "rabbit",
+            "robots",
+            "redbox",
+            "robo"
+        ]
+    },
+    "tea": {
+        "true": [
+            "tea"
+        ],
+        "false": [
+            "t",
+            "tee"
+        ]
+    },
+    "fan": {
+        "true": [
+            "fan"
+        ],
+        "false": [
+            "ben",
+            "fin",
+            "dan",
+            "can",
+            "fanny",
+            "and",
+            "find",
+            "end",
+            "10"
+        ]
+    },
+    "pears": {
+        "true": [
+            "pears"
+        ],
+        "false": [
+            "peers",
+            "dear",
+            "pierce",
+            "beer",
+            "fear"
+        ]
+    },
+    "road": {
+        "true": [
+            "road"
+        ],
+        "false": [
+            "wrote",
+            "roll",
+            "raw",
+            "rhode",
+            "rote"
+        ]
+    },
+    "cake": {
+        "true": [
+            "cake"
+        ],
+        "false": [
+            "cut",
+            "take"
+        ]
+    },
+    "rabbit": {
+        "true": [
+            "rabbit"
+        ],
+        "false": [
+            "rabbits",
+            "rabbi"
+        ]
+    },
+    "jam": {
+        "true": [
+            "jam"
+        ],
+        "false": [
+            "jazz",
+            "gem",
+            "damn"
+        ]
+    },
+    "pen": {
+        "true": [
+            "pen"
+        ],
+        "false": [
+            "10",
+            "pend",
+            "1010"
+        ]
+    },
+    "sweater": {
+        "true": [
+            "sweater"
+        ],
+        "false": [
+            "sweeter",
+            "switter",
+            "switch",
+            "sweat",
+            "weather",
+            "sweet",
+            "swear"
+        ]
+    },
+    "sky": {
+        "true": [
+            "sky"
+        ],
+        "false": [
+            "stye",
+            "sty",
+            "style"
+        ]
+    },
+    "eleplant": {
+        "true": [
+            "eleplant"
+        ],
+        "false": [
+            "elephants",
+            "elephant.stephen"
+        ]
+    },
+    "hippo": {
+        "true": [
+            "hippo"
+        ],
+        "false": [
+            "hipaa",
+            "triple"
+        ]
+    },
+    "peach": {
+        "true": [
+            "peach"
+        ],
+        "false": [
+            "beach",
+            "peace",
+            "pitch"
+        ]
+    },
+    "being": {
+        "true": [
+            "being"
+        ],
+        "false": [
+            "biang",
+            "beef",
+            "bing"
+        ]
+    },
+    "baker": {
+        "true": [
+            "baker"
+        ],
+        "false": [
+            "biker",
+            "picture",
+            "bike",
+            "wicca",
+            "wake",
+            "speaker"
+        ]
+    },
+    "tiger": {
+        "true": [
+            "tiger"
+        ],
+        "false": [
+            "tide",
+            "tyga",
+            "guy",
+            "tyler",
+            "tiga",
+            "tega"
+        ]
+    },
+    "lion": {
+        "true": [
+            "lion"
+        ],
+        "false": [
+            "line",
+            "lee",
+            "lemon",
+            "liar",
+            "lions",
+            "light"
+        ]
+    },
+    "dancer": {
+        "true": [
+            "dancer"
+        ],
+        "false": [
+            "cancel",
+            "tessa",
+            "tensor",
+            "tenser",
+            "dance"
+        ]
+    },
+    "coast": {
+        "true": [
+            "coast"
+        ],
+        "false": [
+            "coached",
+            "codes",
+            "coat",
+            "coach"
+        ]
+    },
+    "driver": {
+        "true": [
+            "driver"
+        ],
+        "false": [
+            "dry",
+            "drive"
+        ]
+    },
+    "slide": {
+        "true": [
+            "slide"
+        ],
+        "false": [
+            "sly",
+            "slider",
+            "side",
+            "slight",
+            "fly",
+            "light"
+        ]
+    },
+    "plant": {
+        "true": [
+            "plant"
+        ],
+        "false": [
+            "plants",
+            "plans",
+            "planned",
+            "plan"
+        ]
+    },
+    "bridge": {
+        "true": [
+            "bridge"
+        ],
+        "false": [
+            "britt",
+            "bright",
+            "preach",
+            "breach"
+        ]
+    },
+    "breakfast": {
+        "true": [
+            "breakfast"
+        ],
+        "false": [
+            "brakes",
+            "break"
+        ]
+    },
+    "dog": {
+        "true": [
+            "dog"
+        ],
+        "false": [
+            "duck",
+            "knock"
+        ]
+    },
+    "brother": {
+        "true": [
+            "brother"
+        ],
+        "false": [
+            "bratz",
+            "barack",
+            "broad",
+            "brat"
+        ]
+    },
+    "coach": {
+        "true": [
+            "coach"
+        ],
+        "false": [
+            "caught",
+            "code",
+            "couch",
+            "coat"
+        ]
+    },
+    "cup": {
+        "true": [
+            "cup"
+        ],
+        "false": [
+            "couple",
+            "coupons",
+            "cap"
+        ]
+    },
+    "chocolate": {
+        "true": [
+            "chocolate"
+        ],
+        "false": [
+            "chocolates"
+        ]
+    },
+    "alligator": {
+        "true": [
+            "alligator"
+        ],
+        "false": [
+            "allegation",
+            "elevator"
+        ]
+    },
+    "queen": {
+        "true": [
+            "queen"
+        ],
+        "false": [
+            "green",
+            "teen"
+        ]
+    },
+    "throat": {
+        "true": [
+            "throat"
+        ],
+        "false": [
+            "truth",
+            "Trust",
+            "throats"
+        ]
+    },
+    "thumb": {
+        "true": [
+            "thumb"
+        ],
+        "false": [
+            "some",
+            "tumblr",
+            "thumbs"
+        ]
+    },
+    "ostrick": {
+        "true": [
+            "ostrick"
+        ],
+        "false": [
+            "oscar",
+            "mavis",
+            "ocean",
+            "ostrich",
+            "austrian",
+            "astric"
+        ]
+    },
+    "yellow": {
+        "true": [
+            "yellow"
+        ],
+        "false": [
+            "joey",
+            "yella",
+            "jello",
+            "jell-o"
+        ]
+    },
+    "plate": {
+        "true": [
+            "plate"
+        ],
+        "false": [
+            "play",
+            "date",
+            "blood",
+            "late",
+            "blet"
+        ]
+    },
+    "sun": {
+        "true": [
+            "sun"
+        ],
+        "false": [
+            "san",
+            "sunday",
+            "stunt",
+            "send",
+            "fun"
+        ]
+    },
+    "sea": {
+        "true": [
+            "sea"
+        ],
+        "false": [
+            "seashell",
+            "seesaw",
+            "see",
+            "cc",
+            "c",
+            "seaside"
+        ]
+    },
+    "trolley": {
+        "true": [
+            "trolley"
+        ],
+        "false": [
+            "chula",
+            "chili",
+            "chill",
+            "joey",
+            "charles",
+            "trelly",
+            "truly",
+            "trilogy",
+            "trolli"
+        ]
+    },
+    "iguana": {
+        "true": [
+            "iguana"
+        ],
+        "false": [
+            "tijuana",
+            "equinox",
+            "wanna",
+            "equine"
+        ]
+    },
+    "top": {
+        "true": [
+            "top"
+        ],
+        "false": [
+            "pop",
+            "stop"
+        ]
+    },
+    "watermelon": {
+        "true": [
+            "watermelon"
+        ],
+        "false": [
+            "tamela",
+            "guatemala",
+            "megan",
+            "melon",
+            "water",
+            "lemon",
+            "megalodon",
+            "waterman"
+        ]
+    },
+    "shorts": {
+        "true": [
+            "shorts"
+        ],
+        "false": [
+            "shut",
+            "sharks",
+            "sure",
+            "stop",
+            "shots",
+            "shop",
+            "shot",
+            "shart",
+            "short"
+        ]
+    },
+    "map": {
+        "true": [
+            "map"
+        ],
+        "false": [
+            "maple",
+            "man"
+        ]
+    },
+    "scooter": {
+        "true": [
+            "scooter"
+        ],
+        "false": [
+            "scotta",
+            "scoot",
+            "skeleton",
+            "scott",
+            "scotter",
+            "sculptor"
+        ]
+    },
+    "tooth": {
+        "true": [
+            "tooth"
+        ],
+        "false": [
+            "toot",
+            "took",
+            "tube",
+            "twist"
+        ]
+    },
+    "key": {
+        "true": [
+            "key"
+        ],
+        "false": [
+            "keyboard",
+            "keith",
+            "tea",
+            "t"
+        ]
+    },
+    "table": {
+        "true": [
+            "table"
+        ],
+        "false": [
+            "type",
+            "tale",
+            "tablet",
+            "taboo",
+            "tablets"
+        ]
+    },
+    "hand": {
+        "true": [
+            "hand"
+        ],
+        "false": [
+            "hun",
+            "hang",
+            "hadn't",
+            "hen",
+            "hemp",
+            "and",
+            "10"
+        ]
+    },
+    "stoves": {
+        "true": [
+            "stoves"
+        ],
+        "false": [
+            "style.stove",
+            "stores"
+        ]
+    },
+    "bread": {
+        "true": [
+            "bread"
+        ],
+        "false": [
+            "been",
+            "barrette.ratner",
+            "brought",
+            "brett.brett",
+            "breath",
+            "barrette"
+        ]
+    },
+    "skiing": {
+        "true": [
+            "skiing"
+        ],
+        "false": [
+            "skin",
+            "skip",
+            "ski",
+            "skinny",
+            "secane",
+            "skate"
+        ]
+    },
+    "blouse": {
+        "true": [
+            "blouse"
+        ],
+        "false": [
+            "loud",
+            "louder",
+            "blues",
+            "plows",
+            "blount"
+        ]
+    },
+    "question": {
+        "true": [
+            "question"
+        ],
+        "false": [
+            "equestrian",
+            "questran",
+            "fashion"
+        ]
+    },
+    "grandmother": {
+        "true": [
+            "grandmother"
+        ],
+        "false": [
+            "grandma",
+            "grandma's"
+        ]
+    },
+    "vest": {
+        "true": [
+            "vest"
+        ],
+        "false": [
+            "best",
+            "west",
+            "vets",
+            "bad"
+        ]
+    },
+    "trousers": {
+        "true": [
+            "trousers"
+        ],
+        "false": [
+            "treasures",
+            "travelers",
+            "trailers",
+            "trouser",
+            "treasure"
+        ]
+    },
+    "black": {
+        "true": [
+            "black"
+        ],
+        "false": [
+            "blanche",
+            "back"
+        ]
+    },
+    "maker": {
+        "true": [
+            "maker"
+        ],
+        "false": [
+            "makeup",
+            "mecca",
+            "make",
+            "makes"
+        ]
+    },
+    "nest": {
+        "true": [
+            "nest"
+        ],
+        "false": [
+            "next",
+            "west",
+            "nestle",
+            "net"
+        ]
+    },
+    "shoes": {
+        "true": [
+            "shoes"
+        ],
+        "false": [
+            "choose",
+            "shoe",
+            "susie",
+            "shu's"
+        ]
+    },
+    "food": {
+        "true": [
+            "food"
+        ],
+        "false": [
+            "put",
+            "good",
+            "fruit",
+            "would"
+        ]
+    },
+    "boat": {
+        "true": [
+            "boat"
+        ],
+        "false": [
+            "but",
+            "boats",
+            "both",
+            "bolt"
+        ]
+    },
+    "fly": {
+        "true": [
+            "fly"
+        ],
+        "false": [
+            "fine",
+            "find",
+            "flea"
+        ]
+    },
+    "watch": {
+        "true": [
+            "watch"
+        ],
+        "false": [
+            "watches",
+            "what's",
+            "what"
+        ]
+    },
+    "fish": {
+        "true": [
+            "fish"
+        ],
+        "false": [
+            "feastpeace",
+            "she's"
+        ]
+    },
+    "sweets": {
+        "true": [
+            "sweets"
+        ],
+        "false": [
+            "squeeze",
+            "sweats",
+            "switch",
+            "swift",
+            "peach",
+            "sweat",
+            "squid",
+            "sweet",
+            "squishies"
+        ]
+    },
+    "under": {
+        "true": [
+            "under"
+        ],
+        "false": [
+            "add",
+            "honda",
+            "panda"
+        ]
+    },
+    "bed": {
+        "true": [
+            "bed"
+        ],
+        "false": [
+            "but",
+            "bad",
+            "back",
+            "best",
+            "bet",
+            "bat",
+            "beth",
+            "bethel",
+            "better"
+        ]
+    },
+    "panda": {
+        "true": [
+            "panda"
+        ],
+        "false": [
+            "bundle",
+            "tenna",
+            "henna",
+            "honda"
+        ]
+    },
+    "bee": {
+        "true": [
+            "bee"
+        ],
+        "false": [
+            "pee",
+            "bees",
+            "being",
+            "wee",
+            "b"
+        ]
+    },
+    "cherries": {
+        "true": [
+            "cherries"
+        ],
+        "false": [
+            "cherry",
+            "chassis",
+            "chase",
+            "chaser",
+            "cherry's"
+        ]
+    },
+    "blackberries": {
+        "true": [
+            "blackberries"
+        ],
+        "false": [
+            "berry",
+            "directories",
+            "bear",
+            "blackberry"
+        ]
+    },
+    "doves": {
+        "true": [
+            "doves"
+        ],
+        "false": [
+            "dopes",
+            "doakes",
+            "dove",
+            "dogs.dopes.dolls"
+        ]
+    },
+    "nut": {
+        "true": [
+            "nut"
+        ],
+        "false": [
+            "but",
+            "notes",
+            "nat",
+            "nothing",
+            "nuts",
+            "knot",
+            "note",
+            "knock",
+            "not"
+        ]
+    },
+    "pig": {
+        "true": [
+            "pig"
+        ],
+        "false": [
+            "wich",
+            "pic",
+            "pick",
+            "pitch"
+        ]
+    },
+    "zero": {
+        "true": [
+            "zero"
+        ],
+        "false": [
+            "yeah",
+            "zia",
+            "gyro",
+            "cero",
+            "oh"
+        ]
+    },
+    "cloud": {
+        "true": [
+            "cloud"
+        ],
+        "false": [
+            "loud",
+            "clout",
+            "count",
+            "couch",
+            "cal"
+        ]
+    },
+    "mouse": {
+        "true": [
+            "mouse"
+        ],
+        "false": [
+            "musa",
+            "nose",
+            "moose"
+        ]
+    },
+    "mother": {
+        "true": [
+            "mother"
+        ],
+        "false": [
+            "mazza"
+        ]
+    },
+    "basketball": {
+        "true": [
+            "basketball"
+        ],
+        "false": [
+            "basket",
+            "bakit",
+            "pesky",
+            "baseketball"
+        ]
+    },
+    "son": {
+        "true": [
+            "son",
+            "sun"
+        ],
+        "false": [
+            "some",
+            "sun",
+            "san",
+            "saint",
+            "son's"
+        ]
+    },
+    "ice cream": {
+        "true": [
+            "ice cream"
+        ],
+        "false": [
+            "cream",
+            "i agree"
+        ]
+    },
+    "late": {
+        "true": [
+            "late"
+        ],
+        "false": [
+            "lit",
+            "lake"
+        ]
+    },
+    "yoyo": {
+        "true": [
+            "yoyo"
+        ],
+        "false": [
+            "yoga",
+            "zozo",
+            "yo-yo",
+            "jojo"
+        ]
+    },
+    "skirt": {
+        "true": [
+            "skirt"
+        ],
+        "false": [
+            "skrt",
+            "shirt",
+            "shirts"
+        ]
+    },
+    "school": {
+        "true": [
+            "school"
+        ],
+        "false": [
+            "schools"
+        ]
+    },
+    "duck": {
+        "true": [
+            "duck"
+        ],
+        "false": [
+            "duq",
+            "duke",
+            "daca",
+            "doc",
+            "dexter"
+        ]
+    },
+    "igloo": {
+        "true": [
+            "igloo"
+        ],
+        "false": [
+            "glue",
+            "exclude",
+            "aglow",
+            "flu"
+        ]
+    },
+    "blush": {
+        "true": [
+            "blush"
+        ],
+        "false": [
+            "lush",
+            "blue",
+            "flush",
+            "bloch",
+            "blah"
+        ]
+    },
+    "jet": {
+        "true": [
+            "jet"
+        ],
+        "false": [
+            "jack",
+            "chat",
+            "get",
+            "chapped",
+            "chet"
+        ]
+    },
+    "quite": {
+        "true": [
+            "quite"
+        ],
+        "false": [
+            "qui",
+            "guard",
+            "white",
+            "quiet",
+            "fight"
+        ]
+    },
+    "hat": {
+        "true": [
+            "hat"
+        ],
+        "false": [
+            "half",
+            "hut",
+            "hats",
+            "had",
+            "heck",
+            "pet",
+            "pat",
+            "heart",
+            "head",
+            "have",
+            "hecht"
+        ]
+    },
+    "grandfather": {
+        "true": [
+            "grandfather"
+        ],
+        "false": [
+            "feather",
+            "weather",
+            "grandpa"
+        ]
+    },
+    "up": {
+        "true": [
+            "up"
+        ],
+        "false": [
+            "up-down"
+        ]
+    },
+    "brian": {
+        "true": [
+            "brian"
+        ],
+        "false": [
+            "ryan",
+            "bryan",
+            "preece"
+        ]
+    },
+    "melon": {
+        "true": [
+            "melon"
+        ],
+        "false": [
+            "megan",
+            "milano's",
+            "metal",
+            "menace",
+            "melody",
+            "mela",
+            "mental",
+            "menlo"
+        ]
+    },
+    "net": {
+        "true": [
+            "net"
+        ],
+        "false": [
+            "next",
+            "wet",
+            "nick",
+            "net-net",
+            "left",
+            "let"
+        ]
+    },
+    "five": {
+        "true": [
+            "five",
+            "5"
+        ],
+        "false": [
+            "55",
+            "5",
+            "555",
+            "fine"
+        ]
+    },
+    "train": {
+        "true": [
+            "train"
+        ],
+        "false": [
+            "trey",
+            "chin",
+            "trend",
+            "tren",
+            "trent"
+        ]
+    },
+    "plum": {
+        "true": [
+            "plum"
+        ],
+        "false": [
+            "play",
+            "plant",
+            "plenty",
+            "plume"
+        ]
+    },
+    "brush": {
+        "true": [
+            "brush"
+        ],
+        "false": [
+            "brash",
+            "bratz",
+            "brad",
+            "bruce",
+            "brett"
+        ]
+    },
+    "violin": {
+        "true": [
+            "violin"
+        ],
+        "false": [
+            "willing",
+            "viola",
+            "piolin",
+            "biotin",
+            "biolan",
+            "valley"
+        ]
+    },
+    "king": {
+        "true": [
+            "king"
+        ],
+        "false": [
+            "kinga",
+            "kind"
+        ]
+    },
+    "tree": {
+        "true": [
+            "tree"
+        ],
+        "false": [
+            "cheat",
+            "t",
+            "chi",
+            "tri",
+            "cheese"
+        ]
+    },
+    "jacket": {
+        "true": [
+            "jacket"
+        ],
+        "false": [
+            "jk",
+            "checking",
+            "jackets",
+            "jackie",
+            "jacques",
+            "jack",
+            "jakacki"
+        ]
+    },
+    "clock": {
+        "true": [
+            "clock"
+        ],
+        "false": [
+            "cluck",
+            "cluck",
+            "cock"
+        ]
+    },
+    "girl": {
+        "true": [
+            "girl"
+        ],
+        "false": [
+            "gun",
+            "turn",
+            "good"
+        ]
+    },
+    "my": {
+        "true": [
+            "my"
+        ],
+        "false": [
+            "mine",
+            "mean",
+            "me",
+            "mom"
+        ]
+    },
+    "lack": {
+        "true": [
+            "lack"
+        ],
+        "false": [
+            "love",
+            "duck",
+            "lock",
+            "locked",
+            "look"
+        ]
+    },
+    "coat": {
+        "true": [
+            "coat"
+        ],
+        "false": [
+            "codes",
+            "code",
+            "couch",
+            "cole",
+            "quotes",
+            "coats",
+            "colt",
+            "cuts",
+            "count",
+            "coach"
+        ]
+    },
+    "desk": {
+        "true": [
+            "desk"
+        ],
+        "false": [
+            "death",
+            "dad",
+            "deck",
+            "dice",
+            "dead",
+            "dash",
+            "debt"
+        ]
+    },
+    "skate": {
+        "true": [
+            "skate"
+        ],
+        "false": [
+            "skite",
+            "skirt",
+            "skates",
+            "state",
+            "sketch"
+        ]
+    },
+    "elephant": {
+        "true": [
+            "elephant"
+        ],
+        "false": [
+            "allison",
+            "elephants"
+        ]
+    },
+    "send": {
+        "true": [
+            "send"
+        ],
+        "false": [
+            "sign",
+            "said",
+            "san"
+        ]
+    },
+    "soap": {
+        "true": [
+            "soap"
+        ],
+        "false": [
+            "shut",
+            "shea",
+            "shock",
+            "shelf",
+            "schultz"
+        ]
+    },
+    "grapes": {
+        "true": [
+            "grapes"
+        ],
+        "false": [
+            "wreck",
+            "grape",
+            "wraps",
+            "reps",
+            "griff"
+        ]
+    },
+    "tent": {
+        "true": [
+            "tent"
+        ],
+        "false": [
+            "tens",
+            "10th",
+            "10-10",
+            "10",
+            "1010"
+        ]
+    },
+    "chicken": {
+        "true": [
+            "chicken"
+        ],
+        "false": [
+            "chica",
+            "ticket",
+            "chick",
+            "chico"
+        ]
+    },
+    "game": {
+        "true": [
+            "game"
+        ],
+        "false": [
+            "gummy",
+            "guy",
+            "gabe",
+            "gum"
+        ]
+    },
+    "shop": {
+        "true": [
+            "shop"
+        ],
+        "false": [
+            "shut",
+            "soap"
+        ]
+    },
+    "mike": {
+        "true": [
+            "mike"
+        ],
+        "false": [
+            "my",
+            "meek",
+            "mai",
+            "make",
+            "tai",
+            "lights"
+        ]
+    },
+    "bush": {
+        "true": [
+            "bush"
+        ],
+        "false": [
+            "but",
+            "bus",
+            "busch"
+        ]
+    },
+    "father": {
+        "true": [
+            "father"
+        ],
+        "false": [
+            "weather",
+            "tyler"
+        ]
+    },
+    "book": {
+        "true": [
+            "book"
+        ],
+        "false": [
+            "bookoo",
+            "boo",
+            "becca",
+            "books"
+        ]
+    },
+    "truck": {
+        "true": [
+            "truck"
+        ],
+        "false": [
+            "troop",
+            "skip",
+            "check",
+            "cheap",
+            "the",
+            "tube",
+            "trek",
+            "chuck",
+            "track"
+        ]
+    },
+    "show": {
+        "true": [
+            "show"
+        ],
+        "false": [
+            "sao",
+            "she",
+            "me",
+            "cho",
+            "so"
+        ]
+    },
+    "back": {
+        "true": [
+            "back"
+        ],
+        "false": [
+            "backup",
+            "black",
+            "bike"
+        ]
+    },
+    "box": {
+        "true": [
+            "box"
+        ],
+        "false": [
+            "but",
+            "ball",
+            "boss",
+            "bob",
+            "bumps",
+            "oops",
+            "bok"
+        ]
+    },
+    "clouds": {
+        "true": [
+            "clouds"
+        ],
+        "false": [
+            "allowed",
+            "couch",
+            "clown",
+            "close",
+            "clout",
+            "loud",
+            "cloudy",
+            "claw",
+            "cloud"
+        ]
+    },
+    "barbie": {
+        "true": [
+            "barbie"
+        ],
+        "false": [
+            "buy",
+            "bye-bye",
+            "bobby",
+            "boppy",
+            "babe",
+            "bob",
+            "baby"
+        ]
+    },
+    "house": {
+        "true": [
+            "house"
+        ],
+        "false": [
+            "how",
+            "how's",
+            "pause"
+        ]
+    },
+    "fox": {
+        "true": [
+            "fox"
+        ],
+        "false": [
+            "boss",
+            "box",
+            "talk"
+        ]
+    },
+    "bike": {
+        "true": [
+            "bike"
+        ],
+        "false": [
+            "beak",
+            "buy",
+            "pike",
+            "bk",
+            "why",
+            "hike",
+            "bye",
+            "by"
+        ]
+    },
+    "head": {
+        "true": [
+            "head"
+        ],
+        "false": [
+            "had",
+            "hooked",
+            "house",
+            "how",
+            "hair",
+            "hook",
+            "heck",
+            "hat",
+            "hey"
+        ]
+    },
+    "apple": {
+        "true": [
+            "apple"
+        ],
+        "false": [
+            "app",
+            "aptoide"
+        ]
+    },
+    "lemon": {
+        "true": [
+            "lemon"
+        ],
+        "false": [
+            "lima",
+            "level",
+            "lime",
+            "lamp",
+            "my",
+            "moon",
+            "la",
+            "name",
+            "send"
+        ]
+    },
+    "teacher": {
+        "true": [
+            "teacher"
+        ],
+        "false": [
+            "teach",
+            "teaching",
+            "beecher",
+            "beach",
+            "steve"
+        ]
+    },
+    "cap": {
+        "true": [
+            "cap"
+        ],
+        "false": [
+            "couple",
+            "capital",
+            "cop",
+            "captain",
+            "can",
+            "cat",
+            "copy",
+            "tap",
+            "camp",
+            "cup"
+        ]
+    },
+    "gloves": {
+        "true": [
+            "gloves"
+        ],
+        "false": [
+            "wagyu",
+            "close",
+            "good",
+            "got",
+            "guy",
+            "loves",
+            "love's",
+            "cookout",
+            "glock",
+            "clubs"
+        ]
+    },
+    "honey": {
+        "true": [
+            "honey"
+        ],
+        "false": [
+            "hannah",
+            "hunie",
+            "hunan"
+        ]
+    },
+    "cat": {
+        "true": [
+            "cat"
+        ],
+        "false": [
+            "capital",
+            "cut",
+            "can't",
+            "pat",
+            "cata",
+            "cattle",
+            "cats"
+        ]
+    },
+    "clown": {
+        "true": [
+            "clown"
+        ],
+        "false": [
+            "cloud",
+            "county",
+            "cloud",
+            "close",
+            "flower"
+        ]
+    },
+    "zoo": {
+        "true": [
+            "zoo"
+        ],
+        "false": [
+            "zhu",
+            "do",
+            "shoe",
+            "you",
+            "juju",
+            "choo",
+            "who"
+        ]
+    },
+    "sheep": {
+        "true": [
+            "sheep"
+        ],
+        "false": [
+            "ship",
+            "pit",
+            "peach",
+            "shipt",
+            "cheap"
+        ]
+    },
+    "zebra": {
+        "true": [
+            "zebra"
+        ],
+        "false": [
+            "jeb",
+            "jeff",
+            "reaper",
+            "libra",
+            "jebra",
+            "jabra"
+        ]
+    },
+    "gorilla": {
+        "true": [
+            "gorilla"
+        ],
+        "false": [
+            "loretta",
+            "korean",
+            "korea",
+            "serena"
+        ]
+    },
+    "balloon": {
+        "true": [
+            "balloon"
+        ],
+        "false": [
+            "loon",
+            "bella",
+            "ballet",
+            "bell",
+            "balade",
+            "ballot",
+            "battle"
+        ]
+    },
+    "six": {
+        "true": [
+            "six"
+        ],
+        "false": [
+            "c",
+            "66",
+            "fixing",
+            "see",
+            "cease",
+            "6"
+        ]
+    },
+    "blossom": {
+        "true": [
+            "blossom"
+        ],
+        "false": [
+            "caesars",
+            "bizarre",
+            "blonde",
+            "burleson",
+            "bellossom",
+            "balisong",
+            "blessed",
+            "lawson",
+            "brussel"
+        ]
+    },
+    "gorzila": {
+        "true": [
+            "gorzila"
+        ],
+        "false": [
+            "florida",
+            "gorillas",
+            "gloria",
+            "gorilla",
+            "liberal"
+        ]
+    },
+    "umbrella": {
+        "true": [
+            "umbrella"
+        ],
+        "false": [
+            "amberina",
+            "amber",
+            "ambereen",
+            "umbra"
+        ]
+    },
+    "ant": {
+        "true": [
+            "ant"
+        ],
+        "false": [
+            "anna",
+            "and",
+            "aunt",
+            "end",
+            "annette"
+        ]
+    },
+    "ink": {
+        "true": [
+            "ink"
+        ],
+        "false": [
+            "think",
+            "pink",
+            "in",
+            "thinkin"
+        ]
+    },
+    "skating": {
+        "true": [
+            "skating"
+        ],
+        "false": [
+            "batting",
+            "state",
+            "catch",
+            "scotty",
+            "catching",
+            "sketching",
+            "kate",
+            "skate",
+            "sketch"
+        ]
+    },
+    "ox": {
+        "true": [
+            "ox"
+        ],
+        "false": [
+            "oasis",
+            "off",
+            "oh",
+            "ups",
+            "up",
+            "apps"
+        ]
+    },
+    "lamp": {
+        "true": [
+            "lamp"
+        ],
+        "false": [
+            "lampu",
+            "lamb",
+            "lampoon"
+        ]
+    },
+    "clothes": {
+        "true": [
+            "clothes"
+        ],
+        "false": [
+            "clue",
+            "lousy",
+            "losey",
+            "lower",
+            "clothing",
+            "clay",
+            "clades",
+            "clone"
+        ]
+    },
+    "sock": {
+        "true": [
+            "sock"
+        ],
+        "false": [
+            "shut",
+            "soccer",
+            "shop",
+            "shock",
+            "stock"
+        ]
+    },
+    "fork": {
+        "true": [
+            "fork"
+        ],
+        "false": [
+            "fart",
+            "far",
+            "fark",
+            "fog",
+            "fock",
+            "pork",
+            "fox"
+        ]
+    },
+    "mouth": {
+        "true": [
+            "mouth"
+        ],
+        "false": [
+            "mom",
+            "mount",
+            "mouse",
+            "mulch"
+        ]
+    },
+    "beach": {
+        "true": [
+            "beach"
+        ],
+        "false": [
+            "bich",
+            "beats",
+            "beat"
+        ]
+    },
+    "iguanna": {
+        "true": [
+            "iguanna"
+        ],
+        "false": [
+            "arana",
+            "elena",
+            "wanna",
+            "arowana",
+            "awana",
+            "iguana"
+        ]
+    },
+    "baby": {
+        "true": [
+            "baby"
+        ],
+        "false": [
+            "bobby",
+            "babe",
+            "barbie"
+        ]
+    },
+    "window": {
+        "true": [
+            "window"
+        ],
+        "false": [
+            "weiner",
+            "wendell",
+            "wine",
+            "wind"
+        ]
+    },
+    "blanket": {
+        "true": [
+            "blanket"
+        ],
+        "false": [
+            "blank",
+            "drank",
+            "blankets",
+            "thanks"
+        ]
+    },
+    "t-shirt": {
+        "true": [
+            "t-shirt"
+        ],
+        "false": [
+            "t-shirts"
+        ]
+    }
+}

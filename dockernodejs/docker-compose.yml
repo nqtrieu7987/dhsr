@@ -1,0 +1,21 @@
+version: '3'
+services:
+    nodepm2:
+        image: tttest:latest
+        volumes:
+            - "./srcnode:/src"
+            - "./srcnode/package.json:/package.json"
+            - "./pm2.json:/pm2.json"
+        ports:
+            - "8442:8443"
+        restart: always
+        networks:
+            chain_net:
+                ipv4_address: 172.27.0.103
+#        network-mode: brigde
+networks:
+  chain_net:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.27.0.0/24

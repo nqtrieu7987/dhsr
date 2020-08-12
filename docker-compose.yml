@@ -1,0 +1,57 @@
+version: '3'
+services:
+    web:
+        image: romeoz/docker-nginx-php:7.2
+        volumes:
+            - "./fpm/www.conf:/etc/php/7.2/fpm/pool.d/www.comf"
+#            - "./configs/nginx.conf:/etc/nginx/nginx.conf"
+            - "./configs/dshr.mdcspace.vn.conf:/etc/nginx/sites-enabled/app.conf"
+            - "./src/dshr:/var/www/app"
+            - "./configs/general.conf:/etc/nginx/general.conf"
+            - "./ssl:/etc/nginx/conf.d"
+        ports:
+            - "80:80"
+            - "443:443"
+        environment:
+            - NGINX_HOST=${NGINX_HOST}
+        restart: always
+        networks:
+            chain_net:
+                ipv4_address: 172.26.0.105
+#        network-mode: brigde
+    databasemy:
+        image: mysql:5.7
+        hostname: database.com
+        domainname: database.com
+        container_name: databasemy
+#        network-mode: brigde
+        volumes:
+            - "./docker/database/dumps:/dumps"
+            - "./docker/database/data/mysql-master:/var/lib/mysql"
+            - "./docker/database/config/mysql-master:/etc/mysql/conf.d"
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_MASTER_ROOT_PASSWORD}
+        expose:
+            - "3306"
+        ports:
+            - "3306:3306"
+        restart: always
+        networks:
+            chain_net:
+                ipv4_address: 172.26.0.104
+    nodepm2:
+        image: nodejspm2:latest
+        volumes:
+            - "./srcnode:/src"
+        ports:
+            - "8443:8443"
+        restart: always
+        networks:
+            chain_net:
+                ipv4_address: 172.26.0.103
+networks:
+  chain_net:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.26.0.0/24

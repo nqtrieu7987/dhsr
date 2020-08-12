@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<!-- saved from url=(0034)https://muaclone.pro/abc/peer.html -->
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Demo Speech to text</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./Demo_files/shoelace.css">
+	<style>
+		.app {
+			margin-top: 10px;
+		}
+
+		#btn-next {
+			background-color: blue;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container" style="margin:0px auto;width:700px;padding:100px">
+
+		<h3 class="no-browser-support" style="color:red;display:none">Máy của bạn không có hỗ trợ rồi</h3>
+		<h3>Câu mẫu:
+			<span id="localText">Nice to meet you too</span>.</h3>
+		<textarea name="" id="boxResult" cols="20" rows="4">matching with YouTube</textarea>
+		<div class="app">
+			<button id="start-record-btn" title="Start Recording">Start Recognition</button>
+			<button id="stop-record-btn" title="Stop Recording">Stop Recognition</button>
+			<button id="btn-next" title="Next">Next</button>
+			<p id="note">
+				<font color="red">Đã dừng thu âm</font>
+			</p>
+			<h3 style="margin-top:20px">Đáp án</h3>
+			<p id="textResult">
+				<font color="red">Nice </font>
+				<font color="red">to </font>
+				<font color="red">meet </font>
+				<font color="red">you </font>
+				<font color="red">too </font>
+			</p>
+
+		</div>
+
+	</div>
+	<script src="./Demo_files/jquery.min.js.download"></script>
+	<script>
+		var hasRecord = false;
+		var finalSpeechText = "";
+		var transcriptsNew = "";
+		var texts = ["am", "and", "are", "badminton", "basketball", "big", "black", "blind man’s bluff", "blue", "book", "bookcase", "brown", "but", "bye", "calculator", "can", "chess", "classroom", "close", "colour", "come here", "come in", "computer", "desk", "don't talk", "eight", "fine", "five", "football", "four", "friend", "goodbye", "good morning", "green", "gym", "hello", "hi", "hide-and-seek", "how old", "I", "is", "it", "jump", "large", "library", "look", "may", "May I...?", "Miss", "Mr", "my", "name", "new", "Nice to meet you.", "nine", "no", "notebook", "old", "one", "open", "orange", "pen", "pencil", "pencil case", "pencil sharpener", "playground", "please", "question", "quiet", "red", "room", "rubber", "ruler", "school", "school bag", "school thing", "seven", "six", "skating", "skipping", "sorry", "speak aloud", "stand up", "table tennis", "talk", "ten", "thanks", "thank you", "that", "these", "they", "this", "those", "three", "too", "two", "what", "white", "who", "write", "year", "yellow", "yes", "you", "your", "ball", "bathroom", "bay", "bed", "bedroom", "behind", "brother", "cat", "cathedral", "central Viet Nam", "chair", "cloudy", "coat", "cook", "count", "cup", "cupboard", "cycle", "different", "dining room", "do", "does", "do homework", "dog", "doll", "door", "draw", "family", "fan", "far", "father", "fence", "fish tank", "fly kites", "garage", "garden", "gate", "goldfish", "grandfather", "grandmother", "great", "have, has", "here", "how many", "in", "in front of", "keep", "kitchen", "kite", "know", "like", "listen to music", "living room", "love", "man", "map", "mirror", "mother", "mountain", "near", "next to", "north Viet Nam", "on", "park", "parrot", "photo", "picture", "plane", "play the piano", "pond", "poster", "puzzle", "rabbit", "rainy", "read", "robot", "ship", "sing", "sister", "skate", "skating", "skip", "snowy", "sofa", "so much", "south Viet Nam", "stormy", "sunny", "table", "teddy bear", "temple", "theatre", "there", "toy", "toy car", "toy room", "train", "tree", "truck", "under", "wall", "wardrobe", "watch TV", "water puppet", "weather", "where", "window", "windy", "woman", "yard", "yo-yo", "afternoon", "again", "America", "American", "April", "Art", "August", "Australia", "Australian", "beach", "bike", "chess", "class", "collect", "comic book", "cool", "dance", "date", "December", "dictation", "dish", "district", "drum", "England", "English", "English", "evening", "every day", "exercise", "February", "flower", "fly", "Friday", "guitar", "have (English)", "hobby", "home", "hometown", "homework", "IT (Information Technology)", "January", "Japan", "Japanese", "July", "June", "kite", "later", "listen", "make", "Malaysia", "Malaysian", "March", "mask", "Maths", "May", "meet", "model", "Monday", "morning", "Music", "night", "November", "October", "paint", "paper", "penfriend", "PE (Physical Education)", "photograph", "piano", "plant", "play", "puppet", "radio", "return", "ride", "road", "sail", "Saturday", "school", "Science", "see", "September", "skate", "skip", "stamp", "stream", "street", "study", "subject", "Sunday", "swim", "swing", "take", "text", "Thursday", "time", "today", "tomorrow", "Tuesday", "TV", "twice", "video", "Viet Nam", "Vietnamese", "Vietnamese", "village", "volleyball", "wash", "watch", "water", "Wednesday", "weekend", "yesterday", "zoo", "a.m.", "after that", "animal", "bakery", "banh chung", "bear", "beef", "big", "birthday present", "blouse", "bookshop", "bread", "breakfast", "build", "busy", "buy", "celebration", "cinema", "clerk", "clothes", "complete", "chicken", "Children' s Day", "chocolate", "Christmas", "countryside", "crocodile", "dangerous", "decorate", "delicious", "dictionary", "dinner", "doctor", "dong", "driver", "elephant", "enjoy", "enormous", "expensive", "factory", "farmer", "fast", "festival", "field", "film", "finally", "first", "fish", "footballer", "free", "firework display", "friendly", "funny", "go", "go fishing", "go for a picnic", "go for a walk", "go home", "go on a boat cruise", "go skating", "go to bed", "go to school", "grandparent", "have (breakfast/lunch/dinner)", "holiday", "hospital", "hotel", "house", "how much", "hungry", "invite", "jacket", "jeans", "join", "jumper", "kangaroo", "late", "leaf", "lemonade", "lucky money", "lunch", "medicine", "milk", "mobile phone", "monkey", "next", "nice", "noodles", "noon", "nurse", "o’clock", "office", "old", "orange juice", "p.m.", "pork", "prepare", "pharmacy", "phone number", "relative", "repeat", "rice", "sandals", "sandcastle", "scarf", "scary", "scenery", "seafood", "shoes", "short", "skirt", "slim", "small", "smart", "start", "stay", "strong", "student", "Summer", "Summer holidays", "supermarket", "sweet", "sweet shop", "swimming pool", "tall", "Teachers’ day", "Tet", "then", "thick", "thin", "Tiger", "Time", "Trousers", "Uncle", "Usually", "Vegetable", "Visit", "Want", "Water", "Wear", "Wish", "Wonderful", "Worker", "Young", "Zebra", "Zoo", "a lot of", "always", "ancient town", "boring", "brave", "breakfast", "brush (your teeth)", "by", "cartoon", "cave", "character", "chat", "circus", "clever", "competition", "contest", "cook", "countryside", "crowded", "cute", "detective", "email", "enjoy", "event", "explore", "fairy tale", "festival", "foreign language", "funfair", "generous", "get", "gorilla", "hard-working", "hope", "imperial city", "island", "lane", "loudly", "lunch", "may", "morning exercise", "motorbike", "never", "notebook", "often", "practise", "project", "python", "quickly", "quiet", "quietly", "railway", "roar", "sandcastle", "scenery", "seaside", "slowly", "sometimes", "story", "sunbathe", "swan", "take part in", "taxi", "think", "tower", "underground", "understand", "view", "vocabulary", "what's…like?", "ago", "accident", "architect", "astronaut", "attractive", "autumn", "banana", "bar", "between", "biscuit", "bottle", "bridge", "building", "burn", "camp", "camping", "carry", "carton", "cheap", "clean", "climb", "coach", "corner", "crow", "cut", "dentist", "design", "diet", "drive", "dry", "earache", "egg", "exciting", "expect", "fishing", "foggy", "forecast", "forest", "fox", "free time", "Glass", "greedy", "grow", "hand", "healthy", "hiking", "honest", "intelligent", "interesting", "karate", "knife", "look after", "leg", "match", "noisy", "once upon a time", "opposite", "order", "packet", "pagoda", "patient", "peaceful", "pilot", "popcorn", "program", "rain", "sandwich", "sausage", "scratch", "season", "seed", "shopping", "snow", "sore throat", "space", "spaceship", "spring", "stairs", "statue", "stomach ache", "stove", "stupid", "take a rest", "thing", "toothache", "touch", "warm", "wet", "will", "wind", "winter", "wise", "writer", "TỪ VỰNG TRONG UNIT SUMMARY", "box", "bomb", "bad", "baby", "happy", "horse", "hat", "hill", "hole", "head", "hear", "what", "how", "spell", "mom", "meeting", "marble", "pink", "pole", "pig", "pot", "pick", "pan", "pancake", "no", "tie", "to", "Tide", "tire", "tiny", "tape", "tusk", "top", "teenager", "yummy", "yacht", "yin", "yang", "yoga", "we", "teacher", "apple", "land", "mad", "band", "beg", "tent", "net", "bench", "send", "men", "go out", "be quiet", "don’t talk", "stand up", "come", "out", "open your book", "close your book", "ask a question", "answer the question", "write your name", "ask", "cake", "cage", "cap", "candy", "camera", "car", "captain", "dad", "daughter", "dark", "day", "dancer", "duck", "computer room", "music room", "long", "ladder", "lady", "lake", "lamp", "line", "language", "laugh", "giant", "giraffe", "gem", "gin", "ginger", "geography", "gibbet", "gibe", "gentleman", "break time", "hide", "seek", "tennis", "game", "sport", "blanket", "skin", "sky", "frog", "shorts", "socks", "bell", "bank", "shop", "balloon", "shell", "bill", "blood", "sheep", "block", "blog", "blackboard", "skull", "skateboard", "skeleton", "purple", "iguana", "insect", "iguanodon", "India", "ink", "internet", "Italy", "igloo", "injure", "oracle", "octopus", "ox", "ostrich", "otter", "olive", "oval", "eleven", "twelve", "thirteen", "thirty", "sixteen", "sixty", "fifteen", "fifty", "eighty", "eighteen", "twenty", "twenty-nine", "thirty-one", "sixty-two", "ninety-nine", "eighty-seven", "forty", "sixty-seven", "eighty-nine", "thirty-eight", "seventeen", "seventy", "nineteen", "women", "grandpa", "grandma", "brick", "broom", "bride", "bright", "brush", "bridge", "break", "groom", "grab", "over there", "earth", "tooth", "peach", "teeth", "chips", "clothe", "north", "south", "brunch", "church", "cheese", "cherry", "jellyfish", "starfish", "whale", "why", "wheel", "when", "whirl", "whine", "check", "chip", "chick", "chalk", "chapter", "sharpener", "case", "bag", "ready", "right", "rat", "resort", "than", "their", "though", "the", "playroom", "same", "easy", "bus", "hard", "lip", "trip", "nose", "face", "mice", "gift", "bite", "site", "give", "middle", "tip", "list", "bit", "many", "teach", "meat", "bean", "beast", "cream", "dream", "raw", "hawk", "claw", "straw", "pawn", "shawl", "prawn", "fawn", "lawn", "toy", "pain", "gain", "aim", "aid", "tail", "snail", "chain", "shake", "frame", "plate", "grape", "bay", "central", "bottom", "water puppet theatre", "museum", "place", "pray", "town", "city", "jar", "scar", "sharp", "floor", "store", "shore", "fork", "sleep", "teacher", "light", "lamp", "swan", "leg", "number", "neck", "stripe", "horse", "bus", "mountain", "temple", "pagoda", "salad", "juice", "jump", "bird", "cook", "shirt", "dirt", "frog", "pitch"];
+		var rd = Math.floor((Math.random() * texts.length) + 0);
+		$("#localText").text(texts[rd]);
+		var note = $("#note");
+		var textResult = $("#textResult");
+		var boxResult = $("#boxResult");
+		var ckStop = false;
+
+		var userName = "Chuyennnd";
+		var globalTexts = new Map();
+		var timeExpired = 20000;
+
+		try {
+			var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+			var recognition = new SpeechRecognition();
+			recognition.interimResults = true;
+			utils.writeLog(recognition.toString());
+		}
+		catch (e) {
+			$('.no-browser-support').show();
+			$('.app').hide();
+		}
+
+
+		recognition.continuous = true;
+		text_final = "";
+		recognition.onresult = function (event) {
+			if (hasRecord) {
+				transcriptsNew = "";
+				var fulltranscript = "";
+				boxResult.text("");
+				var current = event.resultIndex;
+				// var eventTexts = [];
+				utils.writeLog(event.results);
+				// var counter = 0;
+				for (var i = event.resultIndex; i < event.results.length; ++i) {
+					if (event.results[i].isFinal) {
+						finalSpeechText += event.results[i][0].transcript;
+						fulltranscript += " " + event.results[i][0].transcript;
+						// eventText = { transcript: event.results[i][0].transcript, isfinal: event.results[i].isFinal, confidence: event.results[i][0].confidence }
+						// eventTexts[counter] = eventText;
+						// counter++;
+					}
+				}
+				for (var i = current; i < event.results.length; i++) {
+					if (event.results[i].isFinal) {
+						// finalSpeechText += event.results[i][0].transcript;
+					} else {
+						transcriptsNew += event.results[i][0].transcript;
+					}
+					fulltranscript += " " + event.results[i][0].transcript;
+					// eventText = { transcript: event.results[i][0].transcript, isfinal: event.results[i].isFinal, confidence: event.results[i][0].confidence }
+					// eventTexts[counter] = eventText;
+					// counter++;
+				}
+				transcriptsNew = finalSpeechText + " " + transcriptsNew;
+				// eventTexts[counter] = texts[rd];
+				var eventHeader = { event: fulltranscript, source: texts[rd] };
+				callApi(eventHeader, "this is text", "this is text", (data) => utils.writeLog(data));
+				var result = compareString(fulltranscript, texts[rd], userName);
+				utils.writeLog(result);
+				boxResult.text(transcriptsNew);
+				// utils.writeLog(result.isFinal);
+				if (result.isFinal) {
+					hasRecord = false;
+					boxResult.text(fulltranscript);
+					recognition.stop();
+				}
+				textResult.html(changeColor(texts[rd], result.mark));
+			}
+		};
+
+		recognition.onstart = function () {
+			note.text("Đang bắt đầu thu âm");
+		}
+
+		recognition.onspeechend = function () {
+			note.html("<font color=\"red\">Đã dừng thu âm</font>");
+		}
+
+		recognition.onerror = function (event) {
+			if (event.error == 'no-speech') {
+			};
+		}
+
+		$('#start-record-btn').on('click', function (e) {
+			if (hasRecord) {
+				note.text("Đang thu âm rồi");
+			} else {
+				finalSpeechText = "";
+				ckStop = false;
+				hasRecord = true;
+				recognition.lang = "en-AU";
+				recognition.start();
+			}
+		});
+
+		$("#btn-next").click(() => {
+			ckStop = true;
+			hasRecord = false;
+			recognition.stop();
+			finalSpeechText = "";
+			boxResult.text(finalSpeechText);
+			rd = Math.floor((Math.random() * texts.length) + 0);
+			$("#localText").text(texts[rd]);
+			textResult.text("");
+		});
+
+		$('#stop-record-btn').on('click', function (e) {
+			hasRecord = false;
+			finalSpeechText = "";
+			boxResult.text(finalSpeechText);
+			recognition.stop();
+		});
+
+		function compareString(input, source, username) {
+			if (source == undefined || isEmptyObject(source)) {
+				return { message: 'Input source error!', resultCode: 0 };
+			}
+			if (input == undefined) {
+				return { message: 'Input error!', resultCode: 0 };
+			}
+			var arrInput = input.toLowerCase().replace(new RegExp('[^a-z0-9 ]', 'g'), '').split(" ");
+			var arrSource = source.toLowerCase().replace(new RegExp('[^a-z0-9 ]', 'g'), '').split(" ");
+			var counterSucc = 0;
+			var keyStore = username + "-" + source;
+			var valueStore = globalTexts.get(keyStore);
+			var isFinal = false;
+
+			if (valueStore != null) {
+				if (valueStore.timeExpired - new Date() < 0) {
+					isFinal = true;
+				}
+			} else {
+				valueStore = { timeExpired: new Date() - 0 + timeExpired, maxTrue: 0, bestResult: [] };
+			}
+			// get all checkpoint
+			var listCheckPoints = [];
+			listCheckPoints.push(0);
+			for (var j = 1; j < valueStore.bestResult.length; j++) {
+				if (valueStore.bestResult[j] == 0) {
+					listCheckPoints.push(j);
+				}
+			}
+
+			// process list check point
+			for (var k = 0; k < listCheckPoints.length; k++) {
+				var index = 0;
+				var array = [];
+				var checkPoint = listCheckPoints[k];
+				for (var i = 0; i < checkPoint; i++) {
+					array.push(valueStore.bestResult[i]);
+				}
+				for (var i = checkPoint; i < arrSource.length; i++) {
+					var point = 0;
+					for (var j = index; j < arrInput.length; j++) {
+						if (arrInput[j] == arrSource[i]) {
+							index = j;
+							point = 1;
+							break;
+						}
+					}
+					array.push(point);
+				}
+				valueStore.bestResult = bestResult(array, valueStore.bestResult);
+			}
+			var point = Math.floor(countResult(valueStore.bestResult) * 100 / arrSource.length);
+			if (point == 100) {
+				isFinal = true;
+			}
+			if (isFinal) {
+				globalTexts.delete(keyStore);
+			} else {
+				globalTexts.set(keyStore, valueStore);
+			}
+			var result = { mark: valueStore.bestResult, isFinal: isFinal, point: point };
+			// utils.writeLog("Compare:" + input + " -- Source:" + source + " -- Result: " + array);
+			return result;
+		}
+		function bestResult(array, bestResult) {
+			if (countResult(bestResult) < countResult(array)) {
+				return array;
+			} else {
+				return bestResult;
+			}
+		}
+		function countResult(array) {
+			var counter = 0;
+			for (var i = 0; i < array.length; i++) {
+				if (array[i] == 1) {
+					counter++;
+				}
+			}
+			return counter;
+		}
+		function isEmptyObject(obj) {
+			return !Object.keys(obj).length;
+		}
+		function stopWord(str) {
+			str = str.replace(".", "");
+			str = str.replace(",", "");
+			str = str.replace("!", "");
+			str = str.replace("?", "");
+			str = str.replace(":", "");
+			str = str.replace("\"", "");
+			str = str.replace("-", "");
+			str = str.replace("+", "");
+			return str;
+		}
+
+		function changeColor(input, result) {
+			var inputSplit = input.split(" ");
+			var textChange = "";
+			for (var i = 0; i < result.length; i++) {
+				if (result[i] == 1) {
+					textChange += '<font color="blue">' + inputSplit[i] + ' </font>';
+				} else {
+					textChange += '<font color="red">' + inputSplit[i] + ' </font>';
+				}
+			}
+			return textChange;
+		}
+		function callApi(event, text, source, callback) {
+			$.ajax({
+				url: "https://educa.vn/service/markstringnew",
+				headers: event,
+				async: false,
+				type: "POST",
+				data: {
+					input: text,
+					source
+				}, success: callback,
+				error: function (err) {
+					utils.writeLog(err);
+				}
+			});
+		}
+	</script>
+
+
+</body>
+
+</html>

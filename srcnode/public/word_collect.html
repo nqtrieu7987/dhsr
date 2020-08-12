@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)https://muaclone.pro/abc/peer.html -->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo Speech to text</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./Demo_files/shoelace.css">
+    <!--<link rel="stylesheet" href="./shoelace.css">-->
+    <style>
+        .app {
+            margin-top: 10px;
+        }
+
+        #btn-next {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="margin:0px auto;width:700px;padding:100px">
+
+        <h3 class="no-browser-support" style="color:red;display:none">Máy của bạn không có hỗ trợ rồi</h3>
+        <h3>Câu mẫu:
+            <span id="localText">Nice to meet you too</span>.</h3>
+
+        <textarea name="" id="boxResult" cols="20" rows="4">matching with YouTube</textarea>
+        <!--<p id="boxResult"></p>-->
+        <div class="app">
+            <input id="name" name="" type="text" placeholder="User Name" onchange="changeUserName()" />
+            <p id="user_note">
+                Bạn phải nhập user name trước!
+            </p>
+            <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+            <!--<button id="stop-record-btn" title="Stop Recording">Stop Recognition</button>-->
+            <button id="btn-next" title="Next">Next</button>
+            <p id="note">
+                <font color="red">Đã dừng thu âm</font>
+            </p>
+            <h3 style="margin-top:20px">Đáp án</h3>
+            <p id="textResult">
+                <!--<font color="red">Nice </font>-->
+                <!--<font color="red">to </font>-->
+                <!--<font color="red">meet </font>-->
+                <!--<font color="red">you </font>-->
+                <!--<font color="red">too </font>-->
+            </p>
+
+        </div>
+
+    </div>
+    <script src="./Demo_files/jquery.min.js.download"></script>
+    <!--<script src="./jquery.min.js.download"></script>-->
+    <script>
+        var hasRecord = false;
+        var finalSpeechText = "";
+        var transcriptsNew = "";
+        var texts = ["prepare", "egg", "playroom", "kangaroo", "rainy", "mountain", "far", "weather", "stadium", "season", "cinema", "between", "bakery", "expected", "raw", "wonderful", "opposite", "forecast", "animal", "autumn", "bridge", "breakfast", "dog", "parrot", "chocolate", "south", "north", "hot", "cycle", "summer", "supermarket", "hungry", "computer", "same", "pot", "top", "hotel", "place", "shorts", "free", "seafood", "middle", "blouse", "stormy", "wet", "trousers", "sandal", "medicine", "draw", "noisy", "actor", "call", "pagoda", "fast", "anchor", "exciting", "invite", "sweet", "complete", "monkey", "friendly", "buy", "sausage", "sandals", "pray", "spring", "lip", "postcard", "bear", "scary", "different", "sunny", "banana", "rain", "attractive", "like", "bottom", "guidebook", "jacket", "dry", "film", "enormous", "grape", "delicious", "warm", "thirsty", "museum", "pharmacy", "hawk", "lake", "crocodile", "shop", "fruit", "truck", "winter", "cold", "peaceful", "shot", "windy", "central", "bookshop", "busy", "repeat", "park", "snowy", "jumper", "shoe", "zebra", "foggy", "butter", "relax", "teach", "room", "expensive", "cloudy", "sock", "healthy", "meat", "temple"];
+        // var rd = Math.floor((Math.random() * texts.length) + 0);
+        var index = 0;
+        // $("#localText").text(texts[index]);
+        var note = $("#note");
+        var textResult = $("#textResult");
+        var boxResult = $("#boxResult");
+        var user_note = $("#user_note");
+        var ckStop = false;
+
+        var userName = $("#name");
+        var globalTexts = new Map();
+        // var timeExpired = 20000;
+
+        try {
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            var recognition = new SpeechRecognition();
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            utils.writeLog(recognition.toString());
+        }
+        catch (e) {
+            $('.no-browser-support').show();
+            $('.app').hide();
+        }
+        // var recognizing = false;
+        recognition.continuous = true;
+        text_final = "";
+
+        recognition.onstart = function () {
+            utils.writeLog('sdsd123');
+            note.text("Đang bắt đầu thu âm");
+            hasRecord = true;
+        };
+
+        recognition.onend = function () {
+            //Again – give the user feedback that you are not listening anymore. If you wish to achieve continuous recognition – you can write a script to start the recognizer again here.
+            note.text("Tiếp tục thu âm");
+            recognition.start();
+            hasRecord = false;
+        };
+        recognition.onspeechstart = function () {
+            utils.writeLog(hasRecord);
+            utils.writeLog('start speech');
+        };
+        recognition.onspeechend = function () {
+            // hasRecord = false;
+            note.html("<font color=\"red\">Đã dừng thu âm</font>");
+            // recognition.start();
+            hasRecord = false;
+            recognition.stop();
+        }
+
+        recognition.onerror = function (event) {
+            utils.writeLog(event.error);
+            hasRecord = false;
+            recognition.stop();
+            if (event.error == 'no-speech') {
+            }
+            ;
+        }
+
+        recognition.onresult = function (event) {
+            utils.writeLog(userName.val().trim());
+            if (userName.val().trim() == '') {
+                user_note.text('Bạn phải nhập user name trước!');
+            }
+            if (hasRecord && userName.val().trim() != '') {
+                transcriptsNew = "";
+                var fulltranscript = "";
+                boxResult.text("");
+                var current = event.resultIndex;
+                // var eventTexts = [];
+                utils.writeLog(event.results);
+                for (var i = current; i < event.results.length; i++) {
+                    transcriptsNew += event.results[i][0].transcript;
+                    fulltranscript += " " + event.results[i][0].transcript;
+                    // eventText = { transcript: event.results[i][0].transcript, isfinal: event.results[i].isFinal, confidence: event.results[i][0].confidence }
+                    // eventTexts[counter] = eventText;
+                    // counter++;
+                }
+                transcriptsNew = finalSpeechText + " " + transcriptsNew;
+                // eventTexts[counter] = texts[rd];
+                var eventHeader = { input: fulltranscript, source: texts[index], username: userName.val().trim() };
+                // callApi(eventHeader, "this is text", "this is text", (data) => utils.writeLog(data));
+                callApiWord(eventHeader, fulltranscript, texts[index], (data) => utils.writeLog(data));
+                var result = compareString(fulltranscript, texts[index], userName);
+                utils.writeLog(result);
+                boxResult.text(transcriptsNew);
+                // utils.writeLog(result.isFinal);
+                // if (result.isFinal) {
+                //     hasRecord = false;
+                //     boxResult.text(fulltranscript);
+                //     recognition.stop();
+                // }
+                textResult.html(changeColor(texts[index], result.mark));
+            }
+        };
+
+        // $('#start-record-btn').on('click', function (e) {
+        //     if (hasRecord) {
+        //         note.text("Đang thu âm rồi");
+        //     } else {
+        //         finalSpeechText = "";
+        //         ckStop = false;
+        //         hasRecord = true;
+        //         recognition.lang = "en-AU";
+        //         recognition.start();
+        //     }
+        // });
+
+        $("#btn-next").click(() => {
+            recognition.stop();
+            finalSpeechText = "";
+            boxResult.text(finalSpeechText);
+            index++;
+
+            // rd = Math.floor((Math.random() * texts.length) + 0);
+            $("#localText").text(texts[index]);
+            textResult.text("");
+            if (index == index.length) {
+                alert('Bạn đã hoàn thành đầy đủ 800 từ vựng!');
+            }
+        });
+
+        function changeUserName() {
+            var userName = $("#name").val().trim();
+            if (userName != '') {
+                callApiWordUserName(userName, function (data) {
+                    index = data.total;
+                    $("#localText").text(texts[index]);
+                    recognition.lang = "en-AU";
+                    recognition.start();
+                    user_note.text('');
+                });
+            }
+        }
+
+        function compareString(input, source, username) {
+            if (source == undefined || isEmptyObject(source)) {
+                return { message: 'Input source error!', resultCode: 0 };
+            }
+            if (input == undefined) {
+                return { message: 'Input error!', resultCode: 0 };
+            }
+            var arrInput = input.toLowerCase().replace(new RegExp('[^a-z0-9 ]', 'g'), '').split(" ");
+            var arrSource = source.toLowerCase().replace(new RegExp('[^a-z0-9 ]', 'g'), '').split(" ");
+            // utils.writeLog(arrInput);
+            // utils.writeLog(arrSource);
+            var counterSucc = 0;
+            var keyStore = username + "-" + source;
+            var valueStore = globalTexts.get(keyStore);
+            var isFinal = false;
+
+            if (valueStore != null) {
+                // if (valueStore.timeExpired - new Date() < 0) {
+                //     isFinal = true;
+                // }
+            } else {
+                valueStore = { timeExpired: new Date() - 0, maxTrue: 0, bestResult: [] };
+            }
+            // get all checkpoint
+            var listCheckPoints = [];
+            listCheckPoints.push(0);
+            for (var j = 1; j < valueStore.bestResult.length; j++) {
+                if (valueStore.bestResult[j] == 0) {
+                    listCheckPoints.push(j);
+                }
+            }
+
+            // process list check point
+            for (var k = 0; k < listCheckPoints.length; k++) {
+                var index = 0;
+                var array = [];
+                var checkPoint = listCheckPoints[k];
+                for (var i = 0; i < checkPoint; i++) {
+                    array.push(valueStore.bestResult[i]);
+                }
+                for (var i = checkPoint; i < arrSource.length; i++) {
+                    var point = 0;
+                    for (var j = index; j < arrInput.length; j++) {
+                        if (arrInput[j] == arrSource[i]) {
+                            index = j;
+                            point = 1;
+                            break;
+                        }
+                    }
+                    array.push(point);
+                }
+                valueStore.bestResult = bestResult(array, valueStore.bestResult);
+            }
+            var point = Math.floor(countResult(valueStore.bestResult) * 100 / arrSource.length);
+            if (point == 100) {
+                // isFinal = true;
+            }
+            if (isFinal) {
+                globalTexts.delete(keyStore);
+            } else {
+                globalTexts.set(keyStore, valueStore);
+            }
+            var result = { mark: valueStore.bestResult, isFinal: isFinal, point: point };
+            // utils.writeLog("Compare:" + input + " -- Source:" + source + " -- Result: " + array);
+            return result;
+        }
+
+        function bestResult(array, bestResult) {
+            if (countResult(bestResult) < countResult(array)) {
+                return array;
+            } else {
+                return bestResult;
+            }
+        }
+
+        function countResult(array) {
+            var counter = 0;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == 1) {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+
+        function isEmptyObject(obj) {
+            return !Object.keys(obj).length;
+        }
+
+        function stopWord(str) {
+            str = str.replace(".", "");
+            str = str.replace(",", "");
+            str = str.replace("!", "");
+            str = str.replace("?", "");
+            str = str.replace(":", "");
+            str = str.replace("\"", "");
+            str = str.replace("-", "");
+            str = str.replace("+", "");
+            return str;
+        }
+
+        function changeColor(input, result) {
+            var inputSplit = input.split(" ");
+            var textChange = "";
+            for (var i = 0; i < result.length; i++) {
+                if (result[i] == 1) {
+                    textChange += '<font color="blue">' + inputSplit[i] + ' </font>';
+                } else {
+                    textChange += '<font color="red">' + inputSplit[i] + ' </font>';
+                }
+            }
+            return textChange;
+        }
+
+        function callApiWordUserName(username, callback) {
+            $.ajax({
+                url: "https://api.edupia.vn/service/wordspeakusername",
+                headers: { username: username },
+                async: false,
+                type: "POST", success: callback,
+                error: function (err) {
+                    utils.writeLog(err);
+                }
+            });
+        }
+
+        function callApiWord(event, text, source, callback) {
+            $.ajax({
+                url: "https://api.edupia.vn/service/wordspeak",
+                headers: event,
+                async: false,
+                type: "POST", success: callback,
+                error: function (err) {
+                    utils.writeLog(err);
+                }
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
