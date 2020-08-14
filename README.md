@@ -8,7 +8,12 @@ Chien best of F*ck
 6 thư mục fpm config php-fpm.
 .env cifonfig database cluster (hien tai chi can chay master).
  
- 
+edit 
+
+add port 80 in dhsr nginx neu khong dung https
+
+docker run --volume $(pwd):/app prooph/composer:7.2 install
+
 Chạy ứng dụng kiểm tra
  
- 1. docker-compose up
+ docker-compose up
