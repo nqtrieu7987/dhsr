@@ -1,8 +1,0 @@
-{ "_id" : { "$oid" : "5a913888c058c1b3f0024348" }, "hotel_id" : 1, "hotel_name" : "Mandarin Oriental" }
-{ "_id" : { "$oid" : "5a91389ac058c1b3f002434b" }, "hotel_id" : 4, "hotel_name" : "W Sentosa Cove" }
-{ "_id" : { "$oid" : "5a9138b0c058c1b3f002434f" }, "hotel_id" : 2, "hotel_name" : "Resorts World Sentosa" }
-{ "_id" : { "$oid" : "5a9138bdc058c1b3f0024353" }, "hotel_id" : 3, "hotel_name" : "Goodwood Park" }
-{ "_id" : { "$oid" : "5b113789cbe06f9a40e39966" }, "hotel_id" : 5, "hotel_name" : "Hilton Singapore" }
-{ "_id" : { "$oid" : "5bb4ea978465ca4348f584c6" }, "hotel_id" : 6, "hotel_name" : "The Capitol Kempinski Hotel" }
-{ "_id" : { "$oid" : "5ce752f052b36b965a36a461" }, "hotel_id" : 7, "hotel_name" : "Raffles Singapore" }
-{ "_id" : { "$oid" : "5d53def0edf8e91ffc58a979" }, "hotel_id" : 8, "hotel_name" : "Hotel Jen Orchardgateway" }
