@@ -787,9 +787,133 @@ var userUploadsImageThumb =async function (req, res) {
     res.send({ message: "ok.", resultCode: 0 });
   });
 }
+
+var checkInCheckOut = function (req, res) {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  if (!req.files)
+      return res.status(400).send('No files were uploaded.');
+  var email = req.query.email;
+  var id = req.query.id;
+  var all_job_id = req.query.all_job_id;
+  var jwtToken = req.query.token;
+  if(all_job_id == null || all_job_id == undefined){
+    res.json({ message: 'all_job_id not null!', resultCode: 1 });
+    return "";
+  }
+  var job = await getAllJobsById(all_job_id);
+  if(job == false){
+    res.json({ resultCode: 1, message: 'Get All Job Failed'});
+    return "";
+  }
+  try {
+    email = email.toLowerCase();
+  } catch (error) { }
+  jwt.verify(jwtToken, cert, function (err, payload) {
+      if (err) {
+          // utils.writeLog(err);
+          res.json({ message: 'Token invalid!', resultCode: 0 });
+      }
+  });
+
+  utils.writeLog('email: ' + email);
+  utils.writeLog('decoder: ' + payload.email);
+  if (payload.email == email) {
+      // upload userPants
+      let userPants = req.files.userPants;
+      let userShoes = req.files.userShoes;
+      
+      if(userPants == null || userPants == undefined || userShoes == null || userShoes == undefined){
+        res.json({ message: 'userPants or userShoes not null!', resultCode: 1 });
+        return "";
+      }
+      var fileUserPants = folder_upload+type+'/';
+      if (!fs.existsSync(fileUserPants)) {
+        fs.mkdirSync(fileUserPants);
+        utils.writeLog("Create folder:" + fileUserPants)
+      }
+      var time = new Date().getTime();
+      var path = fileUserPants;
+      fileUserPants += id + "_" + time + ".png";
+      var url = '/uploads/users/' + type + "/"+id+"_" + time + ".png";
+      utils.writeLog('name='+userPants.name+' mimetype='+ userPants.mimetype+' size='+ userPants.size);
+      userPants.mv(fileUserPants, function (err) {
+          thumb({
+            source: fileUserPants,
+            destination: path,
+            concurrency: 4
+          }, function(files, err, stdout, stderr) {
+            console.log('Upload='+url);
+          });
+
+          if (err)
+              return res.status(500).send(err);
+          utils.writeLog("Upload userPants." + fileUserPants);
+          updateAvatar(email, url, 'userPants');
+      });
+
+      
+      // upload userPants, userShoes
+      var fileUserShoes = folder_upload+type+'/';
+      if (!fs.existsSync(fileUserShoes)) {
+        fs.mkdirSync(fileUserShoes);
+        utils.writeLog("Create folder:" + fileUserShoes)
+      }
+      var time = new Date().getTime();
+      var path = fileUserShoes;
+      fileUserShoes += id + "_" + time + ".png";
+      var url = '/uploads/users/' + type + "/"+id+"_" + time + ".png";
+      utils.writeLog('name='+userShoes.name+' mimetype='+ userShoes.mimetype+' size='+ userShoes.size);
+      userShoes.mv(fileUserShoes, function (err) {
+          thumb({
+            source: fileUserShoes,
+            destination: path,
+            concurrency: 4
+          }, function(files, err, stdout, stderr) {
+            console.log('Upload='+url);
+          });
+
+          if (err)
+              return res.status(500).send(err);
+          utils.writeLog("Upload userShoes." + fileUserShoes);
+          updateAvatar(email, url, 'userShoes');
+      });
+
+
+      var d = new Date();
+      var t = d.getTime();
+      var h = d.getHours();
+      var m = d.getMinutes();
+      if(h < 10){ 
+        h = "0"+h;
+      }
+      if(m < 10){
+        m = "0"+m;
+      }
+      var sql = {};
+      real_start = job.toJSON().real_start;
+      real_end = job.toJSON().real_end;
+      var type = "in";
+      if(real_start == "" && real_end == ""){
+        sql['real_start'] = h+":"+m;
+        sql["timestamp"] = t;
+      }else{
+        sql['real_end'] = h+":"+m;
+        type = "out";
+      }
+      sql["updated_at"] = new Date();
+      await job.save(sql).then(function (row) {
+        utils.writeLog("CheckIn CheckOut AllJob="+email+" all_job_id="+all_job_id+" "+type);
+      });
+
+      res.json({ message: 'Update all job successfully.', resultCode: 0 });
+  } else {
+      res.json({ message: 'User invalid!', resultCode: 1 });
+  }
+}
 module.exports = {
   userUploadsImage: userUploadsImage,
   userUploadsImageThumb: userUploadsImageThumb,
+  checkInCheckOut: checkInCheckOut,
   validateUsername: function validateUsername(req, res) {
     var username = req.headers.username;
     utils.writeLog("Validate username:" + username);

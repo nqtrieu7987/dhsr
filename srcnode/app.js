@@ -151,5 +151,9 @@ module.exports.create = function (server, host, port, publicDir) {
 	app.post('/service/user/upload_image_thumb', function (req, res) {
 		mysqlTool.userUploadsImageThumb(req, res);
 	});
+
+	app.post('/service/job/check_in_check_out', function (req, res) {
+		mysqlTool.userUploadsImageThumb(req, res);
+	});
 	return app;
 };
