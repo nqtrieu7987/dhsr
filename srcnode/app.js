@@ -153,7 +153,7 @@ module.exports.create = function (server, host, port, publicDir) {
 	});
 
 	app.post('/service/job/check_in_check_out', function (req, res) {
-		mysqlTool.userUploadsImageThumb(req, res);
+		mysqlTool.checkInCheckOut(req, res);
 	});
 	return app;
 };

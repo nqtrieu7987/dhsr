@@ -788,7 +788,7 @@ var userUploadsImageThumb =async function (req, res) {
   });
 }
 
-var checkInCheckOut = function (req, res) {
+var checkInCheckOut = async function (req, res) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (!req.files)
       return res.status(400).send('No files were uploaded.');
