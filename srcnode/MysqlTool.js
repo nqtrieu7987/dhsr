@@ -631,14 +631,15 @@ function updateAvatar(email, avatar, type) {
     email = email.toLowerCase();
     User.where('email', email).fetch().then(function (user) {
       if (user == null) {
-        return { message: "User not exist!", resultCode: 0 };
+        return { message: "User not exist!", resultCode: 1 };
       } else {
         var sql = buildSqlUpdateAvatar(avatar, type);
         utils.writeLog("UpdateUser:");
         utils.writeLog(sql);
-        user.save(sql)
-          .then(function (row) {
-          })
+        user.save(sql).then(function (row) {
+            return row;
+          });
+          return true;
       }
     }).catch(function (err) {
       utils.writeLog(err);
@@ -810,14 +811,14 @@ var checkInCheckOut = async function (req, res) {
   } catch (error) { }
   jwt.verify(jwtToken, cert, function (err, payload) {
       if (err) {
-          // utils.writeLog(err);
-          res.json({ message: 'Token invalid!', resultCode: 0 });
+        res.json({ message: 'Token invalid!', resultCode: 0 });
+      }
+      if (payload.email != email) {
+        res.json({ message: 'User invalid!', resultCode: 1 });
       }
   });
 
-  utils.writeLog('email: ' + email);
-  utils.writeLog('decoder: ' + payload.email);
-  if (payload.email == email) {
+      utils.writeLog('email: ' + email);
       // upload userPants
       let userPants = req.files.userPants;
       let userShoes = req.files.userShoes;
@@ -826,15 +827,15 @@ var checkInCheckOut = async function (req, res) {
         res.json({ message: 'userPants or userShoes not null!', resultCode: 1 });
         return "";
       }
-      var fileUserPants = folder_upload+type+'/';
+      var fileUserPants = folder_upload+'userPants/';
       if (!fs.existsSync(fileUserPants)) {
-        fs.mkdirSync(fileUserPants);
+        await fs.mkdirSync(fileUserPants, { recursive: true });
         utils.writeLog("Create folder:" + fileUserPants)
       }
       var time = new Date().getTime();
       var path = fileUserPants;
       fileUserPants += id + "_" + time + ".png";
-      var url = '/uploads/users/' + type + "/"+id+"_" + time + ".png";
+      var url = '/uploads/users/userPants/'+id+"_" + time + ".png";
       utils.writeLog('name='+userPants.name+' mimetype='+ userPants.mimetype+' size='+ userPants.size);
       userPants.mv(fileUserPants, function (err) {
           thumb({
@@ -853,15 +854,15 @@ var checkInCheckOut = async function (req, res) {
 
       
       // upload userPants, userShoes
-      var fileUserShoes = folder_upload+type+'/';
+      var fileUserShoes = folder_upload+'userShoes/';
       if (!fs.existsSync(fileUserShoes)) {
-        fs.mkdirSync(fileUserShoes);
+        await fs.mkdirSync(fileUserShoes, { recursive: true });
         utils.writeLog("Create folder:" + fileUserShoes)
       }
       var time = new Date().getTime();
       var path = fileUserShoes;
       fileUserShoes += id + "_" + time + ".png";
-      var url = '/uploads/users/' + type + "/"+id+"_" + time + ".png";
+      var url = '/uploads/users/userShoes/'+id+"_" + time + ".png";
       utils.writeLog('name='+userShoes.name+' mimetype='+ userShoes.mimetype+' size='+ userShoes.size);
       userShoes.mv(fileUserShoes, function (err) {
           thumb({
@@ -906,9 +907,6 @@ var checkInCheckOut = async function (req, res) {
       });
 
       res.json({ message: 'Update all job successfully.', resultCode: 0 });
-  } else {
-      res.json({ message: 'User invalid!', resultCode: 1 });
-  }
 }
 module.exports = {
   userUploadsImage: userUploadsImage,
