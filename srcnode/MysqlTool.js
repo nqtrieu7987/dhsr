@@ -203,6 +203,17 @@ async function getAllJobsById(id) {
     });
   });
 }
+async function getAllJobsByUserId(job_id, user_id) {
+  return new Promise(resolve => {
+    AllJobs.where('job_id', job_id).where('user_id', user_id).fetch().then(function (job) {
+      if (job == null) {
+        resolve(null);
+      } else {
+        resolve(job);
+      }
+    });
+  });
+}
 async function getMyJob(user_id, status) {
   return new Promise(resolve => {
     if(status != null){
@@ -894,10 +905,13 @@ var checkInCheckOut = async function (req, res) {
       real_start = job.toJSON().real_start;
       real_end = job.toJSON().real_end;
       var type = "in";
-      if(real_start == "" && real_end == ""){
+      utils.writeLog('real_start='+real_start);
+      if(real_start == "" || real_start == null){
+        sql["status"] = 2;
         sql['real_start'] = h+":"+m;
         sql["timestamp"] = t;
       }else{
+        sql["status"] = 3;
         sql['real_end'] = h+":"+m;
         type = "out";
       }
@@ -1566,6 +1580,12 @@ module.exports = {
       }
       if(job.toJSON().current_slot >= job.toJSON().slot){
         res.json({ message: 'Job full slot!', resultCode: 1 });
+        return "";
+      }
+      var allJob = await getAllJobsByUserId(job_id, user_id);
+      utils.writeLog('allJob='+allJob);
+      if(allJob != null){
+        res.json({ message: 'Job booked!', resultCode: 1 });
         return "";
       }
       // Insert AllJobs
