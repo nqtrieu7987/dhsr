@@ -57,14 +57,13 @@ function getMessageForNewJob(job) {
     }
     headingCont += ", please check the new job"
 
-    Utils.writeLog("job.start_date " + job.start_date);
     const date = job.start_date;
     var day = date.getDate(),
         month = date.getMonth(),
         year = date.getFullYear();
 
-    var content = `${job.slot} slot in ${job.hotel_name} @ ${job.start_time} ${day}/${month}/${year}.
-    ${job.job_name}`;
+    var content =
+        `${job.slot} slot in ${job.hotel_name} @ ${job.start_time} ${day}/${month}/${year}.\n${job.name}`;
 
     var message = createMessage(headingCont, null, content);
 
@@ -72,11 +71,11 @@ function getMessageForNewJob(job) {
 }
 
 async function getNewJob() {
-    const newJobs = await jobDb.getListJobOnGoing();
+    const newJobs = await jobDb.getNewJobs();
     return newJobs
 }
 
-async function sendToTestDevice() {
+async function sendToAllDevices() {
     const newJob = await getNewJob();
     var message;
     if (newJob.length === 0) {
@@ -120,9 +119,9 @@ function sendNotification(data) {
 
 function startSchedule() {
     // schedule tasks to be run on the server
-    cron.schedule("* * * * *", function () {
+    cron.schedule("0 9,15 * * *", function () {
         console.log("running a task every minute");
-        sendToTestDevice();
+        sendToAllDevices();
     });
 }
 
