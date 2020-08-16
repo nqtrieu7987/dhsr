@@ -57,14 +57,13 @@ function getMessageForNewJob(job) {
     }
     headingCont += ", please check the new job"
 
-    Utils.writeLog("job.start_date " + job.start_date);
     const date = job.start_date;
     var day = date.getDate(),
         month = date.getMonth(),
         year = date.getFullYear();
 
     var content = `${job.slot} slot in ${job.hotel_name} @ ${job.start_time} ${day}/${month}/${year}.
-    ${job.job_name}`;
+    ${job.name}`;
 
     var message = createMessage(headingCont, null, content);
 
