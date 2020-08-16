@@ -62,8 +62,8 @@ function getMessageForNewJob(job) {
         month = date.getMonth(),
         year = date.getFullYear();
 
-    var content = `${job.slot} slot in ${job.hotel_name} @ ${job.start_time} ${day}/${month}/${year}.
-    ${job.name}`;
+    var content =
+        `${job.slot} slot in ${job.hotel_name} @ ${job.start_time} ${day}/${month}/${year}.\n${job.name}`;
 
     var message = createMessage(headingCont, null, content);
 
@@ -75,7 +75,7 @@ async function getNewJob() {
     return newJobs
 }
 
-async function sendToTestDevice() {
+async function sendToAllDevices() {
     const newJob = await getNewJob();
     var message;
     if (newJob.length === 0) {
@@ -119,9 +119,9 @@ function sendNotification(data) {
 
 function startSchedule() {
     // schedule tasks to be run on the server
-    cron.schedule("* * * * *", function () {
+    cron.schedule("0 9,15 * * *", function () {
         console.log("running a task every minute");
-        sendToTestDevice();
+        sendToAllDevices();
     });
 }
 
