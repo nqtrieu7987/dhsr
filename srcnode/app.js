@@ -16,6 +16,7 @@ var ip = require("ip");
 var HomeController = require('./controllers/home');
 var writelog = require("./WriteLog.js");
 var getData = require("./controllers/GetData.js");
+var notification = require("./controllers/notification.js");
 
 module.exports.create = function (server, host, port, publicDir) {
 	var app = express();
@@ -155,5 +156,8 @@ module.exports.create = function (server, host, port, publicDir) {
 	app.post('/service/job/check_in_check_out', function (req, res) {
 		mysqlTool.checkInCheckOut(req, res);
 	});
+
+	notification.startSchedule();
+
 	return app;
 };
