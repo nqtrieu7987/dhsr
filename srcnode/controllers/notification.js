@@ -72,7 +72,7 @@ function getMessageForNewJob(job) {
 }
 
 async function getNewJob() {
-    const newJobs = await jobDb.getListJobOnGoing();
+    const newJobs = await jobDb.getNewJobs();
     return newJobs
 }
 
