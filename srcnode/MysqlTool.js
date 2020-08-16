@@ -6,7 +6,7 @@ var cert = fs.readFileSync('./educa.vn.key');  // get private key
 const bcrypt = require('bcryptjs');
 var thumb = require('node-thumbnail').thumb;
 var utils = require("./Utils.js");
-var folder_upload = '/var/www/html/dshr/public/uploads/users/';
+var folder_upload = '/uploads/users/';
 var ip = require("ip");
 var db_config = config["mysql." + ip.address()];
 var passwordAll = "edupia@#$!";
@@ -72,6 +72,11 @@ async function getPackage(packageId) {
       }
     });
   });
+}
+function tm(unix_tm) {
+  var dt = new Date(unix_tm*1000);
+  return (dt.getHours() + ':' + dt.getMinutes());
+
 }
 async function getOder(code) {
   return new Promise(resolve => {
@@ -662,6 +667,34 @@ function updateAvatar(email, avatar, type) {
   }
 }
 
+function updatePantsShoes(email, userPants, userShoes) {
+  try {
+    email = email.toLowerCase();
+    User.where('email', email).fetch().then(function (user) {
+      if (user == null) {
+        return { message: "User not exist!", resultCode: 1 };
+      } else {
+        var sql = {};
+        sql['userPants'] = userPants;
+        sql['userShoes'] = userShoes;
+        sql["updated_at"] = new Date();
+        utils.writeLog("updatePantsShoes:");
+        utils.writeLog(sql);
+        user.save(sql).then(function (row) {
+            return row;
+          });
+          return true;
+      }
+    }).catch(function (err) {
+      utils.writeLog(err);
+      return { message: 'Error!', resultCode: 1 };
+    });
+  } catch (e) {
+    utils.writeLog(e);
+    return { message: 'Error!', resultCode: 1 };
+  }
+}
+
 async function checkUserExistByPhone(username, phone) {
   return new Promise(resolve => {
     username = username.toLowerCase();
@@ -839,68 +872,56 @@ var checkInCheckOut = async function (req, res) {
         return "";
       }
       var fileUserPants = folder_upload+'userPants/';
-      if (!fs.existsSync(fileUserPants)) {
-        await fs.mkdirSync(fileUserPants, { recursive: true });
-        utils.writeLog("Create folder:" + fileUserPants)
-      }
       var time = new Date().getTime();
       var path = fileUserPants;
       fileUserPants += id + "_" + time + ".png";
-      var url = '/uploads/users/userPants/'+id+"_" + time + ".png";
+      var urlPants = '/uploads/users/userPants/'+id+"_" + time + ".png";
       utils.writeLog('name='+userPants.name+' mimetype='+ userPants.mimetype+' size='+ userPants.size);
-      userPants.mv(fileUserPants, function (err) {
+      await userPants.mv(fileUserPants, function (err) {
           thumb({
             source: fileUserPants,
             destination: path,
             concurrency: 4
           }, function(files, err, stdout, stderr) {
-            console.log('Upload='+url);
+            console.log('Upload urlPants='+urlPants);
           });
 
           if (err)
               return res.status(500).send(err);
           utils.writeLog("Upload userPants." + fileUserPants);
-          updateAvatar(email, url, 'userPants');
       });
+      //await updateAvatar(email, urlPants, 'userPants');
 
       
       // upload userPants, userShoes
       var fileUserShoes = folder_upload+'userShoes/';
-      if (!fs.existsSync(fileUserShoes)) {
-        await fs.mkdirSync(fileUserShoes, { recursive: true });
-        utils.writeLog("Create folder:" + fileUserShoes)
-      }
       var time = new Date().getTime();
       var path = fileUserShoes;
       fileUserShoes += id + "_" + time + ".png";
-      var url = '/uploads/users/userShoes/'+id+"_" + time + ".png";
+      var urlShoes = '/uploads/users/userShoes/'+id+"_" + time + ".png";
       utils.writeLog('name='+userShoes.name+' mimetype='+ userShoes.mimetype+' size='+ userShoes.size);
-      userShoes.mv(fileUserShoes, function (err) {
+      await userShoes.mv(fileUserShoes, function (err) {
           thumb({
             source: fileUserShoes,
             destination: path,
             concurrency: 4
           }, function(files, err, stdout, stderr) {
-            console.log('Upload='+url);
+            console.log('Upload urlShoes='+urlShoes);
           });
 
           if (err)
               return res.status(500).send(err);
           utils.writeLog("Upload userShoes." + fileUserShoes);
-          updateAvatar(email, url, 'userShoes');
       });
-
-
+      //await updateAvatar(email, urlShoes, 'userShoes');
+      await updatePantsShoes(email, urlPants, urlShoes);
+      var datetime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
+      utils.writeLog('datetime='+datetime);
+      var time = datetime.substr(11, 5);
       var d = new Date();
       var t = d.getTime();
-      var h = d.getHours();
-      var m = d.getMinutes();
-      if(h < 10){ 
-        h = "0"+h;
-      }
-      if(m < 10){
-        m = "0"+m;
-      }
+      
+      utils.writeLog('time='+time);
       var sql = {};
       real_start = job.toJSON().real_start;
       real_end = job.toJSON().real_end;
@@ -908,11 +929,11 @@ var checkInCheckOut = async function (req, res) {
       utils.writeLog('real_start='+real_start);
       if(real_start == "" || real_start == null){
         sql["status"] = 2;
-        sql['real_start'] = h+":"+m;
+        sql['real_start'] = time;
         sql["timestamp"] = t;
       }else{
         sql["status"] = 3;
-        sql['real_end'] = h+":"+m;
+        sql['real_end'] = time;
         type = "out";
       }
       sql["updated_at"] = new Date();
