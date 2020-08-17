@@ -213,7 +213,7 @@ async function getAllJobsById(id) {
 }
 async function getAllJobsInOut(user_id) {
   return new Promise(resolve => {
-    AllJobs.where('user_id', user_id).where('status', 'in', [1,2]).fetch().then(function (job) {
+    AllJobs.where('user_id', user_id).where('status', 'in', [1,2]).orderBy('id', 'ASC').fetch().then(function (job) {
       if (job == null) {
         resolve(false);
       } else {
@@ -939,12 +939,18 @@ var checkInCheckOut = async function (req, res) {
       var date = new Date(t);
       var hours = date.getHours();
       var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
       var year = date.getFullYear();
       var month = date.getMonth() + 1;
       var day = date.getDate();
+      hours = hours < 10 ? '0'+hours: hours;
+      minutes = minutes < 10 ? '0'+minutes: minutes;
+      seconds = seconds < 10 ? '0'+seconds: seconds;
       month = month < 10 ? '0'+month: month;
       day = day < 10 ? '0'+day: day;
       
+      var dateCheck = year+"-"+month+"-"+day;
+      var dateFull = dateCheck+" "+hours+":"+minutes+":"+seconds
       utils.writeLog('hours='+hours+":"+minutes);
       // var time1 = new Date(t).toLocaleTimeString("en-US");
       // utils.writeLog('time1='+time1);
@@ -959,7 +965,7 @@ var checkInCheckOut = async function (req, res) {
         sql["timestamp"] = d.getTime()+3600000;
 
         new Clockings({
-          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "in", timestamp: d.getTime()+3600000, date: (year+"-"+month+"-"+day), created_at: new Date(), updated_at: new Date()
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "in", timestamp: d.getTime()+3600000, date: (dateCheck), created_at: dateFull, updated_at: dateFull
         }).save().then((model) => {
         }).catch(function (err) {
           res.json({ message: 'Error!', resultCode: 1 });
@@ -970,7 +976,7 @@ var checkInCheckOut = async function (req, res) {
         type = "out";
 
         new Clockings({
-          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "out", timestamp: d.getTime()+3600000, date: (year+"-"+month+"-"+day), created_at: new Date(), updated_at: new Date()
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "out", timestamp: d.getTime()+3600000, date: (dateCheck), created_at: dateFull, updated_at: dateFull
         }).save().then((model) => {
         }).catch(function (err) {
           res.json({ message: 'Error!', resultCode: 1 });
