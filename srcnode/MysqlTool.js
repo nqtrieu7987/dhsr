@@ -45,6 +45,9 @@ var Hotel = bookshelf.Model.extend({
 var AllJobs = bookshelf.Model.extend({
   tableName: 'ds_all_jobs'
 });
+var Clockings = bookshelf.Model.extend({
+  tableName: 'ds_clockings'
+});
 var Job = bookshelf.Model.extend({
   tableName: 'ds_job',
   jobTypes() {
@@ -200,6 +203,17 @@ async function cancelAllJobs(id) {
 async function getAllJobsById(id) {
   return new Promise(resolve => {
     AllJobs.where('id', id).fetch().then(function (job) {
+      if (job == null) {
+        resolve(false);
+      } else {
+        resolve(job);
+      }
+    });
+  });
+}
+async function getAllJobsInOut(user_id) {
+  return new Promise(resolve => {
+    AllJobs.where('user_id', user_id).where('status', 'in', [1,2]).fetch().then(function (job) {
       if (job == null) {
         resolve(false);
       } else {
@@ -841,11 +855,11 @@ var checkInCheckOut = async function (req, res) {
   var id = req.query.id;
   var all_job_id = req.query.all_job_id;
   var jwtToken = req.query.token;
-  if(all_job_id == null || all_job_id == undefined){
-    res.json({ message: 'all_job_id not null!', resultCode: 1 });
-    return "";
-  }
-  var job = await getAllJobsById(all_job_id);
+  // if(all_job_id == null || all_job_id == undefined){
+  //   res.json({ message: 'all_job_id not null!', resultCode: 1 });
+  //   return "";
+  // }
+  var job = await getAllJobsInOut(id);
   if(job == false){
     res.json({ resultCode: 1, message: 'Get All Job Failed'});
     return "";
@@ -915,26 +929,52 @@ var checkInCheckOut = async function (req, res) {
       });
       //await updateAvatar(email, urlShoes, 'userShoes');
       await updatePantsShoes(email, urlPants, urlShoes);
-      var datetime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
-      utils.writeLog('datetime='+datetime);
-      var time = datetime.substr(11, 5);
+      // var datetime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
+      // utils.writeLog('datetime='+datetime);
+      // var time = datetime.substr(11, 5);
+      // utils.writeLog('time='+time);
       var d = new Date();
-      var t = d.getTime();
+      var t = d.getTime()+28800000;
+
+      var date = new Date(t);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      month = month < 10 ? '0'+month: month;
+      day = day < 10 ? '0'+day: day;
       
-      utils.writeLog('time='+time);
+      utils.writeLog('hours='+hours+":"+minutes);
+      // var time1 = new Date(t).toLocaleTimeString("en-US");
+      // utils.writeLog('time1='+time1);
       var sql = {};
       real_start = job.toJSON().real_start;
       real_end = job.toJSON().real_end;
       var type = "in";
       utils.writeLog('real_start='+real_start);
-      if(real_start == "" || real_start == null){
+      if(job.toJSON().status == 1){
         sql["status"] = 2;
-        sql['real_start'] = time;
-        sql["timestamp"] = t;
+        sql['real_start'] = hours+":"+minutes;
+        sql["timestamp"] = d.getTime()+3600000;
+
+        new Clockings({
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "in", timestamp: d.getTime()+3600000, date: (year+"-"+month+"-"+day), created_at: new Date(), updated_at: new Date()
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
       }else{
         sql["status"] = 3;
-        sql['real_end'] = time;
+        sql['real_end'] = hours+":"+minutes;
         type = "out";
+
+        new Clockings({
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "out", timestamp: d.getTime()+3600000, date: (year+"-"+month+"-"+day), created_at: new Date(), updated_at: new Date()
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
       }
       sql["updated_at"] = new Date();
       await job.save(sql).then(function (row) {
