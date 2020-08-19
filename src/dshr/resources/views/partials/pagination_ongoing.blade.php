@@ -31,7 +31,7 @@
             @endif
             <td>{{ $jobon->Jobs() != null ? array_get($jobType, $jobon->Jobs()['job_type_id']): ''}}</td>
             <td>
-                <span class="btn btn-success btn-sm">{{array_get($status, $jobon->status)}}</span>
+                <span class="btn text-{{array_get($color_status, $jobon->status)}} btn-sm">{{array_get($status, $jobon->status)}}</span>
             </td>
             <td class="align-center">{{$jobon->real_start}}</td>
             <td class="align-center">{{$jobon->real_end}}</td>

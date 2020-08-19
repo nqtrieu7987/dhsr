@@ -7,7 +7,7 @@ use App\Models\Job;
 use App\Models\AllJob;
 use App\Models\JobType;
 use App\Models\Hotel;
-use App\Models\User1;
+use App\Models\User;
 use App\Exports\JobExport;
 use Auth;
 use Session, Excel;
@@ -46,7 +46,7 @@ class JobController extends Controller
         ksort($hotels);
 
         $slots = Job::pluck('slot', 'slot')->toArray();
-        $slots[0] ='All';
+        $slots[0] ='Slot';
         ksort($slots);
         $view_type = config('app.view_type');
 
@@ -126,11 +126,12 @@ class JobController extends Controller
         $status = config('app.job_status');
         $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
         $view_type = config('app.view_type');
+        $color_status = config('app.color_status');
 
         $jobsPrev = AllJob::where('job_id', $id)->orderBy('timestamp', 'DESC')->paginate(20);
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('job.edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url'))->with('site','Job: '.$id);
+        return view('job.edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url','color_status'))->with('site','Job: '.$id);
     }
 
     /**
@@ -250,6 +251,7 @@ class JobController extends Controller
 
         $jobType = JobType::pluck('name', 'id')->toArray();
         $status = config('app.job_status');
+        $color_status = config('app.color_status');
 
         $hotels = Hotel::pluck('name', 'id')->toArray();
         $hotels[0] ='Select Hotel';
@@ -261,10 +263,12 @@ class JobController extends Controller
             $jobs = $jobs->where('hotel_id', $request->hotel_id);
         }
         if($request->start_date != ''){
-            $start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
+            $start_date = Carbon::createFromFormat('m/d/Y', $request->get('start_date'))->startOfDay();
+            $start_date = date_format($start_date, "Y-m-d");
             $jobs = $jobs->where('start_date', $start_date);
         }
         $listIds = $jobs->get();
+        
         $ids =[];
         if(count($listIds) > 0){
             foreach ($listIds as $key => $value) {
@@ -277,7 +281,7 @@ class JobController extends Controller
             $datas = AllJob::whereIn('job_id', $ids)->paginate(30);
         }
 
-        return view('job.all-jobs',compact('datas','status','jobType','hotels'))
+        return view('job.all-jobs',compact('datas','status','color_status','jobType','hotels'))
                 ->with('site','All Job');
     }
 
@@ -407,6 +411,8 @@ class JobController extends Controller
 
     public function createMultiPost(Request $request){
         $start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
+        $start_time = str_replace(" ", "", $request->get('start_time'));
+        $end_time = str_replace(" ", "", $request->get('end_time'));
         $msg = 'Create successfully!';
         if($request->get('id') > 0){
             $data = Job::find($request->get('id'));
@@ -415,8 +421,8 @@ class JobController extends Controller
                     'hotel_id' => $request->get('hotel_id'),
                     'job_type_id' => $request->get('job_type_id'),
                     'slot' => $request->get('slot'),
-                    'start_time' => date("H:i", strtotime($request->get('start_time'))),
-                    'end_time' => date("H:i", strtotime($request->get('end_time'))),
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
                     'start_date' => $start_date,
                     'view_type' => $request->get('view_type'),
                     'is_active'  => 1
@@ -428,8 +434,8 @@ class JobController extends Controller
                 'hotel_id' => $request->get('hotel_id'),
                 'job_type_id' => $request->get('job_type_id'),
                 'slot' => $request->get('slot'),
-                'start_time' => date("H:i", strtotime($request->get('start_time'))),
-                'end_time' => date("H:i", strtotime($request->get('end_time'))),
+                'start_time' => $start_time,
+                'end_time' => $end_time,
                 'start_date' => $start_date,
                 'view_type' => $request->get('view_type'),
                 'is_active'  => 1,
@@ -441,5 +447,66 @@ class JobController extends Controller
             'id' => $data->id,
             'msg' => $msg
         ]);
+    }
+
+    public function inOut(Request $request, $id){
+        $data = AllJob::find($id);
+        $link_url = ['url' => route('job.edit', $data->job_id), 'title' => 'Back', 'icon' =>'fa fa-reply'];
+        return view('job.in-out',compact('data','link_url'))->with('site','Job');
+    }
+
+    public function inOutPost(Request $request, $id){
+        $real_start = date("H:i", strtotime($request->get('real_start')));
+        $real_end = date("H:i", strtotime($request->get('real_end')));
+        $paidTimeIn = $request->get('paidTimeIn');
+        $paidTimeOut = $request->get('paidTimeOut');
+        if($paidTimeIn == ""){
+            $paidTimeIn = $real_start;
+        }else{
+            $paidTimeIn = date("H:i", strtotime($request->get('paidTimeIn')));
+        }
+        if($paidTimeOut == ""){
+            $paidTimeOut = $real_end;
+        }else{
+            $paidTimeOut = date("H:i", strtotime($request->get('paidTimeOut')));
+        }
+
+        $timeDiff = $this->timeDiff($paidTimeIn, $paidTimeOut);
+        if($timeDiff < 0){
+            $time1 = $this->timeDiff($paidTimeIn, '24:00');
+            $time2 = $this->timeDiff('00:00', $paidTimeOut);
+            $totalHours = round(($time1 + $time2)/3600, 2) - $request->get('breakTime');
+        }else{
+            $totalHours = round($timeDiff/3600, 2) - $request->get('breakTime');
+        }
+
+        $data = AllJob::find($id);
+        if($data->workTime_confirmed != 1){
+            $user = User::find($data->user_id);
+            $user->update(['jobsDone' => $user->jobsDone + 1]);
+        }
+        $data->update([
+            'real_start' => $real_start,
+            'real_end' => $real_end,
+            'paidTimeIn' => $paidTimeIn,
+            'paidTimeOut' => $paidTimeOut,
+            'breakTime' => $request->get('breakTime'),
+            'totalHours' => $totalHours,
+            'timestamp' => time()*1000,
+            'workTime_confirmed' => 1,
+            'remarks' => $request->get('remarks'),
+        ]);
+        
+        \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
+
+        Session::flash('success', 'Confirm success!');
+        return redirect()->back();
+    }
+
+    public function timeDiff($firstTime,$lastTime) {
+        $firstTime=strtotime($firstTime);
+        $lastTime=strtotime($lastTime);
+        $timeDiff=$lastTime-$firstTime;
+        return $timeDiff;
     }
 }

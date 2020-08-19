@@ -255,17 +255,32 @@ return [
     ),
 
     'view_type' => array(
-        0 => 'Select view type',
-        1 => 'Manager',
-        2 => 'Under the cellar',
-        3 => 'On the room',
-        4 => 'At the kitchen'
+        0 => '#',
+        1 => 'Favourited',
+        2 => 'Admin Only',
+        3 => 'W Regulars',
+        4 => 'MO Regulars',
+        5 => 'RWS Regulars',
+        6 => 'Kempinski Regulars',
+        7 => 'Hilton Regulars',
+        8 => 'GWP Regulars',
+        9 => 'Raffles Regulars',
     ),
 
     'job_status' => array(
         0 => 'New',
-        1 => 'Complete',
-        2 => 'Doing',
-        3 => 'Done'
+        1 => 'Confirm',
+        2 => 'Check in',
+        3 => 'Complete',
+        4 => 'Cancel',
+        5 => 'Failed',    
+    ),
+    'color_status' => array(
+        0 => 'secondary',
+        1 => 'primary',
+        2 => 'info',
+        3 => 'success',
+        4 => 'danger',
+        5 => 'warning',    
     ),
 ];

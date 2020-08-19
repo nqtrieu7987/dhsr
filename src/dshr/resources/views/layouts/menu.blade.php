@@ -8,7 +8,7 @@
         <a href="{{Request::url()}}" class="link-home">{{isset($site) ? $site : 'Home'}}</a>
       </li>
       @if(isset($link_url))
-        <a href="{{$link_url['url']}}" class="nav-link text-primary ml-3" style="font-weight: bold; font-size: 20px;margin-top: -3px;"><i class="{{$link_url['icon']}}" aria-hidden="true"></i> {{$link_url['title']}}</a>
+        <a @if($link_url['icon'] =='fa fa-reply') onclick="goBack()" @else href="{{$link_url['url']}}" @endif class="nav-link text-primary ml-3" style="font-weight: bold; font-size: 20px;margin-top: -3px;"><i class="{{$link_url['icon']}}" aria-hidden="true"></i> {{$link_url['title']}}</a>
       @endif
     </ul>
 
@@ -234,7 +234,7 @@
             <a href="{{route('job.all-jobs')}}" class="nav-link {{ (Request::is('all-jobs')) ? 'active' : null }}">
               <img class="icon-menu-left" src="{{ url('/images/alljob_sidebar_icon.png') }}"/>
               <p>
-                All Job
+                Attendance
               </p>
             </a>
           </li>
@@ -242,7 +242,7 @@
             <a href="{{route('clocking')}}" class="nav-link {{in_array(Route::currentRouteName(), ['clocking']) ? 'active' : ''}}">
               <img class="icon-menu-left" src="{{ url('/images/clocking_sidebar_icon.png') }}"/>
               <p>
-                Clocking
+                Attendance report
               </p>
             </a>
           </li>

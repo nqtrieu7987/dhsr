@@ -65,6 +65,12 @@ return [
             'driver' => 'errorlog',
             'level'  => 'debug',
         ],
+        'inOut' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/log_in_out.log'),
+            'level' => 'debug',
+            'days' => 7,
+        ],
     ],
 
 ];

@@ -38,7 +38,7 @@
                             <tbody>
                                 @php $i = 1; $j = 1 @endphp
                                 @foreach($dataJobs as $k => $jobs)
-                                  <tr @if($j % 2 == 0) style="background-color: rgba(0,0,0,0)" @else style="background-color: rgba(0,0,0,.05)" @endif>
+                                  <tr @if($j % 2 == 0) style="background-color: #1E3458; color: white;" @else style="background-color: #1E3458; color: white;" @endif>
                                     <!-- <td rowspan="{{count($jobs)+ 1}}" style="border:1px solid #ccc"><b>{{$k}}</b></td> -->
                                     <td colspan="12" style="border:1px solid #ccc"><b>{{$k}}</b></td>
                                   </tr>

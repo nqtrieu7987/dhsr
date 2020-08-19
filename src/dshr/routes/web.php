@@ -73,8 +73,13 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'twostep', 'chec
     Route::get('job-export-excel', ['as' => 'job.export-excel', 'uses' => 'JobController@exportExcel']);
     Route::get('all-jobs', ['as' => 'job.all-jobs', 'uses' => 'JobController@AllJobs']);
     Route::delete('job/approved/{id}', ['as' => 'job.approved', 'uses' => 'JobController@approved']);
+    Route::get('job/in-out/{id}', ['as' => 'job.inOut', 'uses' => 'JobController@inOut']);
+    Route::post('job/in-out/{id}', ['as' => 'job.inOut', 'uses' => 'JobController@inOutPost']);
     Route::post('change/status', ['as' => 'change.status', 'uses' => 'HomeController@changeStatus']);
+    Route::post('change/job_status', ['as' => 'changeJobStatus', 'uses' => 'HomeController@changeJobStatus']);
     Route::post('change/statusUser', ['as' => 'change.statusUser', 'uses' => 'HomeController@changeStatusUser']);
+
+    Route::get('change/update_status', ['as' => 'changeUpdateStatus', 'uses' => 'HomeController@changeUpdateStatus']);
 
     Route::get('clocking', ['as' => 'clocking', 'uses' => 'HomeController@clocking']);
     Route::get('chartjs.html', ['as' => 'chartjs', 'uses' => 'HomeController@chartjs']);
@@ -143,6 +148,7 @@ Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 't
     ]);
     Route::get('users/edit/{id}', ['as' => 'user.edit', 'uses' => 'UsersManagementController@editUser']);
     Route::post('users/edit/{id}', ['as' => 'user.edit', 'uses' => 'UsersManagementController@editUserPost']);
+    Route::get('users/resetpass/{id}', ['as' => 'user.resetpass', 'uses' => 'UsersManagementController@resetpass']);
 
 
     Route::post('search-users', 'UsersManagementController@search')->name('search-users');

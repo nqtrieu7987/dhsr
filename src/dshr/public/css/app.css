@@ -444,6 +444,7 @@ a.link-home:hover{
 }
 .changeStatus{
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .status-icon{
@@ -552,4 +553,24 @@ a.link-home:hover{
 }
 .alert a{
 	text-decoration: none;
+}
+
+.time-in-out{
+	width: 100%;
+	float: left;
+}
+.time-col{
+	width: 50%;
+	float: left;
+}
+
+#confirmInOut .modal-footer{
+	width: 100% !important;
+}
+.time-col input{
+	width: 150px;
+	height: 36px;
+	border-radius: 4px;
+	text-align: center;
+	font-weight: bold;
 }

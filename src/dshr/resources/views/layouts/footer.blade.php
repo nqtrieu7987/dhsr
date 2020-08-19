@@ -9,6 +9,10 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
+
+function goBack() {
+	window.history.back();
+}
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ url('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

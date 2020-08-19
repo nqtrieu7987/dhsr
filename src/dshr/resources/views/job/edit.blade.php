@@ -31,13 +31,6 @@
     <div class="row">
       <div class="col-md-12 col-md-offset-1">
         <div class="card panel-default">
-          {{-- <div class="card-header">
-            <a href="/job" class="btn btn-blue-light btn-xs pull-right">
-              <i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
-              <span class="hidden-xs">Back to list </span><br/>
-            </a>
-          </div> --}}
-
           {!! Form::model($data, array('action' => array('JobController@update', $data->id), 'method' => 'PUT', 'files' => true)) !!}
             {!! csrf_field() !!}
 
@@ -149,7 +142,7 @@
                         <div id="deleteAccount" class="tab-pane fade show active">
                             <div class="table-responsive users-table">
                               <div id="table_data">
-                                @include('partials/pagination_data', ['data' => $jobsPrev, 'name' => 'prev'])
+                                @include('partials/pagination_status', ['data' => $jobsPrev, 'name' => 'prev'])
                               </div>
                             </div>
                         </div>
@@ -194,6 +187,12 @@
         $('#datepicker').datepicker({
             format:'mm/dd/yyyy',
         });
+
+        $('.timepicker-24-hr').wickedpicker({
+            title : 'Select hour',
+            twentyFour: true,
+            minutesInterval: 1
+        });
     });
 
 $(document).ready(function(){
@@ -207,7 +206,7 @@ $(document).ready(function(){
   {
     $('#waiting').show();
   $.ajax({
-    url:"/pagination/fetch_data?id={{$data->id}}&type=job&page="+page,
+    url:"/pagination/fetch_data?id={{$data->id}}&type=job&page="+page+"&jobStatus=1",
     success:function(data)
     {
       $('#waiting').hide();
@@ -216,5 +215,45 @@ $(document).ready(function(){
   });
   }
 });
+</script>
+
+<script type="text/javascript">
+    $('.changeStatus').click(function(){
+        $('#waiting').show();
+        var idstt = this.id;
+        var id = $(this).data("id");
+        var type = $(this).data("type");
+        var data = {
+            id: id,
+            model: 'alljob',
+            type: type
+        };
+        $.ajax({
+            type : 'GET',
+            url  : '{{route('changeUpdateStatus')}}?id='+id+'&model=alljob&type='+type,
+            data : data,
+            success  : function (data) {
+                $('#waiting').hide();
+                if(data.status === 201){
+                  //$('.approve').hide();
+                  alert(data.msg);
+                }else{
+                  //$('#approve_cancel_'+id).hide();
+                  if(data.status === 200){
+                    $('#text_'+id).text('Confirm');
+                    $('#text_'+id).removeClass('text-secondary');
+                    $('#text_'+id).removeClass('text-danger');
+                    $('#text_'+id).addClass('text-primary');
+                  }else if(data.status === 202){
+                    $('#text_'+id).text('Cancel');
+                    $('#text_'+id).removeClass('text-secondary');
+                    $('#text_'+id).removeClass('text-primary');
+                    $('#text_'+id).addClass('text-danger');
+                  }
+                  //alert(data.msg);
+                }
+            }
+        });
+    });
 </script>
 @endsection

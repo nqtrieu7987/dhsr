@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
 use Validator;
 use App\Helper\VtHelper;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -130,6 +131,83 @@ class HomeController extends Controller
         return response()->json([
             'status' => $status,
             'img' => '/images/status/'.$request->stt.'-'.$statusName.'.png'
+        ]);
+    }
+
+    public function changeJobStatus(Request $request){
+        $data = AllJob::find($request->id);
+        dd($data);
+        if($request->type == 'approve'){
+            $status = 1;
+            Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
+            if($data->Jobs()->current_slot >= $data->Jobs()->slot){
+                return response()->json([
+                    'msg' => 'Job full slot',
+                    'status' => 201
+                ]);
+            }else{
+                // Cập nhật current_slot của job lên 1 đơn vị
+                if(in_array($data->status, [0,4,5])){
+                    $data->status = $status;
+                    $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
+                    $msg = 'Approve Successfully!';
+                    $stt = 200;
+                }else{
+                    $msg = 'Failed!';
+                    $stt = 203;
+                }
+            }
+        }else{
+            $status = 4;
+            if(in_array($data->status, [1,2,3]) && $data->Jobs()->current_slot > 0){
+                $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot - 1]);
+            }
+            $data->status = $status;
+            $msg = 'Cancel Successfully!';
+            $stt = 202;
+        }
+        $data->save();
+        return response()->json([
+            'msg' => $msg,
+            'status' => $stt
+        ]);
+    }
+
+    public function changeUpdateStatus(Request $request){
+        $data = AllJob::find($request->id);
+        if($request->type == 'approve'){
+            $status = 1;
+            Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
+            if($data->Jobs()->current_slot >= $data->Jobs()->slot){
+                return response()->json([
+                    'msg' => 'Job full slot',
+                    'status' => 201
+                ]);
+            }else{
+                // Cập nhật current_slot của job lên 1 đơn vị
+                if(in_array($data->status, [0,4,5])){
+                    $data->status = $status;
+                    $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
+                    $msg = 'Approve Successfully!';
+                    $stt = 200;
+                }else{
+                    $msg = 'Failed!';
+                    $stt = 203;
+                }
+            }
+        }else{
+            $status = 4;
+            if(in_array($data->status, [1,2,3]) && $data->Jobs()->current_slot > 0){
+                $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot - 1]);
+            }
+            $data->status = $status;
+            $msg = 'Cancel Successfully!';
+            $stt = 202;
+        }
+        $data->save();
+        return response()->json([
+            'msg' => $msg,
+            'status' => $stt
         ]);
     }
 }

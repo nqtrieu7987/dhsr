@@ -31,7 +31,7 @@
             @endif
             <td>{{ $jobpv->Jobs() != null ? array_get($jobType, $jobpv->Jobs()['job_type_id']): ''}}</td>
             <td>
-                <span class="btn btn-success btn-sm">{{array_get($status, $jobpv->status)}}</span>
+                <span class="btn text-{{array_get($color_status, $jobpv->status)}} btn-sm">{{array_get($status, $jobpv->status)}}</span>
             </td>
             <td class="align-center">{{$jobpv->real_start}}</td>
             <td class="align-center">{{$jobpv->real_end}}</td>

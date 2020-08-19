@@ -56,8 +56,12 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Username</th>
+                                        <th>Hotel</th>
                                         <th>Job</th>
-                                        <th>Status</th>
+                                        <th>Current Status</th>
+                                        <th>Confirm</th>
+                                        <th>Cancel</th>
+                                        <th>In/Out</th>
                                         <th>Start time</th>
                                         <th>End time</th>
                                         <th>Paid TimeIn</th>
@@ -68,20 +72,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if($datas)
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{$data->id}}</td>
                                             <td><a href="{{route('user.edit', $data->Users()->id)}}">{{$data->Users()->userName}}</a></td>
+                                            <td>{{ $data->Jobs() != null ? array_get($hotels, $data->Jobs()['hotel_id']): ''}}</td>
                                             <td>{{ $data->Jobs() != null ? array_get($jobType, $data->Jobs()['job_type_id']): ''}}</td>
                                             <td>
-                                                @if($data->status == 3)
-                                                    {!! Form::open(array('url' => 'job/approved/' . $data->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Approved')) !!}
-                                                        {!! Form::hidden('_method', 'DELETE') !!}
-                                                        {!! Form::hidden('remarks', $data->remarks) !!}
-                                                        {!! Form::button('<span>Approved</span><span></span>', array('class' => 'btn btn-warning btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmApproved', 'data-title' => 'Approved', 'data-message' => 'Are you sure?')) !!}
-                                                    {!! Form::close() !!}
-                                                @else
-                                                    <span class="btn btn-success btn-sm">{{array_get($status, $data->status)}}</span>
+                                                <span class="btn text-{{array_get($color_status, $data->status)}} btn-sm" id="text_{{$data->id}}">{{array_get($status, $data->status)}}</span>
+                                            </td>
+                                            <td class="align-center">
+                                                <div id="approve_{{$data->id}}">
+                                                    <span class="text-success approve changeStatus" data-id="{{$data->id}}" data-type="approve" id="approve_{{$data->id}}" value="approve">Approval</span><br>
+                                                </div>
+                                            </td>
+                                            <td class="align-center">
+                                                <div id="cancel_{{$data->id}}">
+                                                    <span class="text-danger changeStatus" data-id="{{$data->id}}" data-type="cancel" id="cancel_{{$data->id}}" value="cancel">Cancel</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if($data->status > 0)
+                                                    <a href="{{route('job.inOut', $data->id)}}" target="_blank" class="btn btn-warning btn-sm">In/Out</a>
                                                 @endif
                                             </td>
                                             <td class="align-center">{{$data->real_start}}</td>
@@ -93,10 +106,12 @@
                                             <td>{{$data->remarks}}</td>
                                         </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
-
-                            {{ $datas->links() }}
+                            @if($datas)
+                                {{ $datas->links() }}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -138,5 +153,45 @@
                 return false;
             }
         })
+</script>
+
+<script type="text/javascript">
+    $('.changeStatus').click(function(){
+        $('#waiting').show();
+        var idstt = this.id;
+        var id = $(this).data("id");
+        var type = $(this).data("type");
+        var data = {
+            id: id,
+            model: 'alljob',
+            type: type
+        };
+        $.ajax({
+            type : 'GET',
+            url  : '{{route('changeUpdateStatus')}}?id='+id+'&model=alljob&type='+type,
+            data : data,
+            success  : function (data) {
+                $('#waiting').hide();
+                if(data.status === 201){
+                  //$('.approve').hide();
+                  alert(data.msg);
+                }else{
+                  //$('#approve_cancel_'+id).hide();
+                  if(data.status === 200){
+                    $('#text_'+id).text('Confirm');
+                    $('#text_'+id).removeClass('text-secondary');
+                    $('#text_'+id).removeClass('text-danger');
+                    $('#text_'+id).addClass('text-primary');
+                  }else if(data.status === 202){
+                    $('#text_'+id).text('Cancel');
+                    $('#text_'+id).removeClass('text-secondary');
+                    $('#text_'+id).removeClass('text-primary');
+                    $('#text_'+id).addClass('text-danger');
+                  }
+                  //alert(data.msg);
+                }
+            }
+        });
+    });
 </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Models\Job;
 use App\Models\AllJob;
 use App\Models\JobType;
 use App\Traits\CaptureIpTrait;
+use Illuminate\Support\Facades\Hash;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -209,30 +210,31 @@ class UsersManagementController extends Controller
 
         $jobType = JobType::pluck('name', 'id')->toArray();
         $status = config('app.job_status');
+        $color_status = config('app.color_status');
 
         $jobsPrev = AllJob::leftJoin('job', function($join) {
-                $join->on('old_all_jobs.job_id', '=', 'job.id');
+                $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->where('old_all_jobs.user_id', $id)
-            ->where('job.start_date','<',DATE(NOW()))
+            ->where('all_jobs.user_id', $id)
+            ->where('job.start_date','<',date('Y-m-d'))
             ->paginate(20);
 
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
-                $join->on('old_all_jobs.job_id', '=', 'job.id');
+                $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->where('old_all_jobs.user_id', $id)
-            ->where('job.start_date','>=',DATE(NOW()))
+            ->where('all_jobs.user_id', $id)
+            ->where('job.start_date','>=',date('Y-m-d'))
             ->paginate(20);
         
         $link_url = ['url' => '/users', 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('usersmanagement.update-user', compact('jobsPrev','jobsOngoing','jobType','status','link_url'))->with($data)->with('site', 'Users: '.$id);
+        return view('usersmanagement.update-user', compact('jobsPrev','jobsOngoing','jobType','status','color_status','link_url'))->with($data)->with('site', 'Users: '.$id);
     }
 
     public function editUserPost(Request $request, $id){
         $user = User::find($id);
         $validator = Validator::make($request->all(), [
             'userName'     => 'required|max:255',
-            'userNRIC'     => 'required|min:6|max:200',
+            //'userNRIC'     => 'required|min:6|max:200',
             'userBirthday' => 'required',
             'contactNo' => 'required',
             'address1' => 'required',
@@ -520,5 +522,21 @@ SELECT * FROM ds_users  WHERE MATCH(userName, email, currentSchool, address1, ad
         $user->save();
 
         return response('success');
+    }
+
+    public function resetpass($id)
+    {
+        $user = User::findOrFail($id);
+        $birthday = str_replace('/', '', $user->userBirthday);
+        $birthday = str_replace('-', '', $birthday);
+        $password = $user->userNRIC.$birthday;
+        if($user){
+            $user->password = Hash::make($password);
+            $user->save();
+
+            return redirect('users')->with('success', 'Reset password default: '.$password.' email: '.$user->email);
+        }
+
+        return back()->with('error', trans('usersmanagement.deleteSelfError'));
     }
 }

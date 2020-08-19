@@ -697,7 +697,7 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                                     {!! Form::label('jobsDone', 'Job Done', array('class' => 'col-md-3 control-label')); !!}
                                                     <div class="col-md-9">
                                                         <div class="input-group">
-                                                            {!! Form::text('jobsDone', $user->jobsDone, array('id' => 'jobsDone', 'class' => 'form-control', 'placeholder' => 'Job Done')) !!}
+                                                            {!! Form::text('jobsDone', ($user->jobsDone > 0 ? $user->jobsDone : 0), array('id' => 'jobsDone', 'class' => 'form-control', 'placeholder' => 'Job Done')) !!}
                                                         </div>
                                                         @if ($errors->has('jobsDone'))
                                                             <span class="help-block">

@@ -80,6 +80,7 @@
                                         <th class="no-search no-sort">Avatar</th>
                                         <th>Username</th>
                                         <th>Contact No</th>
+                                        <th>Reset pass</th>
                                         @if(request()->get('type') =='ic')
                                             <th class="no-search no-sort">NRIC Front</th>
                                             <th class="no-search no-sort">NRIC Back</th>
@@ -103,8 +104,9 @@
                                         <tr>
                                             <td class="hidden-xs">{{$user->userNRIC}}</td>
                                             <td><div class="header-user"><img onclick="showModalImage(this)" src="{{$user->workPassPhoto}}" alt="{{$user->userName}}"></div></td>
-                                            <td><a href="{{ URL::to('users/edit/'.$user->id) }}" title="{{$user->userName}}">{{$user->userName}}</a></td>
+                                            <td><a href="{{ URL::to('users/edit/'.$user->id) }}" title="{{$user->userName}}">{{$user->userName ? $user->userName : $user->email}}</a></td>
                                             <td>{{$user->contactNo}}</td>
+                                            <td><a href="{{route('user.resetpass', $user->id)}}">Resetpass</a></td>
                                             @if(request()->get('type') =='ic')
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICFront}}" alt="NRICFront"></td>
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICBack}}" alt="NRICBack"></td>

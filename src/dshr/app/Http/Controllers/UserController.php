@@ -34,14 +34,18 @@ class UserController extends Controller
         $datas = Job::selectRaw("hotel_id, COUNT(*) AS 'tong'")->groupBy('hotel_id')->get();
 
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
-                $join->on('old_all_jobs.job_id', '=', 'job.id');
+                $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->where('job.start_date','>=',DATE(NOW()))
+            ->where('job.start_date','>=', date('Y-m-d'))
             ->where('job.is_active', 1)
             ->orderBy('job.start_date', 'ASC')
             ->limit(20)
-            ->get();
-
+            ->get([
+            'all_jobs.*', //to get ids and timestamps
+            'job.job_type_id as job_type_id',
+            'job.hotel_id as hotel_id',
+            'job.slot as slot',
+        ]);
         $dataJobs = [];
         foreach ($jobsOngoing as $key => $value) {
             if(!isset($dataJobs[$value->Jobs()->Hotels()->name])){
