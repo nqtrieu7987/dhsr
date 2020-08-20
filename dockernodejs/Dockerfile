@@ -1,10 +1,10 @@
 FROM keymetrics/pm2:latest-alpine
-VOLUME ["/src"]
+VOLUME ["/src","/uploads"]
 # Bundle APP files
 COPY src src/
 #COPY package.json .
 #COPY pm2.json .
-
+COPY uploads uploads/
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
 WORKDIR src
