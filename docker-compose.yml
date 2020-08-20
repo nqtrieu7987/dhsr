@@ -9,7 +9,9 @@ services:
             - "./src/dshr:/var/www/app"
             - "./configs/general.conf:/etc/nginx/general.conf"
             - "./ssl:/etc/nginx/conf.d"
+            - "./log:/var/log/nginx"
         ports:
+            - "80:80"
             - "443:443"
         environment:
             - NGINX_HOST=${NGINX_HOST}
@@ -42,6 +44,7 @@ services:
         image: nodejspm2:latest
         volumes:
             - "./srcnode:/src"
+            - "./src/dshr/public/uploads:/uploads"
         ports:
             - "8443:8443"
         restart: always
