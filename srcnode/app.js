@@ -78,7 +78,31 @@ module.exports.create = function (server, host, port, publicDir) {
 		mysqlTool.resetPass(req, res);
 	});
 	app.post('/service/users', function (req, res) {
-		mysqlTool.getUserInfor(req, res);
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.getUserInfor(req, res);	
+			}
+		});
 	});
 	// dang ki mua goi
 	app.post('/service/user/register', function (req, res) {
@@ -117,7 +141,32 @@ module.exports.create = function (server, host, port, publicDir) {
 		mysqlTool.userUploadsImage(req, res);
 	});
 	app.post('/service/hotel', function (req, res) {
-		mysqlTool.getListHotel(req, res);
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.getListHotel(req, res);
+			}
+		});
+		
 	});
 	app.post('/service/hotel/info', function (req, res) {
 		mysqlTool.getHotelInfo(req, res);
@@ -131,11 +180,59 @@ module.exports.create = function (server, host, port, publicDir) {
 	});
 
 	app.post('/service/job/booking', function (req, res) {
-		mysqlTool.jobBooking(req, res);
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.jobBooking(req, res);
+			}
+		});
 	});
 
 	app.post('/service/job/cancel', function (req, res) {
-		mysqlTool.jobCancel(req, res);
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.jobCancel(req, res);
+			}
+		});
 	});
 
 	app.post('/service/job/myjob', async function (req, res) {
@@ -154,7 +251,31 @@ module.exports.create = function (server, host, port, publicDir) {
 	});
 
 	app.post('/service/job/check_in_check_out', function (req, res) {
-		mysqlTool.checkInCheckOut(req, res);
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.checkInCheckOut(req, res);
+			}
+		});
 	});
 
 	notification.startSchedule();

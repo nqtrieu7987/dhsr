@@ -1128,6 +1128,7 @@ module.exports = {
     var isGWP = req.headers.isgwp;
     var activated = req.headers.activated;
     var verifyCode = req.headers.verifycode;
+    var jwtToken = req.query.token;
     if (req.headers.email == undefined || utils.isEmptyObject(req.headers.email)) {
       res.json({ message: 'Email error!', resultCode: 1 });
       return "";
@@ -1200,7 +1201,6 @@ module.exports = {
   getUserInfor: function getUserInfor(req, res) {
     var userID = req.headers.userID;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    email = email.toLowerCase();
     try {
       User.where('id', userID).fetch().then(function (user) {
         if (user != null) {
