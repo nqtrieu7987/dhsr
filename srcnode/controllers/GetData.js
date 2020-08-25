@@ -1,5 +1,8 @@
 var utils = require("../Utils.js");
 const database = require('../config/database.js');
+var fs = require('fs');
+var jwt = require('jsonwebtoken');
+var cert = fs.readFileSync('./educa.vn.key');  // get private key
 
 async function getListJobOnGoing(req, res) {
     var hotel_id = req.headers.hotel_id;
@@ -16,8 +19,41 @@ async function getListJobOnGoing(req, res) {
         INNER JOIN ds_job_type ON ds_job.job_type_id = ds_job_type.id 
         WHERE ds_job.hotel_id = `+ hotel_id + ` AND ds_hotel.is_active = 1 AND ds_job.is_active = 1 AND current_slot < slot AND start_date >= CURDATE() ORDER BY start_date`;
     }
-    utils.writeLog("Ongoing=" + sql);
-    return database.simpleExecute(sql);
+
+    var email = req.headers.email;
+    var jwtToken = req.headers.token;
+    if (email == undefined || utils.isEmptyObject(email)) {
+        res.json({ message: 'Email not null!', resultCode: 1 });
+        return "";
+    }
+    if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+        res.json({ message: 'Token not null!', resultCode: 1 });
+        return "";
+    }
+    
+    try {
+        email = email.toLowerCase();
+    } catch (error) { }
+    var check = false;
+    await jwt.verify(jwtToken, cert, function (err, payload) {
+        if (err) {
+            res.json({ message: 'Token invalid!', resultCode: 1 });
+            return "";
+        }
+        if (payload.email != email) {
+            res.json({ message: 'Email invalid!', resultCode: 1 });
+            return "";
+        }else{
+            check = true;
+        }
+    });
+    if(check == true){
+        utils.writeLog("Ongoing=" + sql);
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        var datas = await database.simpleExecute(sql);
+        res.json({ message: 'Success', resultCode: 0, data: datas });
+        return "";
+    }
 }
 
 async function getNewJobs() {
@@ -46,8 +82,40 @@ async function getMyJob(req, res) {
     } else {
         var sql = "SELECT ds_all_jobs.id AS all_job_id, ds_job.id, ds_job.hotel_id, ds_hotel.name AS hotel_name, ds_job.is_active, ds_all_jobs.status AS STATUS, ds_job.start_date, ds_job.start_date, ds_job.job_type_id, ds_job_type.name AS name, ds_job.start_time, ds_job.end_time, DATE_FORMAT(start_date, '%d %b') AS day_month, DATE_FORMAT(start_date, '%W') AS  weekyday FROM ds_all_jobs LEFT JOIN ds_job ON ds_all_jobs.job_id = ds_job.id LEFT JOIN ds_hotel ON ds_job.hotel_id = ds_hotel.id LEFT JOIN ds_job_type ON ds_job.job_type_id= ds_job_type.id WHERE ds_all_jobs.user_id=" + user_id + " AND ds_all_jobs.status=" + status + " ORDER BY ds_job.start_date DESC";
     }
-    utils.writeLog("MyJob=" + sql);
-    return database.simpleExecute(sql);
+    var email = req.headers.email;
+    var jwtToken = req.headers.token;
+    if (email == undefined || utils.isEmptyObject(email)) {
+        res.json({ message: 'Email not null!', resultCode: 1 });
+        return "";
+    }
+    if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+        res.json({ message: 'Token not null!', resultCode: 1 });
+        return "";
+    }
+    
+    try {
+        email = email.toLowerCase();
+    } catch (error) { }
+    var check = false;
+    await jwt.verify(jwtToken, cert, function (err, payload) {
+        if (err) {
+            res.json({ message: 'Token invalid!', resultCode: 1 });
+            return "";
+        }
+        if (payload.email != email) {
+            res.json({ message: 'Email invalid!', resultCode: 1 });
+            return "";
+        }else{
+            check = true;
+        }
+    });
+    if(check == true){
+        utils.writeLog("MyJob=" + sql);
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        var datas = await database.simpleExecute(sql);
+        res.json({ message: 'Success', resultCode: 0, data: datas });
+        return "";
+    }
 }
 
 module.exports = {

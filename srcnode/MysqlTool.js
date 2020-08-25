@@ -255,9 +255,9 @@ async function getMyJob(user_id, status) {
     
   });
 }
-async function getUserInfo(username) {
+async function getUserInfo(email) {
   return new Promise(resolve => {
-    User.where('username', username).fetch().then(function (user) {
+    User.where('email', email).fetch().then(function (user) {
       resolve(user);
     });
   });
@@ -847,35 +847,46 @@ var userUploadsImageThumb =async function (req, res) {
   });
 }
 
-var checkInCheckOut = async function (req, res) {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+async function checkInCheckOut(req, res) {
+  //res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (!req.files)
       return res.status(400).send('No files were uploaded.');
   var email = req.query.email;
   var id = req.query.id;
   var all_job_id = req.query.all_job_id;
   var jwtToken = req.query.token;
-  // if(all_job_id == null || all_job_id == undefined){
-  //   res.json({ message: 'all_job_id not null!', resultCode: 1 });
-  //   return "";
-  // }
-  var job = await getAllJobsInOut(id);
-  if(job == false){
-    res.json({ resultCode: 1, message: 'Get All Job Failed'});
-    return "";
-  }
-  try {
-    email = email.toLowerCase();
-  } catch (error) { }
-  jwt.verify(jwtToken, cert, function (err, payload) {
-      if (err) {
-        res.json({ message: 'Token invalid!', resultCode: 0 });
-      }
-      if (payload.email != email) {
-        res.json({ message: 'User invalid!', resultCode: 1 });
-      }
-  });
-
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+    } catch (error) { }
+    var check = false;
+		await jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+        check = true;
+			}
+    });
+    utils.writeLog('check='+check);
+  if(check == true){
+    var job = await getAllJobsInOut(id);
+    utils.writeLog('job='+job);
+    if(job == false){
+      res.json({ resultCode: 1, message: 'Get All Job Failed'});
+      return "";
+    }
       utils.writeLog('email: ' + email);
       // upload userPants
       let userPants = req.files.userPants;
@@ -988,6 +999,10 @@ var checkInCheckOut = async function (req, res) {
       });
 
       res.json({ message: 'Update all job successfully.', resultCode: 0 });
+  }else{
+    res.json({ message: 'Failed check in check out!', resultCode: 1 });
+				return "";
+  }
 }
 module.exports = {
   userUploadsImage: userUploadsImage,
@@ -1630,6 +1645,7 @@ module.exports = {
     req.header("Content-Type", "text/html; charset=utf-8");
     var job_id = req.headers.job_id;
     var user_id = req.headers.user_id;
+    var email = req.headers.email;
     utils.writeLog("Job booking: user_id= "+user_id + ", job_id="+job_id);
     if (req.headers.job_id == undefined || utils.isEmptyObject(req.headers.job_id)) {
       res.json({ message: 'Please select job!', resultCode: 1 });
@@ -1641,38 +1657,36 @@ module.exports = {
     }
 
     try {
-      var job = await getJobValiable(job_id);
-      if(job == null){
-        res.json({ message: 'Job not valiable!', resultCode: 1 });
-      }
-      if(job.toJSON().current_slot >= job.toJSON().slot){
-        res.json({ message: 'Job full slot!', resultCode: 1 });
-        return "";
-      }
-      var allJob = await getAllJobsByUserId(job_id, user_id);
-      utils.writeLog('allJob='+allJob);
-      if(allJob != null){
-        res.json({ message: 'Job booked!', resultCode: 1 });
-        return "";
-      }
-      // Insert AllJobs
-      new AllJobs({
-        job_id: job_id, user_id: user_id, status: 0, workTime_confirmed: 0, created_at: new Date(), updated_at: new Date()
-      }).save().then((model) => {
-      }).catch(function (err) {
-        res.json({ message: 'Error!', resultCode: 1 });
-      });
+      var user = await getUserInfo(email);
+      if(user == null){
+        res.json({ message: 'User not valiable!', resultCode: 1 });
+      }else if(user.toJSON().userPantsApproved == 1 && user.toJSON().userShoesApproved == 1){// check userPantsApproved, userShoesApproved = 1 to book job
+        var job = await getJobValiable(job_id);
+        if(job == null){
+          res.json({ message: 'Job not valiable!', resultCode: 1 });
+        }
+        if(job.toJSON().current_slot >= job.toJSON().slot){
+          res.json({ message: 'Job full slot!', resultCode: 1 });
+          return "";
+        }
+        var allJob = await getAllJobsByUserId(job_id, user_id);
+        utils.writeLog('allJob='+allJob);
+        if(allJob != null){
+          res.json({ message: 'Job booked!', resultCode: 1 });
+          return "";
+        }
+        // Insert AllJobs
+        new AllJobs({
+          job_id: job_id, user_id: user_id, status: 0, workTime_confirmed: 0, created_at: new Date(), updated_at: new Date()
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
 
-      // Update current_slot on ds_job
-      // var sql = {};
-      //     sql['current_slot'] = job.toJSON().current_slot + 1;
-      //     sql["updated_at"] = new Date();
-      //     await job.save(sql).then(function (row) {
-      //       utils.writeLog("Update Job="+job_id +", current_slot="+sql['current_slot']);
-      //     });
-
-          res.json({ message: 'Book job successfull!', resultCode: 0 });
-          
+        res.json({ message: 'Book job successfull!', resultCode: 0 });
+      }else{
+        res.json({ message: 'User not confirm userPantsApproved, userShoesApproved!', resultCode: 1 });
+      }    
     } catch (e) {
       res.json({ resultCode: 1, message: 'Fail'});
       utils.writeLog("Error book job");
