@@ -122,6 +122,8 @@ function startSchedule() {
     cron.schedule("0 9,15 * * *", function () {
         console.log("running a task every minute");
         sendToAllDevices();
+    }, {
+        timezone: 'Asia/Kuala_Lumpur'
     });
 }
 
