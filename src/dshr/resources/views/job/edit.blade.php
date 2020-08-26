@@ -187,12 +187,6 @@
         $('#datepicker').datepicker({
             format:'mm/dd/yyyy',
         });
-
-        $('.timepicker-24-hr').wickedpicker({
-            title : 'Select hour',
-            twentyFour: true,
-            minutesInterval: 1
-        });
     });
 
 $(document).ready(function(){

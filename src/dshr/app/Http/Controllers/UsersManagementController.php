@@ -47,8 +47,8 @@ class UsersManagementController extends Controller
             //$users = $users->whereRaw('MATCH(userName, email, currentSchool, address1, address2, emergencyContactName, emergencyContactNo, relationToEmergencyContact, bankName,referralCode )AGAINST("'.$request->get('keyword').'" IN NATURAL LANGUAGE MODE)');
         }
         switch ($request->type) {
-            case 'pending':
-                $users = $users->whereRaw('(userPantsApproved =0 OR userPantsApproved is null) and (userShoesApproved =0 OR userShoesApproved is null)')->whereNotNull('userPants')->whereNotNull('userShoes');
+            case 'attire':
+                $users = $users->whereRaw('(userPantsApproved = 0 OR userShoesApproved = 0)')->whereNotNull('userPants')->whereNotNull('userShoes');
                 break;
             case 'uniform':
                 $users = $users->where('userConfirmed', 1);
@@ -67,7 +67,7 @@ class UsersManagementController extends Controller
                 break;
         }
         //dd($users->toSql());
-        $users = $users->paginate(50);
+        $users = $users->paginate(5);
         
         $roles = Role::all();
 

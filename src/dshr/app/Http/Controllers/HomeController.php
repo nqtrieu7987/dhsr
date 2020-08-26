@@ -36,6 +36,7 @@ class HomeController extends Controller
     }
 
     public function changeStatus(Request $request){
+        $type = $request->type;
         switch ($request->model) {
             case 'job':
                 $data = Job::find($request->id);
@@ -59,8 +60,22 @@ class HomeController extends Controller
                 break;
             case 'user':
                 $data = User::find($request->id);
-                $data->activated = abs($data->activated - 1);
-                $msg = abs($data->activated - 1);
+                if($type == 'userPantsApproved'){
+                    $data->userPantsApproved = abs($data->userPantsApproved - 1);
+                    $msg = abs($data->userPantsApproved - 1);
+                }else if($type == 'userShoesApproved'){
+                    $data->userShoesApproved = abs($data->userShoesApproved - 1);
+                    $msg = abs($data->userShoesApproved - 1);
+                }else{
+                    $data->activated = abs($data->activated - 1);
+                    $msg = abs($data->activated - 1);
+                }
+                // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
+                // Chỉ có user có userPantsApproved =1 và userShoesApproved = 1 mới được quyền book new job
+                if($data->userPantsApproved == 1 && $data->userShoesApproved == 1){
+                    $data->userPants = null;
+                    $data->userShoes = null;
+                }
                 break;
             default:
                 # code...
@@ -69,7 +84,8 @@ class HomeController extends Controller
         $data->save();
         return response()->json([
             'msg' => (int)$msg,
-            'status' => '200'
+            'status' => '200',
+            'type' => $type,
         ]);
     }
 
@@ -136,7 +152,6 @@ class HomeController extends Controller
 
     public function changeJobStatus(Request $request){
         $data = AllJob::find($request->id);
-        dd($data);
         if($request->type == 'approve'){
             $status = 1;
             Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
@@ -203,6 +218,9 @@ class HomeController extends Controller
             $data->status = $status;
             $msg = 'Cancel Successfully!';
             $stt = 202;
+
+            $data->userPantsApproved = 0;
+            $data->userShoesApproved = 0;
         }
         $data->save();
         return response()->json([

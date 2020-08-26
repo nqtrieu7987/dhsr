@@ -452,7 +452,8 @@ class JobController extends Controller
     public function inOut(Request $request, $id){
         $data = AllJob::find($id);
         $link_url = ['url' => route('job.edit', $data->job_id), 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('job.in-out',compact('data','link_url'))->with('site','Job');
+        $status = [1 =>'Job Done', 2 =>'Job Failure'];
+        return view('job.in-out',compact('data','link_url','status'))->with('site','Job');
     }
 
     public function inOutPost(Request $request, $id){
@@ -481,10 +482,14 @@ class JobController extends Controller
         }
 
         $data = AllJob::find($id);
-        if($data->workTime_confirmed != 1){
-            $user = User::find($data->user_id);
+        $user = User::find($data->user_id);
+        // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
+        if($data->workTime_confirmed != 1 && $request->status == 1){
             $user->update(['jobsDone' => $user->jobsDone + 1]);
         }
+        // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
+        $user->update(['userPantsApproved' => 0, 'userShoesApproved' => 0]);
+
         $data->update([
             'real_start' => $real_start,
             'real_end' => $real_end,

@@ -23,7 +23,7 @@
                             
                         <div class="btn-filter-users">
                             <a href="{{route('users')}}" class="btn btn-primary mr-3 mt-3">All</a>
-                            <a href="{{route('users')}}?type=pending" class="btn btn-warning mr-3 mt-3">Pending</a>
+                            <a href="{{route('users')}}?type=attire" class="btn btn-warning mr-3 mt-3">Approval Attire</a>
                             <a href="{{route('users')}}?type=uniform" class="btn btn-info mr-3 mt-3">Uniform</a>
                             <a href="{{route('users')}}?type=failed" class="btn btn-success mr-3 mt-3">Failed</a>
                             <a href="{{route('users')}}?type=blacklist" class="btn btn-danger mr-3 mt-3">Blacklist</a>
@@ -84,6 +84,9 @@
                                         @if(request()->get('type') =='ic')
                                             <th class="no-search no-sort">NRIC Front</th>
                                             <th class="no-search no-sort">NRIC Back</th>
+                                        @elseif(request()->get('type') =='attire')
+                                            <th class="no-search no-sort">User Pants</th>
+                                            <th class="no-search no-sort">User Shoes</th>
                                         @else
                                             <th class="hidden-xs no-search no-sort">Gender</th>
                                             <th class="hidden-xs">Job Done</th>
@@ -92,11 +95,10 @@
                                             <th class="hidden-sm hidden-xs hidden-md">Emg Name</th>
                                             <th class="no-search no-sort">Work in TCC before</th>
                                         @endif
-                                        <th>Created at</th>
                                         <th class="no-search no-sort">Appovals</th>
-                                        {{-- @if(Auth::user()->isAdmin())
+                                        @if(Auth::user()->isAdmin())
                                             <th class="no-search no-sort"></th>
-                                        @endif --}}
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody id="users_table">
@@ -110,6 +112,21 @@
                                             @if(request()->get('type') =='ic')
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICFront}}" alt="NRICFront"></td>
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICBack}}" alt="NRICBack"></td>
+                                            @elseif(request()->get('type') =='attire')
+                                                <td class="align-center">
+                                                    <img style="width: 100px" onclick="showModalImage(this)" src="{{$user->userPants}}" alt="userPants">
+                                                    @if($user->userPantsApproved == 0)
+                                                        @php $status = $user->userPantsApproved == 1 ? 'Deactivated' : 'Active'; @endphp
+                                                        <span class="{{$user->userPantsApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userPantsApproved" id="pants_{{$user->id}}" value="{{$status}}">{{$status}}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="align-center">
+                                                    <img style="width: 100px" onclick="showModalImage(this)" src="{{$user->userShoes}}" alt="userShoes">
+                                                    @if($user->userShoesApproved == 0)
+                                                        @php $status = $user->userShoesApproved == 1 ? 'Deactivated' : 'Active'; @endphp
+                                                        <span class="{{$user->userShoesApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userShoesApproved" id="shoes_{{$user->id}}" value="{{$status}}">{{$status}}</span>
+                                                    @endif
+                                                </td>
                                             @else
                                                 <td class="align-center hidden-sm hidden-xs">{!! \App\Helper\VtHelper::checkGenderIcon($user->userGender)!!}</td>
                                                 <td class="align-center hidden-sm hidden-xs">{!! $user->jobsDone !!}</td>
@@ -118,16 +135,15 @@
                                                 <td class="hidden-xs hidden-sm hidden-xs">{!! $user->emergencyContactName !!}</td>
                                                 <td class="align-center">{!! \App\Helper\VtHelper::checkStatusIcon($user->TCC)!!}</td>
                                             @endif
-                                            <td>{{$user->created_at}}</td>
                                             <td class="align-center" id="img_status_{{$user->id}}">
                                                 {!! \App\Helper\VtHelper::checkStatusIcon($user->activated)!!}
                                             </td>
-                                            {{-- @if(Auth::user()->isAdmin())
+                                            @if(Auth::user()->isAdmin())
                                             <td>
                                                 @php $status = $user->activated == 1 ? 'Deactivated' : 'Active'; @endphp
-                                                <button class="btn {{$user->activated == 1 ? 'btn-danger' : 'btn-success'}} changeStatus" data-id="{{$user->id}}" id="status_{{$user->id}}" value="{{$status}}">{{$status}}</button>
+                                                <button class="btn {{$user->activated == 1 ? 'btn-danger' : 'btn-success'}} changeStatus" data-id="{{$user->id}}" data-type="activated" id="status_{{$user->id}}" value="{{$status}}">{{$status}}</button>
                                             </td>
-                                            @endif --}}
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -169,8 +185,10 @@
             $('#waiting').show();
             var idstt = this.id;
             var id = $(this).data("id");
+            var type = $(this).data("type");
             var data = {
-                id: id, 
+                id: id,
+                type: type,
                 model: 'user',
             };
             $.ajax({
@@ -179,16 +197,22 @@
                 data : data,
                 success  : function (data) {
                     $('#waiting').hide();
-                    if(data.msg === 0){
-                        $('#'+idstt).removeClass('btn-success');
-                        $('#'+idstt).addClass('btn-danger');
-                        $('#'+idstt).text('Deactivated');
-                        $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
+                    if(data.type ==='userPantsApproved'){
+                        $('#'+idstt).hide();
+                    }else if(data.type ==='userShoesApproved'){
+                        $('#'+idstt).hide();
                     }else{
-                        $('#'+idstt).removeClass('btn-danger');
-                        $('#'+idstt).addClass('btn-success');
-                        $('#'+idstt).text('Active');
-                        $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
+                        if(data.msg === 0){
+                            $('#'+idstt).removeClass('btn-success');
+                            $('#'+idstt).addClass('btn-danger');
+                            $('#'+idstt).text('Deactivated');
+                            $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
+                        }else{
+                            $('#'+idstt).removeClass('btn-danger');
+                            $('#'+idstt).addClass('btn-success');
+                            $('#'+idstt).text('Active');
+                            $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
+                        }
                     }
                 }
             });
