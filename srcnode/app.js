@@ -104,14 +104,6 @@ module.exports.create = function (server, host, port, publicDir) {
 			}
 		});
 	});
-	// dang ki mua goi
-	app.post('/service/user/register', function (req, res) {
-		mysqlTool.register(req, res);
-	});
-	app.post('/service/user/register_package', function (req, res) {
-		mysqlTool.registerPackage(req, res);
-	});
-
 	// 53. cac api notify
 	app.post('/service/notify/getall', function (req, res) {
 		nofity.readAllNotify(req, res);
@@ -270,6 +262,10 @@ module.exports.create = function (server, host, port, publicDir) {
 
 	app.post('/service/job/check_in_check_out',async function (req, res) {
 		mysqlTool.checkInCheckOut(req, res);
+	});
+
+	app.post('/service/user/upload_pants_shoes',async function (req, res) {
+		mysqlTool.uploadPantsShoes(req, res);
 	});
 
 	notification.startSchedule();

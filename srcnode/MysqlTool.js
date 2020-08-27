@@ -61,114 +61,12 @@ var JobType = bookshelf.Model.extend({
   }
 });
 
-// end crm db config 
-var mapPackageDay = {};
-async function getPackage(packageId) {
-  utils.writeLog("Get packageId: " + packageId);
-  return new Promise(resolve => {
-    CrmPackage.where('id', packageId).fetch().then(function (pack) {
-      console.log("pack=" + pack);
-      if (pack != null) {
-        resolve({ day: pack.toJSON().day, type: pack.toJSON().type });
-      } else {
-        resolve(null);
-      }
-    });
-  });
-}
 function tm(unix_tm) {
   var dt = new Date(unix_tm*1000);
   return (dt.getHours() + ':' + dt.getMinutes());
 
 }
-async function getOder(code) {
-  return new Promise(resolve => {
-    CrmOrder.where('code', code).fetch().then(function (oder) {
-      resolve(oder);
-    });
-  });
-}
-async function getAttachInfo(code) {
-  var oder = await getOder(code);
-  var result = {};
-  if (oder != null) {
-    var item = oder.toJSON().package_item;
-    if (item != null) {
-      result = mapPackageDay[item];
-      if (result == null) {
-        result = await getPackage(item);
-        if (result != null) {
-          mapPackageDay[item] = result;
-        } else {
-          return null;
-        }
-      }
-    }
-  }
-  return result;
-}
-async function activeTangkem(code, username) {
-  var tangkem = await getAttachInfo(code);
-  var codeTangkem = "tangkem";
 
-  if (tangkem == null || tangkem.day == null || tangkem.type == null || tangkem.day < 0) {
-    return;
-  }
-  var user = await getUserInfo(username);
-  switch (tangkem.type) {
-    case 1:// tang kem tieu hoc
-      var sql;
-      if (user.toJSON().code == null || utils.isEmptyObject(user.toJSON().code)) {
-        sql = buildSqlActiveCodeUserNew(tangkem.day, codeTangkem, "", user);
-      } else {
-        sql = buildSqlActiveCodeUserOld(tangkem.day, codeTangkem, user, "");
-      }
-      break;
-    case 3: // tang kem kid
-      if (user.toJSON().code_smart == null || utils.isEmptyObject(user.toJSON().code_smart)) {
-        sql = buildSqlActiveCodeSmartUserNew(tangkem.day, codeTangkem);
-      } else {
-        sql = buildSqlActiveCodeSmartUserOld(tangkem.day, codeTangkem, user);
-      }
-      break;
-    case 4: // tang kem cap 2
-      if (user.toJSON().second == null || utils.isEmptyObject(user.toJSON().second)) {
-        sql = buildSqlActiveCodeUserEsNew(tangkem.day, codeTangkem);
-      } else {
-        sql = buildSqlActiveCodeUserEsOld(tangkem.day, codeTangkem, user);
-      }
-      break;
-    default:
-      break;
-  }
-  if (sql != null) {
-    console.log("username=" + username + " tangkem day=" + tangkem.day + " tangkem type=" + tangkem.type + " sql=" + JSON.stringify(sql));
-    try {
-      await user.save(sql).then(function (row) {
-        utils.writeLog("tangkem thanh cong");
-      });
-    } catch (e) {
-      utils.writeLog("error tangkem=" + e);
-    }
-  }
-  utils.writeLog("Active tang kem: " + code + " -> " + sql)
-}
-
-async function getRedisHash(key, value) {
-  return new Promise(resolve => {
-    redis.hget(key, value, function (err, obj) {
-      resolve(obj);
-    });
-  });
-}
-
-async function getRedisGet(key) {
-  return new Promise(resolve => {
-    redis.get(key, function (error, value) {
-      resolve(value);
-    });
-  });
-}
 async function getJobValiable(id) {
   return new Promise(resolve => {
     Job.where('id', id).fetch().then(function (user) {
@@ -260,19 +158,6 @@ async function getUserInfo(email) {
     User.where('email', email).fetch().then(function (user) {
       resolve(user);
     });
-  });
-}
-async function updateUserTangKem(user, sql) {
-  return new Promise(resolve => {
-    try {
-      user.save(sql)
-        .then(function (row) {
-          utils.writeLog("tangkem thanh cong");
-        });
-    } catch (e) {
-      utils.writeLog("error tangkem=" + e);
-    }
-    resolve(user);
   });
 }
 function validateName(userName) {
@@ -917,7 +802,6 @@ async function checkInCheckOut(req, res) {
       });
       //await updateAvatar(email, urlPants, 'userPants');
 
-      
       // upload userPants, userShoes
       var fileUserShoes = folder_upload+'userShoes/';
       var time = new Date().getTime();
@@ -940,10 +824,6 @@ async function checkInCheckOut(req, res) {
       });
       //await updateAvatar(email, urlShoes, 'userShoes');
       await updatePantsShoes(email, urlPants, urlShoes);
-      // var datetime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace('T', ' ');
-      // utils.writeLog('datetime='+datetime);
-      // var time = datetime.substr(11, 5);
-      // utils.writeLog('time='+time);
       var d = new Date();
       var t = d.getTime()+28800000;
 
@@ -1004,10 +884,98 @@ async function checkInCheckOut(req, res) {
 				return "";
   }
 }
+
+async function uploadPantsShoes(req, res) {
+  //res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  if (!req.files) return res.status(400).send('No files were uploaded.');
+    var id = req.query.id;  
+    var email = req.query.email;
+    var jwtToken = req.query.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+    } catch (error) { }
+    var check = false;
+		await jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 1 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+        check = true;
+			}
+    });
+    utils.writeLog('check='+check);
+    if(check == true){
+      // upload userPants
+      let userPants = req.files.userPants;
+      let userShoes = req.files.userShoes;
+      
+      if(userPants == null || userPants == undefined || userShoes == null || userShoes == undefined){
+        res.json({ message: 'userPants or userShoes not null!', resultCode: 1 });
+        return "";
+      }
+      var fileUserPants = folder_upload+'userPants/';
+      var time = new Date().getTime();
+      var path = fileUserPants;
+      fileUserPants += id + "_" + time + ".png";
+      var urlPants = '/uploads/users/userPants/'+id+"_" + time + ".png";
+      utils.writeLog('name='+userPants.name+' mimetype='+ userPants.mimetype+' size='+ userPants.size);
+      await userPants.mv(fileUserPants, function (err) {
+          thumb({
+            source: fileUserPants,
+            destination: path,
+            concurrency: 4
+          }, function(files, err, stdout, stderr) {
+            console.log('Upload urlPants='+urlPants);
+          });
+
+          if (err) return res.status(500).send(err);
+          utils.writeLog("Upload userPants." + fileUserPants);
+      });
+
+      // upload userShoes
+      var fileUserShoes = folder_upload+'userShoes/';
+      var time = new Date().getTime();
+      var path = fileUserShoes;
+      fileUserShoes += id + "_" + time + ".png";
+      var urlShoes = '/uploads/users/userShoes/'+id+"_" + time + ".png";
+      utils.writeLog('name='+userShoes.name+' mimetype='+ userShoes.mimetype+' size='+ userShoes.size);
+      await userShoes.mv(fileUserShoes, function (err) {
+          thumb({
+            source: fileUserShoes,
+            destination: path,
+            concurrency: 4
+          }, function(files, err, stdout, stderr) {
+            console.log('Upload urlShoes='+urlShoes);
+          });
+
+          if (err) return res.status(500).send(err);
+          utils.writeLog("Upload userShoes." + fileUserShoes);
+      });
+      await updatePantsShoes(email, urlPants, urlShoes);
+
+      res.json({ message: 'Update user pants, user shoes successfully.', resultCode: 0 });
+    }else{
+      res.json({ message: 'Failed update user pants, user shoes!', resultCode: 1 });
+          return "";
+    }
+}
 module.exports = {
   userUploadsImage: userUploadsImage,
   userUploadsImageThumb: userUploadsImageThumb,
   checkInCheckOut: checkInCheckOut,
+  uploadPantsShoes: uploadPantsShoes,
   validateUsername: function validateUsername(req, res) {
     var username = req.headers.username;
     utils.writeLog("Validate username:" + username);
@@ -1018,9 +986,9 @@ module.exports = {
       username = username.toLowerCase();
       User.where('username', username).fetch().then(function (user) {
         if (user == null) {
-          res.send({ message: "Tài khoản đã tồn tại.", resultCode: 1 });
+          res.send({ message: "Account is exist.", resultCode: 1 });
         } else {
-          res.send({ message: "Tài khoản hợp lệ!", resultCode: 0 });
+          res.send({ message: "Valid account!", resultCode: 0 });
         }
       }).catch(function (err) {
         res.send({ message: "Error!", resultCode: 1 });
@@ -1233,15 +1201,15 @@ module.exports = {
     var passwordOld = req.headers.passwordold;
     var passwordNew = req.headers.passwordnew;
     if (req.headers.username == undefined || utils.isEmptyObject(req.headers.username)) {
-      res.json({ message: 'Tên đăng nhập không hợp lệ!', resultCode: 1 });
+      res.json({ message: 'Username is not valid!', resultCode: 1 });
       return "";
     }
     if (passwordOld == undefined || utils.isEmptyObject(passwordOld)) {
-      res.json({ message: 'Bạn phải nhập mật khẩu cũ!', resultCode: 1 });
+      res.json({ message: 'You must enter your old password!', resultCode: 1 });
       return "";
     }
     if (passwordNew == undefined || utils.isEmptyObject(passwordNew)) {
-      res.json({ message: 'Bạn phải nhập mật khẩu mới!', resultCode: 1 });
+      res.json({ message: 'You must enter a new password!', resultCode: 1 });
       return "";
     }
     utils.writeLog("Validate login:" + username);
@@ -1257,14 +1225,14 @@ module.exports = {
               User.where('username', username).fetch().then(function (user) {
                 user.save({ password: hashNew })
                   .then(function (row) {
-                    res.json({ message: 'Đổi mật khẩu thành công!', resultCode: 0 });
+                    res.json({ message: 'Password changed successfully!', resultCode: 0 });
                   })
               }).catch(function (err) {
                 res.json({ message: 'Reset password fail!', resultCode: 1 });
               });
             });
           } else {
-            res.json({ message: 'Mật khẩu cũ không đúng!', resultCode: 1 });
+            res.json({ message: 'Old password is incorrect!', resultCode: 1 });
           }
         });
       } catch (e) {
@@ -1278,15 +1246,15 @@ module.exports = {
     var token = req.headers.token;
     var deviceOs = req.headers.deviceos;
     if (req.headers.username == undefined || utils.isEmptyObject(req.headers.username)) {
-      res.status(200).json({ message: 'Bạn phải nhập username!', resultCode: 1 });
+      res.status(200).json({ message: 'You must enter a username!', resultCode: 1 });
       return "";
     }
     if (token == undefined || utils.isEmptyObject(token)) {
-      res.status(200).json({ message: 'Bạn phải nhập token!', resultCode: 1 });
+      res.status(200).json({ message: 'You must enter token!', resultCode: 1 });
       return "";
     }
     if (deviceOs == undefined || utils.isEmptyObject(deviceOs)) {
-      res.status(200).json({ message: 'Bạn phải nhập device Os!', resultCode: 1 });
+      res.status(200).json({ message: 'You must enter device Os!', resultCode: 1 });
       return "";
     }
     token = token.trim();
@@ -1295,103 +1263,11 @@ module.exports = {
     User.where('username', username).fetch().then(function (user) {
       user.save({ "firebase_token": token + "_os_" + deviceOs })
         .then(function (row) {
-          var notify = "Cập nhật token thành công.";
+          var notify = "Successful token update.";
           res.json({ message: 'Successfull!', notify: notify, resultCode: 0 });
         })
     }).catch(function (err) {
       res.json({ message: 'Error!', resultCode: 1 });
-    });
-  },
-  register: function register(req, res) {
-    req.header("Content-Type", "text/html; charset=utf-8");
-    var name = req.headers.name;
-    var phone = req.headers.phone;
-    var address = req.headers.address;
-    var packageId = req.headers.packageid;
-    var type = req.headers.type;
-    utils.writeLog("Register package:", packageId);
-    if (req.headers.name == undefined || utils.isEmptyObject(req.headers.name)) {
-      res.json({ message: 'Name error!', resultCode: 1 });
-      return "";
-    }
-    if (req.headers.phone == undefined || utils.isEmptyObject(req.headers.phone)) {
-      res.json({ message: 'Phone error!', resultCode: 1 });
-      return "";
-    }
-    if (req.headers.address == undefined || utils.isEmptyObject(req.headers.address)) {
-      res.json({ message: 'Address error!', resultCode: 1 });
-      return "";
-    }
-    if (req.headers.packageid == undefined || utils.isEmptyObject(req.headers.packageid)) {
-      res.json({ message: 'Package error!', resultCode: 1 });
-      return "";
-    }
-    if (type == undefined || utils.isEmptyObject(type)) {
-      type = 0;
-    }
-    address = decodeUtf8(address);
-    name = decodeUtf8(name);
-    redis.hget(config.keyMarketingPackge, packageId, function (err, obj) {
-      try {
-        var json = JSON.parse(obj);
-        var price = JSON.parse(json.price);
-        new UserPackage({
-          parent_name: name, phone: phone, pack_id: packageId, price: price, is_active: "1", address: address, type: type, created_at: new Date(), updated_at: new Date()
-        }).save().then((model) => {
-          var notify = 'Tạo đơn hàng thành công!\n Trân trọng cảm ơn quý khách đã tin tưởng và sử dụng sản phẩm của Edupia.vn';
-          res.json({ message: 'Create user successfull!', notify: notify, resultCode: 0 });
-        }).catch(function (err) {
-          res.json({ message: 'Error!', resultCode: 1 });
-        });
-      } catch (e) {
-        res.json({ resultCode: 0, message: 'Fail', data: "{}" });
-        utils.writeLog("Error get marketingpackage");
-      }
-    });
-  },
-  registerPackage: function registerPackage(req, res) {
-    req.header("Content-Type", "text/html; charset=utf-8");
-    var name = req.body.name;
-    var phone = req.body.phone;
-    var address = req.body.address;
-    var packageId = req.body.packageid;
-    var type = req.headers.type;
-    utils.writeLog("Register package:", packageId);
-    if (req.body.name == undefined || utils.isEmptyObject(req.body.name)) {
-      res.json({ message: 'Name error!', resultCode: 1 });
-      return "";
-    }
-    if (req.body.phone == undefined || utils.isEmptyObject(req.body.phone)) {
-      res.json({ message: 'Phone error!', resultCode: 1 });
-      return "";
-    }
-    if (req.body.address == undefined || utils.isEmptyObject(req.body.address)) {
-      res.json({ message: 'Address error!', resultCode: 1 });
-      return "";
-    }
-    if (req.body.packageid == undefined || utils.isEmptyObject(req.body.packageid)) {
-      res.json({ message: 'Package error!', resultCode: 1 });
-      return "";
-    }
-    if (type == undefined || utils.isEmptyObject(type)) {
-      type = 0;
-    }
-    redis.hget(config.keyMarketingPackge, packageId, function (err, obj) {
-      try {
-        var json = JSON.parse(obj);
-        var price = JSON.parse(json.price);
-        new UserPackage({
-          parent_name: name, phone: phone, pack_id: packageId, price: price, is_active: "1", address: address, type: type, created_at: new Date(), updated_at: new Date()
-        }).save().then((model) => {
-          var notify = 'Tạo đơn hàng thành công!\n Trân trọng cảm ơn quý khách đã tin tưởng và sử dụng sản phẩm của Edupia.vn';
-          res.json({ message: 'Create user successfull!', notify: notify, resultCode: 0 });
-        }).catch(function (err) {
-          res.json({ message: 'Error!', resultCode: 1 });
-        });
-      } catch (e) {
-        res.json({ resultCode: 0, message: 'Fail', data: "{}" });
-        utils.writeLog("Error get marketingpackage");
-      }
     });
   },
   validateUserActived: function validateUserActived(req, res) {
@@ -1399,7 +1275,7 @@ module.exports = {
     var phone = req.headers.phone;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     if (req.headers.username == undefined || utils.isEmptyObject(req.headers.username)) {
-      res.status(200).json({ message: 'Bạn phải nhập username!', resultCode: 1 });
+      res.status(200).json({ message: 'You must enter a username!', resultCode: 1 });
       return "";
     }
     username = username.toLowerCase();
@@ -1416,157 +1292,12 @@ module.exports = {
         }
         res.send({ message: "successfull!", dayVip: dayActived, isPremiumUser: premium, resultCode: 0 });
       } else {
-        res.send({ message: "Tài khoản không hợp lệ!", resultCode: 0 });
+        res.send({ message: "This account is Invalid!", resultCode: 0 });
       }
     }).catch(function (err) {
       res.send({ message: "Error!", resultCode: 1 });
     });
 
-  },
-
-  forgetPass: async function forgetPass(req, res) {
-    var username = req.headers.username;
-    var phone = req.headers.phone;
-
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    if (req.headers.username == undefined || utils.isEmptyObject(req.headers.username)) {
-      res.json({ message: 'Thiếu tên đăng nhập!', resultCode: 1 });
-      return "";
-    }
-
-    if (req.headers.phone == undefined || utils.isEmptyObject(req.headers.phone)) {
-      res.json({ message: 'Chưa nhập số điện thoại!', resultCode: 1 });
-      return "";
-    }
-
-    var checkUser = await checkUserExist(username, phone);
-    if (checkUser == false) {
-      res.json({ message: 'Tên đăng nhập không đúng', resultCode: 1 });
-      return "";
-    }
-
-    var check = await checkUserExistByPhone(username, phone);
-    if (check == false) {
-      res.json({ message: 'Số điện thoại không chính xác', resultCode: 2 });
-      return "";
-    }
-    var randomstring = require("randomstring");
-
-    var random = randomstring.generate({
-      length: 4,
-      charset: '0123456789'
-    });
-    utils.writeLog("random=" + random);
-    var content = "Mat khau truy cap Edupia.vn cua Quy khach la: " + random + " Vui long doi mat khau trong lan truy cap dau tien.";
-
-    username = username.toLowerCase();
-
-    var time = await getRedisGet(config.keyPhoneSmsTime + "." + phone);
-    if (time != undefined || !utils.isEmptyObject(time)) {
-      res.json({ message: 'Bạn chỉ được lấy lại mật khẩu 1 lần/ngày. Để nhận được hỗ trợ hoặc tư vấn, vui lòng gọi đến số 1900.8686', resultCode: 3 });
-      return "";
-    }
-
-    redis.hget(config.keyUserNameActive, username, function (err, hash) {
-      try {
-        if (hash == undefined || utils.isEmptyObject(hash) || hash == null) {
-          res.json({ message: 'Tên đăng nhập không đúng!', resultCode: 1 });
-          return "";
-        }
-        bcrypt.hash(random, 10, function (err, hashNew) {
-          hashNew = hashNew.replace("$2a$", "$2y$");
-          redis.hset(config.keyUserNameActive, username, hashNew);
-          User.where('username', username).fetch().then(function (user) {
-            user.save({ password: hashNew })
-              .then(function (row) {
-                utils.writeLog("Post publish sms:" + phone + " :" + content);
-                var message = { "phone": phone, "content": content };
-                redis.rpush(config.SmsBrandViettelQueue, JSON.stringify(message));
-                redis.set(config.keyPhoneSmsTime + "." + phone, phone, 'EX', 86400);
-                res.json({ message: 'Mật khẩu mới của bạn là: ' + random, resultCode: 0 });
-                return null;
-              })
-          }).catch(function (err) {
-            res.json({ message: 'Reset password fail!', resultCode: 1 });
-          });
-        });
-      } catch (e) {
-        res.json({ message: 'Error!', resultCode: 1 });
-      }
-    });
-  },
-
-  verifyOtpPhone: async function verifyOtpPhone(req, res) {
-    var phone = req.headers.phone;
-    var username = phone;
-    var otp_token = req.headers.otp_token;
-
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    if (req.headers.otp_token == undefined || utils.isEmptyObject(req.headers.otp_token)) {
-      res.json({ message: 'Thiếu mã OTP!', resultCode: 1 });
-      return "";
-    }
-
-    if (req.headers.phone == undefined || utils.isEmptyObject(req.headers.phone)) {
-      res.json({ message: 'Chưa nhập số điện thoại!', resultCode: 1 });
-      return "";
-    }
-
-    var check = await checkUserExistByPhone(phone, phone);
-    if (check == false) {
-      res.json({ message: 'Thông tin không chính xác', resultCode: 1 });
-      return "";
-    }
-    key = utils.nomalizePhoneNumber(phone);
-    var obj1 = await getRedisHash(config.keyGroupUserUsedCodeFree, key);
-    var time = new Date().getTime();
-
-    console.log('otp_token=' + otp_token + ' phone=' + phone);
-    redis.get(config.keyPhoneOtpTime + "." + phone, function (error, otp) {
-      console.log('otp2=' + otp);
-      try {
-        if (otp == undefined || utils.isEmptyObject(otp) || otp == null) {
-          res.json({ message: 'OTP hết hạn!', resultCode: 1 });
-          return "";
-        }
-        utils.writeLog("otp_token=" + otp_token + " , OTP=" + otp);
-        if (otp_token != otp) {
-          res.json({ message: 'OTP không hợp lệ!', resultCode: 1 });
-          return "";
-        }
-
-        User.where('username', phone).fetch().then(function (user) {
-          var end_time = new Date().getTime() + 3 * 86400000;
-          var end_time_smart = new Date().getTime() + 3 * 86400000;
-          var sql = {
-            activated: "1", code: "appnew", time_active_code: new Date().toISOString().slice(0, 19).replace('T', ' '), start_time: new Date(), end_time: new Date(end_time), start_time_smart: new Date(), end_time_smart: new Date(end_time_smart), created_at: new Date(), updated_at: new Date()
-          };
-
-          user.save(sql)
-            .then(function (row) {
-              // push queue userinfo
-              redis.rpush(config.EdupiaUserInfoQueues, username + "||");
-              // publish to data model to build user info
-              redis.publish(config.KidChannelUserProfile, username + "||");
-
-              var payload = { username: username };
-              var jwtToken = jwt.sign(payload, cert, { expiresIn: 365 * 24 * 60 * 60 });
-              var key = utils.nomalizePhoneNumber(phone);
-              if (obj1 == null) {
-                obj1 = "";
-              }
-              obj1 += "3";
-              redis.hset(config.keyGroupUserUsedCodeFree, key, obj1);
-              res.json({ message: 'Tạo tài khoản thành công!', 'access_token': jwtToken, resultCode: 0 });
-            })
-        }).catch(function (err) {
-          res.json({ message: 'Error!', resultCode: 1 });
-        });
-
-      } catch (e) {
-        res.json({ message: 'Error!', resultCode: 1 });
-      }
-    });
   },
 
   getListHotel:async function getListHotel(req, res) {
