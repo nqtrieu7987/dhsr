@@ -70,12 +70,6 @@ class HomeController extends Controller
                     $data->activated = abs($data->activated - 1);
                     $msg = abs($data->activated - 1);
                 }
-                // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
-                // Chỉ có user có userPantsApproved =1 và userShoesApproved = 1 mới được quyền book new job
-                if($data->userPantsApproved == 1 && $data->userShoesApproved == 1){
-                    $data->userPants = null;
-                    $data->userShoes = null;
-                }
                 break;
             default:
                 # code...
@@ -219,6 +213,8 @@ class HomeController extends Controller
             $msg = 'Cancel Successfully!';
             $stt = 202;
 
+            $data->userPants = null;
+            $data->userShoes = null;
             $data->userPantsApproved = 0;
             $data->userShoesApproved = 0;
         }

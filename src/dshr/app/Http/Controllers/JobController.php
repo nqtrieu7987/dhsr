@@ -488,7 +488,13 @@ class JobController extends Controller
             $user->update(['jobsDone' => $user->jobsDone + 1]);
         }
         // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
-        $user->update(['userPantsApproved' => 0, 'userShoesApproved' => 0]);
+        // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
+        $user->update([
+            'userPants' => null,
+            'userShoes' => null,
+            'userPantsApproved' => 0,
+            'userShoesApproved' => 0,
+        ]);
 
         $data->update([
             'real_start' => $real_start,

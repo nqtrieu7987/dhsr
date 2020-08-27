@@ -80,14 +80,16 @@
                                         <th class="no-search no-sort">Avatar</th>
                                         <th>Username</th>
                                         <th>Contact No</th>
-                                        <th>Reset pass</th>
                                         @if(request()->get('type') =='ic')
                                             <th class="no-search no-sort">NRIC Front</th>
                                             <th class="no-search no-sort">NRIC Back</th>
                                         @elseif(request()->get('type') =='attire')
                                             <th class="no-search no-sort">User Pants</th>
+                                            <th class="no-search no-sort">Pants Approved</th>
                                             <th class="no-search no-sort">User Shoes</th>
+                                            <th class="no-search no-sort">Shoes Approved</th>
                                         @else
+                                            <th>Reset pass</th>
                                             <th class="hidden-xs no-search no-sort">Gender</th>
                                             <th class="hidden-xs">Job Done</th>
                                             <th class="no-search no-sort">Student</th>
@@ -96,9 +98,6 @@
                                             <th class="no-search no-sort">Work in TCC before</th>
                                         @endif
                                         <th class="no-search no-sort">Appovals</th>
-                                        @if(Auth::user()->isAdmin())
-                                            <th class="no-search no-sort"></th>
-                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody id="users_table">
@@ -108,26 +107,26 @@
                                             <td><div class="header-user"><img onclick="showModalImage(this)" src="{{$user->workPassPhoto}}" alt="{{$user->userName}}"></div></td>
                                             <td><a href="{{ URL::to('users/edit/'.$user->id) }}" title="{{$user->userName}}">{{$user->userName ? $user->userName : $user->email}}</a></td>
                                             <td>{{$user->contactNo}}</td>
-                                            <td><a href="{{route('user.resetpass', $user->id)}}">Resetpass</a></td>
                                             @if(request()->get('type') =='ic')
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICFront}}" alt="NRICFront"></td>
                                                 <td><img style="width: 100px" onclick="showModalImage(this)" src="{{$user->NRICBack}}" alt="NRICBack"></td>
                                             @elseif(request()->get('type') =='attire')
                                                 <td class="align-center">
                                                     <img style="width: 100px" onclick="showModalImage(this)" src="{{$user->userPants}}" alt="userPants">
-                                                    @if($user->userPantsApproved == 0)
-                                                        @php $status = $user->userPantsApproved == 1 ? 'Deactivated' : 'Active'; @endphp
-                                                        <span class="{{$user->userPantsApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userPantsApproved" id="pants_{{$user->id}}" value="{{$status}}">{{$status}}</span>
-                                                    @endif
+                                                </td>
+                                                <td class="align-center">
+                                                    @php $status = $user->userPantsApproved == 1 ? 'Deactivated' : 'Active'; @endphp
+                                                    <span class="{{$user->userPantsApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userPantsApproved" id="pants_{{$user->id}}" value="{{$status}}">{{$status}}</span>
                                                 </td>
                                                 <td class="align-center">
                                                     <img style="width: 100px" onclick="showModalImage(this)" src="{{$user->userShoes}}" alt="userShoes">
-                                                    @if($user->userShoesApproved == 0)
-                                                        @php $status = $user->userShoesApproved == 1 ? 'Deactivated' : 'Active'; @endphp
-                                                        <span class="{{$user->userShoesApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userShoesApproved" id="shoes_{{$user->id}}" value="{{$status}}">{{$status}}</span>
-                                                    @endif
+                                                </td>
+                                                <td class="align-center">
+                                                    @php $status = $user->userShoesApproved == 1 ? 'Deactivated' : 'Active'; @endphp
+                                                    <span class="{{$user->userShoesApproved == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" data-type="userShoesApproved" id="shoes_{{$user->id}}" value="{{$status}}">{{$status}}</span>
                                                 </td>
                                             @else
+                                                <td><a href="{{route('user.resetpass', $user->id)}}">Resetpass</a></td>
                                                 <td class="align-center hidden-sm hidden-xs">{!! \App\Helper\VtHelper::checkGenderIcon($user->userGender)!!}</td>
                                                 <td class="align-center hidden-sm hidden-xs">{!! $user->jobsDone !!}</td>
                                                 <td class="align-center">{!! \App\Helper\VtHelper::checkStatusIcon($user->studentType)!!}</td>
@@ -138,12 +137,6 @@
                                             <td class="align-center" id="img_status_{{$user->id}}">
                                                 {!! \App\Helper\VtHelper::checkStatusIcon($user->activated)!!}
                                             </td>
-                                            @if(Auth::user()->isAdmin())
-                                            <td>
-                                                @php $status = $user->activated == 1 ? 'Deactivated' : 'Active'; @endphp
-                                                <button class="btn {{$user->activated == 1 ? 'btn-danger' : 'btn-success'}} changeStatus" data-id="{{$user->id}}" data-type="activated" id="status_{{$user->id}}" value="{{$status}}">{{$status}}</button>
-                                            </td>
-                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -197,22 +190,16 @@
                 data : data,
                 success  : function (data) {
                     $('#waiting').hide();
-                    if(data.type ==='userPantsApproved'){
-                        $('#'+idstt).hide();
-                    }else if(data.type ==='userShoesApproved'){
-                        $('#'+idstt).hide();
+                    if(data.msg === 0){
+                        $('#'+idstt).removeClass('text-success');
+                        $('#'+idstt).addClass('text-danger');
+                        $('#'+idstt).text('Deactivated');
+                        $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
                     }else{
-                        if(data.msg === 0){
-                            $('#'+idstt).removeClass('btn-success');
-                            $('#'+idstt).addClass('btn-danger');
-                            $('#'+idstt).text('Deactivated');
-                            $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
-                        }else{
-                            $('#'+idstt).removeClass('btn-danger');
-                            $('#'+idstt).addClass('btn-success');
-                            $('#'+idstt).text('Active');
-                            $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
-                        }
+                        $('#'+idstt).removeClass('text-danger');
+                        $('#'+idstt).addClass('text-success');
+                        $('#'+idstt).text('Active');
+                        $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
                     }
                 }
             });
