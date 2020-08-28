@@ -77,7 +77,7 @@ module.exports.create = function (server, host, port, publicDir) {
 	app.post('/service/user/resetpass', function (req, res) {
 		mysqlTool.resetPass(req, res);
 	});
-	app.post('/service/users', function (req, res) {
+	app.post('/service/users/image_info', function (req, res) {
 		var email = req.headers.email;
 		var jwtToken = req.headers.token;
 		if (email == undefined || utils.isEmptyObject(email)) {

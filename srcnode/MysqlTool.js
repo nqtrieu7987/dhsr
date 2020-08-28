@@ -321,9 +321,14 @@ function buildSqlUpdateUser(userName, contactNo, activated, studentType, userNRI
   return sql;
 }
 
-function buildSqlUpdateAvatar(avatar, type) {
+function buildSqlUpdateImage(image, type) {
   var sql = {};
-  sql[type] = avatar;
+  sql[type] = image;
+  if(type == 'userPants'){
+    sql['userPantsApproved'] = 0;
+  }else if(type == 'userShoes'){
+    sql['userShoesApproved'] = 0;
+  }
   return sql;
 }
 function buildSqlIntro(user, username) {
@@ -541,14 +546,14 @@ async function checkUserExist(username) {
   });
 }
 
-function updateAvatar(email, avatar, type) {
+function updateImage(email, image, type) {
   try {
     email = email.toLowerCase();
     User.where('email', email).fetch().then(function (user) {
       if (user == null) {
         return { message: "User not exist!", resultCode: 1 };
       } else {
-        var sql = buildSqlUpdateAvatar(avatar, type);
+        var sql = buildSqlUpdateImage(image, type);
         utils.writeLog("UpdateUser:");
         utils.writeLog(sql);
         user.save(sql).then(function (row) {
@@ -617,7 +622,7 @@ async function createNewUser(username, firstName, password, phone, url, req, res
     if (check == true) {
       resolve(true);
     } else {
-      var avatar = "/uploads/images/avata_system/" + utils.getRandomInteger(51, 60) + ".png";//Lay random avata tu 51 den 60
+      var image = "/uploads/images/avata_system/" + utils.getRandomInteger(51, 60) + ".png";//Lay random avata tu 51 den 60
       bcrypt.hash(password, 10, function (err, hash) {
         hash = hash.replace("$2a$", "$2y$");
         var sql = {
@@ -637,7 +642,7 @@ async function createNewUser(username, firstName, password, phone, url, req, res
           //res.json({ message: 'Tạo tài khoản thành công!', 'access_token': jwtToken, resultCode: 0 });
         }).catch(function (err) {
           utils.writeLog(err);
-          resolve({ message: 'Tạo tài khoản thất bại 1!', resultCode: 1 });
+          resolve({ message: 'Create account failed!', resultCode: 1 });
         });
       });
     }
@@ -664,7 +669,7 @@ var userUploadsImage = function (req, res) {
            utils.writeLog('decoder: ' + payload.email);
           if (payload.email == email) {
               //The name of the input field(i.e. "sampleFile") is used to retrieve the uploaded file
-              let avatar = req.files.avatar;
+              let image = req.files.image;
               // Use the mv() method to place the file somewhere on your server					
               var fileName = folder_upload+type+'/';
               if (!fs.existsSync(fileName)) {
@@ -678,8 +683,8 @@ var userUploadsImage = function (req, res) {
 
 
               utils.writeLog('fileName='+fileName);
-              utils.writeLog('name='+avatar.name+' mimetype='+ avatar.mimetype+' size='+ avatar.size);
-              avatar.mv(fileName, function (err) {
+              utils.writeLog('name='+image.name+' mimetype='+ image.mimetype+' size='+ image.size);
+              image.mv(fileName, function (err) {
                   thumb({
                     source: fileName,
                     destination: path,
@@ -690,8 +695,8 @@ var userUploadsImage = function (req, res) {
 
                   if (err)
                       return res.status(500).send(err);
-                  utils.writeLog("Get publish avatar." + fileName);
-                  updateAvatar(email, url, type);
+                  utils.writeLog("Get publish image." + fileName);
+                  updateImage(email, url, type);
                   res.json({ message: 'File uploaded!', url: url, resultCode: 0 });
               });
           } else {
@@ -800,7 +805,7 @@ async function checkInCheckOut(req, res) {
               return res.status(500).send(err);
           utils.writeLog("Upload userPants." + fileUserPants);
       });
-      //await updateAvatar(email, urlPants, 'userPants');
+      //await updateImage(email, urlPants, 'userPants');
 
       // upload userPants, userShoes
       var fileUserShoes = folder_upload+'userShoes/';
@@ -822,7 +827,7 @@ async function checkInCheckOut(req, res) {
               return res.status(500).send(err);
           utils.writeLog("Upload userShoes." + fileUserShoes);
       });
-      //await updateAvatar(email, urlShoes, 'userShoes');
+      //await updateImage(email, urlShoes, 'userShoes');
       await updatePantsShoes(email, urlPants, urlShoes);
       var d = new Date();
       var t = d.getTime()+28800000;
@@ -1048,17 +1053,17 @@ module.exports = {
                 res.json({ message: 'Create user successfully!', 'access_token': jwtToken, resultCode: 0 });
               }).catch(function (err) {
                 utils.writeLog(err);
-                res.json({ message: 'Create user error 3!', resultCode: 1 });
+                res.json({ message: 'Create user error!', resultCode: 1 });
               });
             });
           }
         }).catch(function (err) {
           utils.writeLog(err);
-          res.send({ message: "Create user error 4!", resultCode: 1 });
+          res.send({ message: "Create user error!", resultCode: 1 });
         });
       } catch (e) {
         utils.writeLog(e);
-        res.json({ message: 'Create user error 5!', resultCode: 1 });
+        res.json({ message: 'Create user error!', resultCode: 1 });
       }
     }
   },
@@ -1182,12 +1187,17 @@ module.exports = {
     });
   },
   getUserInfor: function getUserInfor(req, res) {
-    var userID = req.headers.userID;
+    var email = req.headers.email;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     try {
-      User.where('id', userID).fetch().then(function (user) {
+      User.where('email', email).fetch().then(function (user) {
         if (user != null) {
-          res.json({ "info": user, message: 'Login successfully!', resultCode: 0 });
+          var data = {userPants: user.toJSON().userPants, 
+            userShoes: user.toJSON().userShoes, 
+            userPantsApproved: user.toJSON().userPantsApproved, 
+            userShoesApproved: user.toJSON().userShoesApproved
+          };
+          res.json({ "data": data, message: 'get info successfully!', resultCode: 0 });
         } else {
           res.json({ message: 'Email is incorrect!', resultCode: 1 });
         }
