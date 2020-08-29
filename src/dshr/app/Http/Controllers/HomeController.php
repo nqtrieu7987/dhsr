@@ -61,11 +61,19 @@ class HomeController extends Controller
             case 'user':
                 $data = User::find($request->id);
                 if($type == 'userPantsApproved'){
-                    $data->userPantsApproved = abs($data->userPantsApproved - 1);
-                    $msg = abs($data->userPantsApproved - 1);
+                    $data->userPantsApproved = $request->value;
+                    $msg = $request->value;
+                    if($request->value == 0){
+                        $data->userPants = null;
+                        $data->userPantsApproved = null;
+                    }
                 }else if($type == 'userShoesApproved'){
-                    $data->userShoesApproved = abs($data->userShoesApproved - 1);
-                    $msg = abs($data->userShoesApproved - 1);
+                    $data->userShoesApproved = $request->value;
+                    $msg = $request->value;
+                    if($request->value == 0){
+                        $data->userShoes = null;
+                        $data->userShoesApproved = null;
+                    }
                 }else{
                     $data->activated = abs($data->activated - 1);
                     $msg = abs($data->activated - 1);

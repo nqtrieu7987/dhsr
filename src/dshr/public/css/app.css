@@ -574,3 +574,7 @@ a.link-home:hover{
 	text-align: center;
 	font-weight: bold;
 }
+.status-icon.check{
+	display: none;
+	position: absolute;
+}

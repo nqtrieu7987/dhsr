@@ -149,6 +149,7 @@ Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 't
     Route::get('users/edit/{id}', ['as' => 'user.edit', 'uses' => 'UsersManagementController@editUser']);
     Route::post('users/edit/{id}', ['as' => 'user.edit', 'uses' => 'UsersManagementController@editUserPost']);
     Route::get('users/resetpass/{id}', ['as' => 'user.resetpass', 'uses' => 'UsersManagementController@resetpass']);
+    Route::get('approval-attire', ['as' => 'user.approvalAttire', 'uses' => 'UsersManagementController@approvalAttire']);
 
 
     Route::post('search-users', 'UsersManagementController@search')->name('search-users');

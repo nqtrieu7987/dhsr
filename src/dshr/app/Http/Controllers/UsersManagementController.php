@@ -47,8 +47,10 @@ class UsersManagementController extends Controller
             //$users = $users->whereRaw('MATCH(userName, email, currentSchool, address1, address2, emergencyContactName, emergencyContactNo, relationToEmergencyContact, bankName,referralCode )AGAINST("'.$request->get('keyword').'" IN NATURAL LANGUAGE MODE)');
         }
         switch ($request->type) {
+            case 'all':
+                break;
             case 'attire':
-                $users = $users->whereRaw('(userPantsApproved = 0 OR userShoesApproved = 0)')->whereNotNull('userPants')->whereNotNull('userShoes');
+                $users = $users->whereRaw('(userPantsApproved = 0 OR userPantsApproved IS NULL OR userShoesApproved = 0 OR userShoesApproved IS NULL)')->whereNotNull('userPants')->whereNotNull('userShoes');
                 break;
             case 'uniform':
                 $users = $users->where('userConfirmed', 1);
@@ -63,7 +65,7 @@ class UsersManagementController extends Controller
                 $users = $users->whereRaw('NRICFront is not null AND NRICBack is not null');
                 break;
             default:
-                # code...
+                $request->merge(['type' => 'all']);
                 break;
         }
         //dd($users->toSql());
@@ -73,6 +75,23 @@ class UsersManagementController extends Controller
 
         $link_url = ['url' => '/users/create', 'title' => 'Add', 'icon' =>'fa fa-plus-circle'];
         return View('usersmanagement.show-users', compact('users', 'roles','link_url'))->with('site', 'Users');
+    }
+
+    public function approvalAttire(Request $request)
+    {
+        $users = User::orderBy('created_at', 'DESC');
+        if($request->has('keyword') && $request->get('keyword') != ''){
+            $keyword = trim($request->get('keyword'));
+            $users = $users->whereRaw("userName LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
+        }
+        $users = $users->whereRaw('(userPantsApproved = 0 OR userPantsApproved IS NULL OR userShoesApproved = 0 OR userShoesApproved IS NULL)')->whereNotNull('userPants')->whereNotNull('userShoes');
+        
+        $users = $users->paginate(5);
+        
+        $roles = Role::all();
+
+        $link_url = ['url' => '/users/create', 'title' => 'Add', 'icon' =>'fa fa-plus-circle'];
+        return View('usersmanagement.approval-attire', compact('users', 'roles','link_url'))->with('site', 'approval-attire');
     }
 
     /**
