@@ -103,6 +103,7 @@ class HotelController extends Controller
 
         $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
         $status = config('app.job_status');
+        $color_status = config('app.color_status');
 
         $idPrev = Job::where('hotel_id', $id)->where('start_date', '<', now())->pluck('id')->toArray();
         $idOn = Job::where('hotel_id', $id)->where('start_date', '>=', now())->pluck('id')->toArray();
@@ -110,7 +111,7 @@ class HotelController extends Controller
         $jobsOngoing = AllJob::whereIn('job_id', $idOn)->orderBy('timestamp', 'DESC')->paginate(20);
 
         $link_url = ['url' => route('hotel.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('hotel.edit',compact('hotel','jobsPrev','jobsOngoing','jobType','status','link_url'))->with('site','Hotel: '.$id);
+        return view('hotel.edit',compact('hotel','jobsPrev','jobsOngoing','jobType','status','link_url','color_status'))->with('site','Hotel: '.$id);
     }
 
     /**
