@@ -489,6 +489,20 @@ class JobController extends Controller
         }
         // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
         // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
+        if(file_exists(public_path().$data->userPants)){
+            unlink(public_path().$data->userPants);
+            $thumb = str_replace('.png', '_thumb.png', $data->userPants);
+            if(file_exists(public_path().$thumb)){
+                unlink(public_path().$thumb);
+            }
+        }
+        if(file_exists(public_path().$data->userShoes)){
+            unlink(public_path().$data->userShoes);
+            $thumb = str_replace('.png', '_thumb.png', $data->userShoes);
+            if(file_exists(public_path().$thumb)){
+                unlink(public_path().$thumb);
+            }
+        }
         $user->update([
             'userPants' => null,
             'userShoes' => null,

@@ -64,6 +64,14 @@ class HomeController extends Controller
                     $data->userPantsApproved = $request->value;
                     $msg = $request->value;
                     if($request->value == 0){
+                        //Xoa file khi reject
+                        if(file_exists(public_path().$data->userPants)){
+                            unlink(public_path().$data->userPants);
+                            $thumb = str_replace('.png', '_thumb.png', $data->userPants);
+                            if(file_exists(public_path().$thumb)){
+                                unlink(public_path().$thumb);
+                            }
+                        }
                         $data->userPants = null;
                         $data->userPantsApproved = null;
                     }
@@ -71,6 +79,14 @@ class HomeController extends Controller
                     $data->userShoesApproved = $request->value;
                     $msg = $request->value;
                     if($request->value == 0){
+                        //Xoa file khi reject
+                        if(file_exists(public_path().$data->userShoes)){
+                            unlink(public_path().$data->userShoes);
+                            $thumb = str_replace('.png', '_thumb.png', $data->userShoes);
+                            if(file_exists(public_path().$thumb)){
+                                unlink(public_path().$thumb);
+                            }
+                        }
                         $data->userShoes = null;
                         $data->userShoesApproved = null;
                     }

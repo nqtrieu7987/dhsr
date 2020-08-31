@@ -18,6 +18,9 @@
 .fa-fw{
   color: #aaa;
 }
+.table-responsive{
+  overflow-x:inherit;
+}
 </style>
 
   <div class="container">
