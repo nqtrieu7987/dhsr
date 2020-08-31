@@ -663,7 +663,7 @@ var userUploadsImage = function (req, res) {
   jwt.verify(jwtToken, cert, function (err, payload) {
       if (err) {
           // utils.writeLog(err);
-          res.json({ message: 'Token invalid!', resultCode: 0 });
+          res.json({ message: 'Token invalid!', resultCode: 99 });
       } else {        
            utils.writeLog('email: ' + email);
            utils.writeLog('decoder: ' + payload.email);
@@ -759,7 +759,7 @@ async function checkInCheckOut(req, res) {
     var check = false;
 		await jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {
@@ -910,7 +910,7 @@ async function uploadPantsShoes(req, res) {
     var check = false;
 		await jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {

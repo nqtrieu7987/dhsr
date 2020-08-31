@@ -47,13 +47,13 @@ module.exports.create = function (server, host, port, publicDir) {
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
 				// utils.writeLog(err);
-				res.json({ message: 'Token invalid!', resultCode: 0 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 			} else {
 				// utils.writeLog('decoder: ' + payload.username);
 				if (payload.email == email) {
-					res.json({ message: 'Authorized successfull!', resultCode: 1 });
+					res.json({ message: 'Authorized successfull!', resultCode: 0 });
 				} else {
-					res.json({ message: 'User invalid!', resultCode: 0 });
+					res.json({ message: 'User invalid!', resultCode: 1 });
 				}
 			}
 		});
@@ -93,7 +93,7 @@ module.exports.create = function (server, host, port, publicDir) {
 		} catch (error) { }
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {
@@ -148,7 +148,7 @@ module.exports.create = function (server, host, port, publicDir) {
 		} catch (error) { }
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {
@@ -176,7 +176,7 @@ module.exports.create = function (server, host, port, publicDir) {
 		} catch (error) { }
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {
@@ -208,7 +208,7 @@ module.exports.create = function (server, host, port, publicDir) {
 		} catch (error) { }
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {
@@ -236,7 +236,7 @@ module.exports.create = function (server, host, port, publicDir) {
 		} catch (error) { }
 		jwt.verify(jwtToken, cert, function (err, payload) {
 			if (err) {
-				res.json({ message: 'Token invalid!', resultCode: 1 });
+				res.json({ message: 'Token invalid!', resultCode: 99 });
 				return "";
 			}
 			if (payload.email != email) {

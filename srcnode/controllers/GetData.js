@@ -37,7 +37,7 @@ async function getListJobOnGoing(req, res) {
     var check = false;
     await jwt.verify(jwtToken, cert, function (err, payload) {
         if (err) {
-            res.json({ message: 'Token invalid!', resultCode: 1 });
+            res.json({ message: 'Token invalid!', resultCode: 99 });
             return "";
         }
         if (payload.email != email) {
@@ -99,7 +99,7 @@ async function getMyJob(req, res) {
     var check = false;
     await jwt.verify(jwtToken, cert, function (err, payload) {
         if (err) {
-            res.json({ message: 'Token invalid!', resultCode: 1 });
+            res.json({ message: 'Token invalid!', resultCode: 99 });
             return "";
         }
         if (payload.email != email) {
