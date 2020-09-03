@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            @if($site === 'users')
+            @if(\Route::current()->getName() === "user.edit")
                 <th>Hotel</th>
             @else
                 <th>Username</th>
@@ -24,7 +24,7 @@
         @foreach($data as $jobon)
         <tr>
             <td>{{(20 * (request()->get('page', 1) - 1)) + $j++}}</td>
-            @if($site === 'users')
+            @if(\Route::current()->getName() === 'user.edit')
                 <td><a href="{{route('hotel.edit', $jobon->Jobs()->hotel_id)}}">{{$jobon->Jobs()->Hotels()->name}}</a></td>
             @else
                 <td><a href="{{route('user.edit', $jobon->Users()->id)}}">{{$jobon->Users()->userName}}</a></td>
