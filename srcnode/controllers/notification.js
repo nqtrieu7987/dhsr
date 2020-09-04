@@ -4,17 +4,6 @@ const jobDb = require('./GetData.js');
 const Utils = require("../Utils.js");
 let app_id = "4a50e4fd-467c-41e9-bda4-4715ec1b833c";
 
-function sendToAllUser() {
-
-    var message = {
-        app_id: app_id,
-        contents: { "en": "Hi DSHR team, here Bui Chung is!" },
-        included_segments: ["All"]
-    };
-
-    sendNotification(message);
-}
-
 function createMessage(title, subtitle, content) {
     var message = {
         app_id: app_id,
@@ -69,6 +58,76 @@ function getMessageForNewJob(job) {
 
     sendNotification(message);
 }
+
+function getMessageApprovedPhoto(userID, forShoes = false) {
+    var headingCont = "Attire Verification";
+    var content = "Your pants photo was approved.";
+    if (forShoes) {
+        content = "Your shoes photo was approved.";
+    }
+
+    var message = createMessageToUserID(headingCont, null, content, userID);
+    return message;
+}
+
+function getMessageCancelPhoto(userID, forShoes = false) {
+    var headingCont = "Attire Verification";
+    var content = "Your pants photo was cancel.";
+    if (forShoes) {
+        content = "Your shoes photo was cancel.";
+    }
+
+    var message = createMessageToUserID(headingCont, null, content, userID);
+    return message;
+}
+
+function sendToAllUser() {
+
+    var message = {
+        app_id: app_id,
+        contents: { "en": "Hi DSHR team, here Bui Chung is!" },
+        included_segments: ["All"]
+    };
+
+    sendNotification(message);
+}
+
+function sendMessageForApprovedPant(userID) {
+    var message = getMessageApprovedPhoto(userID);
+
+    sendNotification(message);
+}
+
+function sendMessageForCancelPant(userID) {
+    var message = getMessageCancelPhoto(userID);
+
+    sendNotification(message);
+}
+
+function sendMessageForApprovedShoes(userID) {
+    var message = getMessageApprovedPhoto(userID, true);
+
+    sendNotification(message);
+}
+
+function sendMessageForCancelShoes(userID) {
+    var message = getMessageCancelPhoto(userID, true);
+
+    sendNotification(message);
+}
+
+function testForSendingApproved(userID) {
+    sendMessageForApprovedPant(userID);
+    sendMessageForApprovedShoes(userID);
+}
+
+
+function testForSendingCancel(userID) {
+    sendMessageForCancelPant(userID);
+    sendMessageForCancelShoes(userID);
+}
+
+
 
 async function getNewJob() {
     const newJobs = await jobDb.getNewJobs();
@@ -128,5 +187,9 @@ function startSchedule() {
 }
 
 module.exports = {
-    startSchedule: startSchedule
+    startSchedule: startSchedule,
+    sendMessageForCancelShoes: sendMessageForCancelShoes,
+    sendMessageForCancelPant: sendMessageForCancelPant,
+    sendMessageForApprovedPant: sendMessageForApprovedPant,
+    sendMessageForCancelPant: sendMessageForCancelPant
 };
