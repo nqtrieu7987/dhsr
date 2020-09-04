@@ -1,5 +1,5 @@
 <?php
-
+use GuzzleHttp\Client;
 return [
 
     /*
@@ -283,4 +283,6 @@ return [
         4 => 'danger',
         5 => 'warning',    
     ),
+
+    'service' => new Client(['base_uri' => env('SERVICE', 'http://mdcspace.vn:8443/service/'), 'verify' => false]),
 ];
