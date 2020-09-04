@@ -270,5 +270,25 @@ module.exports.create = function (server, host, port, publicDir) {
 
 	notification.startSchedule();
 
+	// send notify pants shoes
+	app.post('/service/user/notify_pants_shoes',async function (req, res) {
+		var email = req.headers.email;
+  		var type = req.headers.type; // type = true: pant, false: shoe
+  		var status = req.headers.status; // status = true: approve, false: reject
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (type == undefined || utils.isEmptyObject(type)) {
+			res.json({ message: 'Type not null!', resultCode: 1 });
+			return "";
+		}
+		if (status == undefined || utils.isEmptyObject(status)) {
+			res.json({ message: 'Status not null!', resultCode: 1 });
+			return "";
+		}
+		notification.sendMessageForAttire(email, type, status);
+	});
+
 	return app;
 };
