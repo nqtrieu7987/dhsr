@@ -19,6 +19,23 @@ function createMessage(title, subtitle, content) {
     return message;
 }
 
+function createMessageWithEmail(title, subtitle, content, email) {
+    var message = {
+        app_id: app_id,
+        contents: { "en": content },
+        headings: { "en": title },
+        filters: [
+            { "field": "tag", "key": "email", "relation": "=", "value": email },
+        ]
+    };
+
+    if (subtitle !== null) {
+        message.subtitle = { "en": subtitle };
+    }
+
+    return message;
+}
+
 function isAfternoonTime() {
     let nowDate = new Date(Date.now());
     let nowHours = nowDate.getHours();
@@ -59,26 +76,20 @@ function getMessageForNewJob(job) {
     sendNotification(message);
 }
 
-function getMessageApprovedPhoto(userID, forShoes = false) {
+function getMessageForAttire(email, forPant = true, approved = true) {
     var headingCont = "Attire Verification";
-    var content = "Your pants photo was approved.";
-    if (forShoes) {
-        content = "Your shoes photo was approved.";
-    }
 
-    var message = createMessageToUserID(headingCont, null, content, userID);
+    var content =
+        `Your ${(forPant) ? "pants" : "shoes"} photo was ${(approved) ? "approved" : "shoes"}.\nPlease check it!`;
+
+    var message = createMessageWithEmail(headingCont, null, content, email);
     return message;
 }
 
-function getMessageCancelPhoto(userID, forShoes = false) {
-    var headingCont = "Attire Verification";
-    var content = "Your pants photo was cancel.";
-    if (forShoes) {
-        content = "Your shoes photo was cancel.";
-    }
+function sendMessageForAttire(email, forPant = true, approved = true) {
+    var message = getMessageForAttire(email, forPant, approved);
 
-    var message = createMessageToUserID(headingCont, null, content, userID);
-    return message;
+    sendNotification(message);
 }
 
 function sendToAllUser() {
@@ -92,41 +103,17 @@ function sendToAllUser() {
     sendNotification(message);
 }
 
-function sendMessageForApprovedPant(userID) {
-    var message = getMessageApprovedPhoto(userID);
 
-    sendNotification(message);
-}
-
-function sendMessageForCancelPant(userID) {
-    var message = getMessageCancelPhoto(userID);
-
-    sendNotification(message);
-}
-
-function sendMessageForApprovedShoes(userID) {
-    var message = getMessageApprovedPhoto(userID, true);
-
-    sendNotification(message);
-}
-
-function sendMessageForCancelShoes(userID) {
-    var message = getMessageCancelPhoto(userID, true);
-
-    sendNotification(message);
-}
-
-function testForSendingApproved(userID) {
-    sendMessageForApprovedPant(userID);
-    sendMessageForApprovedShoes(userID);
+function testForSendingApproved(email) {
+    sendMessageForAttire(email, true, true);
+    sendMessageForAttire(email, false, true);
 }
 
 
-function testForSendingCancel(userID) {
-    sendMessageForCancelPant(userID);
-    sendMessageForCancelShoes(userID);
+function testForSendingCancel(email) {
+    sendMessageForAttire(email, true, false);
+    sendMessageForAttire(email, false, false);
 }
-
 
 
 async function getNewJob() {
@@ -188,8 +175,5 @@ function startSchedule() {
 
 module.exports = {
     startSchedule: startSchedule,
-    sendMessageForCancelShoes: sendMessageForCancelShoes,
-    sendMessageForCancelPant: sendMessageForCancelPant,
-    sendMessageForApprovedPant: sendMessageForApprovedPant,
-    sendMessageForCancelPant: sendMessageForCancelPant
+    sendMessageForAttire:sendMessageForAttire
 };
