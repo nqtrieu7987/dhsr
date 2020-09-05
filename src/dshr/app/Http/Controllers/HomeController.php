@@ -74,14 +74,11 @@ class HomeController extends Controller
                         }
                         $data->userPants = null;
                         $data->userPantsApproved = null;
-
+                        $body = array('email' => $data->email,'type' => true,'status' => false);
                         try {
                             $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'headers' => array(
-                                    'email' => $data->email,
-                                    'type' => true,
-                                    'status' => false,
-                                )]);
+                                'body' => json_encode($obj)
+                            ]);
                             return true;
                         } catch (\GuzzleHttp\Exception\ClientException $e) {
                             return false;
@@ -101,13 +98,11 @@ class HomeController extends Controller
                         }
                         $data->userShoes = null;
                         $data->userShoesApproved = null;
+                        $body = array('email' => $data->email,'type' => false,'status' => false);
                         try {
                             $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'headers' => array(
-                                    'email' => $data->email,
-                                    'type' => false,
-                                    'status' => false,
-                                )]);
+                                'body' => json_encode($obj)
+                            ]);
                             return true;
                         } catch (\GuzzleHttp\Exception\ClientException $e) {
                             return false;
