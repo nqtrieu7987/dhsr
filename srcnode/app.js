@@ -272,22 +272,24 @@ module.exports.create = function (server, host, port, publicDir) {
 
 	// send notify pants shoes
 	app.post('/service/user/notify_pants_shoes',async function (req, res) {
-		var email = req.headers.email;
-  		var type = req.headers.type; // type = true: pant, false: shoe
-  		var status = req.headers.status; // status = true: approve, false: reject
-		if (email == undefined || utils.isEmptyObject(email)) {
+		var email = req.body.email;
+  		var type = req.body.type; // type = true: pant, false: shoe
+  		var status = req.body.status; // status = true: approve, false: reject
+		if (email == undefined) {
 			res.json({ message: 'Email not null!', resultCode: 1 });
 			return "";
 		}
-		if (type == undefined || utils.isEmptyObject(type)) {
+		if (type == undefined) {
 			res.json({ message: 'Type not null!', resultCode: 1 });
 			return "";
 		}
-		if (status == undefined || utils.isEmptyObject(status)) {
+		if (status == undefined) {
 			res.json({ message: 'Status not null!', resultCode: 1 });
 			return "";
 		}
 		notification.sendMessageForAttire(email, type, status);
+		res.setHeader('Content-Type', 'application/json; charset=utf-8');
+		res.send({ message: "Sending Successfull!", resultCode: 0 });
 	});
 
 	return app;
