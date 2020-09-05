@@ -77,12 +77,9 @@ class HomeController extends Controller
                         $body = array('email' => $data->email,'type' => true,'status' => false);
                         try {
                             $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'body' => json_encode($obj)
+                                'body' => json_encode($body)
                             ]);
-                            return true;
-                        } catch (\GuzzleHttp\Exception\ClientException $e) {
-                            return false;
-                        }
+                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
                     }
                 }else if($type == 'userShoesApproved'){
                     $data->userShoesApproved = $request->value;
@@ -101,12 +98,9 @@ class HomeController extends Controller
                         $body = array('email' => $data->email,'type' => false,'status' => false);
                         try {
                             $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'body' => json_encode($obj)
+                                'body' => json_encode($body)
                             ]);
-                            return true;
-                        } catch (\GuzzleHttp\Exception\ClientException $e) {
-                            return false;
-                        }
+                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
                     }
                 }else{
                     $data->activated = abs($data->activated - 1);
