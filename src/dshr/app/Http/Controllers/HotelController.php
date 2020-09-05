@@ -107,9 +107,15 @@ class HotelController extends Controller
 
         $idPrev = Job::where('hotel_id', $id)->where('start_date', '<', now())->pluck('id')->toArray();
         $idOn = Job::where('hotel_id', $id)->where('start_date', '>=', now())->pluck('id')->toArray();
-        $jobsPrev = AllJob::whereIn('job_id', $idPrev)->orderBy('timestamp', 'DESC')->paginate(20);
-        $jobsOngoing = AllJob::whereIn('job_id', $idOn)->orderBy('timestamp', 'DESC')->paginate(20);
+        $jobsPrev = AllJob::leftJoin('job', function($join) {
+                        $join->on('all_jobs.job_id', '=', 'job.id');
+                    })
+                    ->whereIn('all_jobs.job_id', $idPrev)->orderBy('timestamp', 'DESC')->paginate(20);
 
+        $jobsOngoing = AllJob::leftJoin('job', function($join) {
+                        $join->on('all_jobs.job_id', '=', 'job.id');
+                    })
+                    ->whereIn('job_id', $idOn)->orderBy('timestamp', 'DESC')->paginate(20);
         $link_url = ['url' => route('hotel.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('hotel.edit',compact('hotel','jobsPrev','jobsOngoing','jobType','status','link_url','color_status'))->with('site','Hotel: '.$id);
     }

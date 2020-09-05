@@ -300,10 +300,12 @@ class JobController extends Controller
         if($request->hotel_id > 0){
             $jobs = $jobs->where('hotel_id', $request->hotel_id);
             $check_search = true;
+            $hotel = Hotel::find($request->hotel_id);
         }
         if($request->job > 0){
             $jobs = $jobs->where('job_type_id', $request->job);
             $check_search = true;
+            $job = JobType::find($request->job);
         }
         if($request->start_date != ''){
             $start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
@@ -332,6 +334,34 @@ class JobController extends Controller
         ksort($hotels);
 
         $status = config('app.job_status');
+        if($request->submit == 'export' && $datas != null){
+            foreach ($datas as $k => $v) {
+                $data_export[] = [
+                    'No' => $k+1,
+                    'Date Of Work' => date('Y-m-d H:i:s', $v['timestamp']/1000),
+                    'Name' => $v->Users()['name'],
+                    'Exp' => $v->Users()['jobsDone'] > 0 ? 'Yes' : 'No',
+                    'Sex' => $v->Users()['gender'] = 1 ? 'M' : 'F',
+                    'Feedback' => $v->Users()['feedback'],
+                    'IC/FIN No.' => $v->Users()['userNRIC'],
+                    'Shift' => $v->Jobs()['start_time'].' - '.$v->Jobs()['end_time'],
+                    'Actual Time In' => $v['real_start'],
+                    'Signature' => '',
+                    'Meal Break' => $v['breakTime'],
+                    'Actual Time Out' => $v['real_end'],
+                    'Signature ' => '',
+                    'Start Time' => $v['paidTimeIn'],
+                    'End Time' => $v['paidTimeOut'],
+                    'Meal Break ' => $v['breakTime'],
+                    'Total Hours' => $v['totalHours'],
+                    'In-Charge Signature' => '',
+                ];
+            }
+            $timestamp = date('Y') . date('m') . date('d');
+
+            return Excel::download(new JobExport($data_export, $hotel, $job), $hotel->name.' ('.$job->name.') '.date('Y-m-d', time()).'.xlsx');
+        }
+
         return view('job.report-job',compact('datas','status','jobType','hotels','check_search'))
                 ->with('site','Hotel Attendance');
     }

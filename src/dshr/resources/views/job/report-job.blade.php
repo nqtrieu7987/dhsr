@@ -27,8 +27,9 @@
 
                                 {!! Form::label('Date', 'Date', array('class' => 'control-label mt-2 mr-1 ml-2 hidden-xs text-right')); !!}
                                 {!! Form::text('start_date', request()->get('start_date'), array('id' => 'datepicker', 'class' => 'form-control col-md-2 col-xs-4 mt-1-sx pull-right datepicker', 'placeholder' => 'dd/mm/yyyy')) !!}
-                                <button class="btn bg-main mr-1 ml-1 mt-3-sx" type="submit"><i aria-hidden="true" class="fa fa-search"></i>&nbsp;Search</button>
-                                <a href="{{route('job.export-excel', request()->all())}}" onclick="checkHotelJob()" class="btn btn-success mt-3-sx"><i class="fa fa-download"></i></a>
+                                <button class="btn bg-main mr-1 ml-1 mt-3-sx" name="submit" value="search" type="submit"><i aria-hidden="true" class="fa fa-search"></i>&nbsp;Search</button>
+                                <button class="btn btn-success mr-1 ml-1 mt-3-sx" name="submit" value="export" type="submit"><i aria-hidden="true" class="fa fa-download"></i></button>
+                                {{-- <a href="{{route('job.export-excel', request()->all())}}" onclick="checkHotelJob()" class="btn btn-success mt-3-sx"><i class="fa fa-download"></i></a> --}}
                             </div>
                         </div>
                     {!! Form::close() !!}
@@ -49,13 +50,14 @@
                                         <th>Name</th>
                                         <th>Job</th>
                                         <th>Status</th>
-                                        <th class="hidden-xs">Start time</th>
-                                        <th class="hidden-xs">End time</th>
-                                        <th class="hidden-xs">Paid TimeIn</th>
-                                        <th class="hidden-xs">Paid TimeOut</th>
+                                        <th>Start time</th>
+                                        <th>End time</th>
+                                        <th>Start date</th>
+                                        <th>Paid TimeIn</th>
+                                        <th>Paid TimeOut</th>
                                         <th>BreakTime</th>
                                         <th>Total Hours</th>
-                                        <th class="hidden-xs">Remarks</th>
+                                        <th>Remarks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -78,6 +80,7 @@
                                             </td>
                                             <td>{{$data->real_start}}</td>
                                             <td>{{$data->real_end}}</td>
+                                            <td>{{request()->get('start_date')}}</td>
                                             <td>{{$data->paidTimeIn}}</td>
                                             <td>{{$data->paidTimeOut}}</td>
                                             <td>{{$data->breakTime}}</td>

@@ -8,14 +8,15 @@
                 <th>Username</th>
             @endif
             <th>Job</th>
-            <th class="hidden-xs">Status</th>
-            <th class="hidden-xs">Start time</th>
-            <th class="hidden-xs">End time</th>
-            <th class="hidden-xs">Paid TimeIn</th>
-            <th class="hidden-xs">Paid TimeOut</th>
-            <th class="hidden-xs">BreakTime</th>
-            <th class="hidden-xs">Total Hours</th>
-            <th class="hidden-xs">Remarks</th>
+            <th>Status</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Start date</th>
+            <th>Paid TimeIn</th>
+            <th>Paid TimeOut</th>
+            <th>BreakTime</th>
+            <th>Total Hours</th>
+            <th>Remarks</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +36,7 @@
             </td>
             <td class="align-center">{{$jobpv->real_start}}</td>
             <td class="align-center">{{$jobpv->real_end}}</td>
+            <td class="align-center">{{$jobpv->start_date}}</td>
             <td class="align-center">{{$jobpv->paidTimeIn}}</td>
             <td class="align-center">{{$jobpv->paidTimeOut}}</td>
             <td>{{$jobpv->breakTime}}</td>

@@ -320,8 +320,9 @@ class UsersManagementController extends Controller
         }
         $user->save();
 
-        Session::flash('success', 'Update success!');
-        return back()->with('success', trans('usersmanagement.updateSuccess'));
+        /*Session::flash('success', 'Update success!');
+        return back()->with('success', trans('usersmanagement.updateSuccess'));*/
+        return response()->json(['comments' => $request->comments, 'time' => date('Y-m-d H:i:s', time())], 200);
     }
 
     /**

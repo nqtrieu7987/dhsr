@@ -14,7 +14,9 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         '/user/approvedByType',
         '/change/status',
+        '/change/job_status',
         '/change/statusUser',
-        '/job-create-multi'
+        '/job-create-multi',
+        '/user/updateComment'
     ];
 }

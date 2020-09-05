@@ -778,7 +778,6 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                             </div>
 
                             <div id="commentAccount" class="tab-pane fade">
-                                @if($user->comments)
 
                                     <div class="row">
                                         <div class="col-12">
@@ -790,7 +789,8 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                                             <th>Comment</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="table-comments">
+                                                        @if($user->comments)
                                                         @php $comments = json_decode($user->comments, true); arsort($comments); @endphp
                                                         @foreach ($comments as $key => $cmt)
                                                             @if(is_array($cmt))
@@ -805,16 +805,17 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                                             </tr>
                                                             @endif
                                                         @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
                                             
                                         </div>
                                     </div>
-                                @endif
+                                
                                 <div class="row">
                                     <div class="col-sm-6 offset-sm-3 margin-bottom-3 text-center">
-                                        {!! Form::model($user, ['method' => 'POST', 'route' => ['user.updateComment', $user->id], 'class' => 'form-horizontal', 'role' => 'form']) !!}
+                                        {{-- {!! Form::model($user, ['method' => 'POST', 'route' => ['user.updateComment', $user->id], 'class' => 'form-horizontal', 'role' => 'form']) !!} --}}
 
                                             <div class="form-group">
                                                 <div class="col-md-12 col-sm-8 col-xs-12">
@@ -823,10 +824,10 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                                 </div>
                                             </div>
                                             {!! Form::hidden("id", $user->id) !!}
+                                            <span class="btn bg-main btn-block margin-bottom-1 mt-3 mb-2 addComment"><i class="fa fa-fw fa-save" aria-hidden="true"></i> Save Changes</span>
+                                            {{-- {!! Form::button(trans('forms.save-changes'), array('class' => 'btn bg-main btn-block margin-bottom-1 mt-3 mb-2','onclick' => 'addComment()')) !!} --}}
 
-                                            {!! Form::button(trans('forms.save-changes'), array('class' => 'btn bg-main btn-block margin-bottom-1 mt-3 mb-2','type' => 'submit')) !!}
-
-                                        {!! Form::close() !!}
+                                        {{-- {!! Form::close() !!} --}}
 
                                     </div>
                                 </div>
@@ -986,6 +987,20 @@ $(document).ready(function(){
   }
 });
 
+$('.addComment').click(function(){
+    var comments = $("#comments").val();
+    $('#waiting').show();
+    $.ajax({
+        type : 'POST',
+        url  : '{{route('user.updateComment')}}',
+        data : {id: '{{$user->id}}', comments: comments},
+        success  : function (data) {
+            $('#waiting').hide();
+            var html = "<tr><td>"+data.time+"</td><td>"+data.comments+"</td></tr>";
+            $('#table-comments').prepend(html);
+        }
+    });
+});
 
 $('.changeStatusUser').click(function(){
     $('#waiting').show();
