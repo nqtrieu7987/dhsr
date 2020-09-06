@@ -11,7 +11,6 @@ var cert = fs.readFileSync('./educa.vn.key');  // get private key
 const fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
 var config = require('./config.json');
-var avatar_upload = '/var/www/log/avatar/';
 var ip = require("ip");
 var HomeController = require('./controllers/home');
 var writelog = require("./WriteLog.js");
