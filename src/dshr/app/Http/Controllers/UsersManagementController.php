@@ -69,7 +69,7 @@ class UsersManagementController extends Controller
                 break;
         }
         //dd($users->toSql());
-        $users = $users->paginate(5);
+        $users = $users->paginate(30);
         
         $roles = Role::all();
 
@@ -86,7 +86,7 @@ class UsersManagementController extends Controller
         }
         $users = $users->whereRaw('(userPantsApproved = 0 OR userPantsApproved IS NULL OR userShoesApproved = 0 OR userShoesApproved IS NULL)')->whereNotNull('userPants')->whereNotNull('userShoes');
         
-        $users = $users->paginate(5);
+        $users = $users->paginate(30);
         
         $roles = Role::all();
 

@@ -23,7 +23,7 @@ $date = getdate();
                 $image = base64_encode($img);
             }
             @endphp
-            <td colspan="3" rowspan="3" style="width: 100px; height: 100px">@if($hotel->logo != '')<img style="width: 100px; height: 100px" src="{!! \App\Helper\VtHelper::base64_to_jpeg('data:image/'.strtolower(pathinfo(MEDIADOMAIN.$hotel->logo, PATHINFO_EXTENSION)).';base64,'.$image, 'abc.png')!!}">@endif</td>
+            <td colspan="3" rowspan="3" style="width: 100px; height: 100px">@if($hotel->logo != '')<img style="width: 100px; height: 100px" src="{!! \App\Helper\VtHelper::base64_to_jpeg('data:image/'.strtolower(pathinfo(MEDIADOMAIN.$hotel->logo, PATHINFO_EXTENSION)).';base64,'.$image, public_path('uploads/abc.png'))!!}">@endif</td>
             <td colspan="15" style="height: 60px;text-align: center; margin: 0 auto;position: relative;top: -20px;">
                 <b>{{strtoupper($job->name)}} OPERATIONS <br>
                 CASUAL LABOUR ATTENDANCE LIST</b>
