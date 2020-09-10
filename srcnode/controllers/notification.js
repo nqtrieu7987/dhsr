@@ -78,8 +78,8 @@ function getMessageForNewJob(job) {
 
 function getMessageForAttire(email, forPant = true, approved = true) {
     var headingCont = "Attire Verification";
-    var itemName = (forPant) ? "pants" : "shoes";
-    var statusStr = (approved) ? "approved" : "cancel";
+    var itemName = (forPant == true) ? "pants" : "shoes";
+    var statusStr = (approved == true) ? "approved" : "cancel";
     var content =
         `Your ${itemName} photo was ${statusStr}.\nPlease check it!`;
     var message = createMessageWithEmail(headingCont, null, content, email);

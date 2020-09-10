@@ -71,6 +71,12 @@ return [
             'level' => 'debug',
             'days' => 7,
         ],
+        'approvalImage' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/log_approval_image.log'),
+            'level' => 'debug',
+            'days' => 7,
+        ],
     ],
 
 ];

@@ -284,5 +284,5 @@ return [
         5 => 'warning',    
     ),
 
-    'service' => new Client(['base_uri' => env('SERVICE', 'http://mdcspace.vn:8443/service/'), 'verify' => false]),
+    'service' => new Client(['base_uri' => env('SERVICE', 'https://mdcspace.vn:8443/service/'), 'verify' => false]),
 ];

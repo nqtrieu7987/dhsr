@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
 use Validator;
 use App\Helper\VtHelper;
 use Illuminate\Support\Facades\Log;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -60,6 +61,7 @@ class HomeController extends Controller
                 break;
             case 'user':
                 $data = User::find($request->id);
+                $status = true;
                 if($type == 'userPantsApproved'){
                     $data->userPantsApproved = $request->value;
                     $msg = $request->value;
@@ -74,13 +76,16 @@ class HomeController extends Controller
                         }
                         $data->userPants = null;
                         $data->userPantsApproved = null;
-                        $body = array('email' => $data->email,'type' => true,'status' => false);
-                        try {
-                            $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'body' => json_encode($body)
-                            ]);
-                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
+                        $status = false;
                     }
+
+                    $body = array('email' => $data->email,'type' => true,'status' => $status);
+                    try {
+                        $res = config('app.service')->post('user/notify_pants_shoes', [
+                            'form_params' => $body
+                        ]);
+                        \Log::channel('approvalImage')->info("User: ".Auth::user()->id. " data=". json_encode($body));
+                    } catch (\GuzzleHttp\Exception\ClientException $e) {}
                 }else if($type == 'userShoesApproved'){
                     $data->userShoesApproved = $request->value;
                     $msg = $request->value;
@@ -95,13 +100,15 @@ class HomeController extends Controller
                         }
                         $data->userShoes = null;
                         $data->userShoesApproved = null;
-                        $body = array('email' => $data->email,'type' => false,'status' => false);
-                        try {
-                            $res = config('app.service')->post('user/notify_pants_shoes', [
-                                'body' => json_encode($body)
-                            ]);
-                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
+                        $status = false;
                     }
+                    $body = array('email' => $data->email,'type' => false,'status' => $status);
+                    try {
+                        $res = config('app.service')->post('user/notify_pants_shoes', [
+                            'form_params' => $body
+                        ]);
+                        \Log::channel('approvalImage')->info("User: ".Auth::user()->id. " data=". json_encode($body));
+                    } catch (\GuzzleHttp\Exception\ClientException $e) {}
                 }else{
                     $data->activated = abs($data->activated - 1);
                     $msg = abs($data->activated - 1);
