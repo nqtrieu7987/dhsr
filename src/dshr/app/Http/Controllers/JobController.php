@@ -8,6 +8,7 @@ use App\Models\AllJob;
 use App\Models\JobType;
 use App\Models\Hotel;
 use App\Models\User;
+use App\Models\Adminusers;
 use App\Exports\JobExport;
 use Auth;
 use Session, Excel;
@@ -182,73 +183,6 @@ class JobController extends Controller
     }
 
     public function AllJobs(Request $request){
-        /*$file = public_path('json/users.json');
-        $count = 0;
-        if ($fh = fopen($file, 'r')) {
-            while (!feof($fh)) {
-                $line = fgets($fh);
-                $data = json_decode(trim($line), true);
-               
-
-                $jobType = User1::create([
-                    'id' => $data['user_id'],
-                    // 'updatedAt' => array_get($data, 'updatedAt'),
-                    // 'createdAt' => array_get($data, 'createdAt'),
-                    'email' => $data['email'],
-                    'password' => $data['password'],
-                    'timeStamp' => $data['timeStamp'],
-                    'visitTimeStamp' => $data['visitTimeStamp'],
-                    'studentType' => $data['studentType'],
-                    'userName' => $data['userName'],
-                    'userNRIC' => $data['userNRIC'],
-                    'userBirthday' => $data['userBirthday'],
-                    'userGender' => $data['userGender'],
-                    'studentStatus' => $data['studentStatus'],
-                    'currentSchool' => $data['currentSchool'],
-                    'contactNo' => $data['contactNo'],
-                    'address1' => $data['address1'],
-                    'address2' => $data['address2'],
-                    'emergencyContactNo' => $data['emergencyContactNo'],
-                    'emergencyContactName' => $data['emergencyContactName'],
-                    'relationToEmergencyContact' => $data['relationToEmergencyContact'],
-                    'accountNo' => $data['accountNo'],
-                    'asWaiter' => $data['asWaiter'],
-                    'dyedHair' => $data['dyedHair'],
-                    'visibleTattoo' => $data['visibleTattoo'],
-                    'workPassPhoto' => $data['workPassPhoto'],
-                    'studentCardFront' => $data['studentCardFront'],
-                    'studentCardBack' => $data['studentCardBack'],
-                    'NRICFront' => $data['NRICFront'],
-                    'NRICBack' => $data['NRICBack'],
-                    'jobsDone' => $data['jobsDone'],
-                    'userConfirmed' => $data['userConfirmed'],
-                    'userPants' => $data['userPants'],
-                    'userShoes' => $data['userShoes'],
-                    'userShoesApproved' => $data['userShoesApproved'],
-                    'userPantsApproved' => $data['userPantsApproved'],
-                    'isFavourite' => $data['isFavourite'],
-                    'isWarned' => $data['isWarned'],
-                    'isDiamond' => $data['isDiamond'],
-                    'isJCActive' => $data['isJCActive'],
-                    'isW' => $data['isW'],
-                    'isMO' => $data['isMO'],
-                    'isMC' => $data['isMC'],
-                    'verifyCode' => $data['verifyCode'],
-                    'chatURL' => $data['chatURL'],
-                    'feedback' => array_get($data,'feedback'),
-                    'TCC' => array_get($data,'TCC'),
-                    'referralCode' => array_get($data,'referralCode'),
-                    'isGWP' => $data['isGWP'],
-                    'isHilton' => $data['isHilton'],
-                    'isKempinski' => $data['isKempinski'],
-                    'isRWS' => $data['isRWS'],
-                    'comments' => json_encode($data['comments'])
-                ]);
-            }
-            fclose($fh);
-        }
-        dd('xxxx');*/
-
         $jobType = JobType::pluck('name', 'id')->toArray();
         $status = config('app.job_status');
         $color_status = config('app.color_status');
@@ -278,10 +212,35 @@ class JobController extends Controller
 
         $datas = null;
         if(count($ids) > 0){
-            $datas = AllJob::whereIn('job_id', $ids)->paginate(30);
+            //$datas = AllJob::whereIn('job_id', $ids)->paginate(30);
+            $datas = AllJob::leftJoin('job', function($join) {
+                $join->on('all_jobs.job_id', '=', 'job.id');
+            })
+            ->select('all_jobs.*', 'job.job_type_id', 'job.hotel_id')
+            ->whereIn('all_jobs.job_id', $ids)
+            ->orderBy('updated_at', 'DESC')
+            ->paginate(20);
+        }
+        $attentions = [];
+        $pendings = [];
+        $approveds = [];
+        if($datas){
+            foreach ($datas as $key => $value) {
+                if($value->rwsConfirmed != null){
+                    array_push($approveds, $value);
+                }else{
+                    if($value->real_start != '' && $value->real_end != ''){
+                        array_push($pendings, $value);
+                    }else{
+                        array_push($attentions, $value);
+                    }
+                }
+            }
         }
 
-        return view('job.all-jobs',compact('datas','status','color_status','jobType','hotels'))
+        $view_type = config('app.view_type');
+
+        return view('job.all-jobs-news',compact('datas','status','color_status','jobType','hotels','view_type','attentions','pendings','approveds'))
                 ->with('site','All Job');
     }
 
@@ -514,7 +473,7 @@ class JobController extends Controller
         $data = AllJob::find($id);
         $user = User::find($data->user_id);
         // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
-        if($data->workTime_confirmed != 1 && $request->status == 1){
+        if($data->rwsConfirmed != 1 && $request->status == 1){
             $user->update(['jobsDone' => $user->jobsDone + 1]);
         }
         // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
@@ -549,6 +508,7 @@ class JobController extends Controller
             'totalHours' => $totalHours,
             'timestamp' => time()*1000,
             'workTime_confirmed' => 1,
+            'rwsConfirmed' => $request->status,
             'remarks' => $request->get('remarks'),
         ]);
         

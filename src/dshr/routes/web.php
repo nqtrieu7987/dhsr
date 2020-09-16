@@ -166,4 +166,6 @@ Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 't
     Route::get('active-users', 'AdminDetailsController@activeUsers');
 });
 
+Route::post('job/in-out-aj', ['as' => 'job.inOutAJ', 'uses' => 'AjaxController@inOutPost']);
+
 Route::redirect('/php', '/phpinfo', 301);

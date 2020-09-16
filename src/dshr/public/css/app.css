@@ -578,3 +578,11 @@ a.link-home:hover{
 	display: none;
 	position: absolute;
 }
+.table-responsive{
+  overflow-x:inherit;
+}
+
+.card-body-white{
+	background-color: #fff;
+	width: 100% !important;
+}

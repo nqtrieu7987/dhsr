@@ -125,12 +125,10 @@
                     {!! Form::label('status', 'Job Status' , array('class' => 'col-md-3 control-label')); !!}
                     <div class="col-md-3">
                         <div class="input-group">
-                            <select id="status" class="form-control col-md-7 col-xs-12" name="status" @if($data->workTime_confirmed == 1) disabled @endif>
+                            <select id="status" class="form-control col-md-7 col-xs-12" name="status" @if($data->rwsConfirmed == 1) disabled @endif>
                                 <option value="1">Job Done</option>
                                 <option value="2">Job Failure</option>
                             </select>
-
-                            {{-- {!! Form::select('status', $status, null, ['id' => 'status','class' => 'form-control col-md-7 col-xs-12']); !!} --}}
                         </div>
                     </div>
                 </div>

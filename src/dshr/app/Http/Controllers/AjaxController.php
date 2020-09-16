@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\AllJob;
 use App\Models\Job;
+use App\Models\User;
 use App\Models\JobType;
 use Auth;
 use Session;
 use Carbon\Carbon;
+use Log;
 
 class AjaxController extends Controller
 {
@@ -70,4 +72,96 @@ class AjaxController extends Controller
 			return view('partials/pagination_ongoing', compact('data','jobType','status','color_status','site'))->render();
 		}
 	}
+
+	public function inOutPost(Request $request){
+        $real_start = date("H:i", strtotime($request->get('real_start')));
+        $real_end = date("H:i", strtotime($request->get('real_end')));
+        $paidTimeIn = $request->get('paidTimeIn');
+        $paidTimeOut = $request->get('paidTimeOut');
+        if($paidTimeIn == ""){
+            $paidTimeIn = $real_start;
+        }else{
+            $paidTimeIn = date("H:i", strtotime($request->get('paidTimeIn')));
+        }
+        if($paidTimeOut == ""){
+            $paidTimeOut = $real_end;
+        }else{
+            $paidTimeOut = date("H:i", strtotime($request->get('paidTimeOut')));
+        }
+
+        $timeDiff = $this->timeDiff($paidTimeIn, $paidTimeOut);
+        if($timeDiff < 0){
+            $time1 = $this->timeDiff($paidTimeIn, '24:00');
+            $time2 = $this->timeDiff('00:00', $paidTimeOut);
+            $totalHours = round(($time1 + $time2)/3600, 2) - $request->get('breakTime');
+        }else{
+            $totalHours = round($timeDiff/3600, 2) - $request->get('breakTime');
+        }
+
+        $data = AllJob::find($request->get('id'));
+        //Neu bam approved => type = 2
+        $status = null;
+        if($request->type == 2){
+            $user = User::find($data->user_id);
+            // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
+            if($data->rwsConfirmed != 1 && $request->status == 1){
+                $user->update(['jobsDone' => $user->jobsDone + 1]);
+            }
+            // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
+            // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
+            if(file_exists(public_path().$data->userPants) && public_path().$data->userPants != public_path()){
+                unlink(public_path().$data->userPants);
+                $thumb = str_replace('.png', '_thumb.png', $data->userPants);
+                if(file_exists(public_path().$thumb)){
+                    unlink(public_path().$thumb);
+                }
+            }
+            if(file_exists(public_path().$data->userShoes) && public_path().$data->userShoes != public_path()){
+                unlink(public_path().$data->userShoes);
+                $thumb = str_replace('.png', '_thumb.png', $data->userShoes);
+                if(file_exists(public_path().$thumb)){
+                    unlink(public_path().$thumb);
+                }
+            }
+            $user->update([
+                'userPants' => null,
+                'userShoes' => null,
+                'userPantsApproved' => 0,
+                'userShoesApproved' => 0,
+            ]);
+            $status = $request->status;
+        }else{
+            $real_start = $data->real_start != '' ? $data->real_start : $paidTimeIn;
+            $real_end = $data->real_end != '' ? $data->real_end : $paidTimeOut;
+        }
+        $data->update([
+            'real_start' => $real_start,
+            'real_end' => $real_end,
+            'paidTimeIn' => $paidTimeIn,
+            'paidTimeOut' => $paidTimeOut,
+            'breakTime' => $request->get('breakTime'),
+            'totalHours' => $totalHours,
+            'timestamp' => time()*1000,
+            'workTime_confirmed' => 1,
+            'rwsConfirmed' => $status,
+            'remarks' => $request->get('remarks'),
+        ]);
+        
+        \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
+
+        Session::flash('success', 'Confirm success!');
+        return response()->json([
+            'msg' => 'Update success',
+            'id' => $data->id,
+            'totalHours' => $totalHours,
+            'type' => $request->type,
+        ]);
+    }
+
+    public function timeDiff($firstTime,$lastTime) {
+        $firstTime=strtotime($firstTime);
+        $lastTime=strtotime($lastTime);
+        $timeDiff=$lastTime-$firstTime;
+        return $timeDiff;
+    }
 }
