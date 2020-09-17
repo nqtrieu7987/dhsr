@@ -197,12 +197,11 @@ class JobController extends Controller
             $jobs = $jobs->where('hotel_id', $request->hotel_id);
         }
         if($request->start_date != ''){
-            $start_date = Carbon::createFromFormat('m/d/Y', $request->get('start_date'))->startOfDay();
+            $start_date = Carbon::createFromFormat('d/m/Y', $request->get('start_date'))->startOfDay();
             $start_date = date_format($start_date, "Y-m-d");
             $jobs = $jobs->where('start_date', $start_date);
         }
         $listIds = $jobs->get();
-        
         $ids =[];
         if(count($listIds) > 0){
             foreach ($listIds as $key => $value) {

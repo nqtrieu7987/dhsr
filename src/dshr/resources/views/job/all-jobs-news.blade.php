@@ -325,10 +325,15 @@
         @endif
 
         //Date picker
+        @if(request()->get('start_date') == null)
         $('.datepicker').datepicker({
             format:'dd/mm/yyyy'
         }).datepicker("setDate",'now');
-
+        @else
+        $('.datepicker').datepicker({
+            format:'dd/mm/yyyy'
+        });
+        @endif
 
         $(":button").click(function(){
             var $lastRow = $("[id$=blah] tr:not('.ui-widget-header'):last"); //grab row before the last row
@@ -338,8 +343,11 @@
         });
 
     });
-
+var els = document.getElementsByClassName('has-error');
+var red = document.getElementsByClassName('red');
 function saveChange(i, type){
+    removeClasses(els,'has-error');
+    removeClasses(red,'red');
     $('.error_ajax').hide();
     var breakTime = $('#breakTime'+i).val();
     var remarks = $('#remarks'+i).val();
@@ -358,13 +366,21 @@ function saveChange(i, type){
     if(paidTimeIn == ''){
       $('#err_paidTimeIn'+i).text("Start time not null");
       $('#paidTimeIn_txt'+i).addClass('has-error').focus();
-      $('#save'+i).css({"color": "#a94442"});
+      if(type == 1){
+        $('#save'+i).addClass('red');
+      }else{
+        $('#approved'+i).addClass('red');
+      }
       return false;
     }
     if(paidTimeOut == ''){
       $('#err_paidTimeOut'+i).text("End time not null");
       $('#paidTimeOut_txt'+i).addClass('has-error').focus();
-      $('#save'+i).css({"color": "#a94442"});
+      if(type == 1){
+        $('#save'+i).addClass('red');
+      }else{
+        $('#approved'+i).addClass('red');
+      }
       return false;
     }
 
@@ -386,6 +402,12 @@ function saveChange(i, type){
           }
         }
     });
+}
+
+function removeClasses (item, clas) {
+  while (item[0]) {
+    item[0].classList.remove(clas);
+  }
 }
 </script>
 @endsection
