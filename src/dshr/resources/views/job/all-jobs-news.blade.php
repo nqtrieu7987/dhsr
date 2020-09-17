@@ -52,9 +52,9 @@
                                     <th>Name</th>
                                     {{-- <th>Hotel</th>
                                     <th>Job</th> --}}
-                                    {{-- <th>Shift start</th>
+                                    <th>Shift start</th>
                                     <th>Shift end</th>
-                                    <th>Hours</th> --}}
+                                    <th>Hours</th>
                                     <th>Actual Time In</th>
                                     <th>Actual Time Out</th>
                                     <th>Paid Time In</th>
@@ -75,9 +75,9 @@
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
                                         {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
                                         <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        {{-- <td>{{$data->Jobs()->start_time}}</td>
+                                        <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td> --}}
+                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>
@@ -148,9 +148,9 @@
                                     <th>Name</th>
                                     {{-- <th>Hotel</th>
                                     <th>Job</th> --}}
-                                    {{-- <th>Shift start</th>
+                                    <th>Shift start</th>
                                     <th>Shift end</th>
-                                    <th>Hours</th> --}}
+                                    <th>Hours</th>
                                     <th>Actual Time In</th>
                                     <th>Actual Time Out</th>
                                     <th>Paid Time In</th>
@@ -170,9 +170,9 @@
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
                                         {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
                                         <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        {{-- <td>{{$data->Jobs()->start_time}}</td>
+                                        <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td> --}}
+                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>
@@ -238,9 +238,9 @@
                                     <th>Name</th>
                                     {{-- <th>Hotel</th>
                                     <th>Job</th> --}}
-                                    {{-- <th>Shift start</th>
+                                    <th>Shift start</th>
                                     <th>Shift end</th>
-                                    <th>Hours</th> --}}
+                                    <th>Hours</th>
                                     <th>Actual Time In</th>
                                     <th>Actual Time Out</th>
                                     <th>Paid Time In</th>
@@ -259,9 +259,9 @@
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
                                         {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
                                         <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        {{-- <td>{{$data->Jobs()->start_time}}</td>
+                                        <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td> --}}
+                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>{{$data->paidTimeIn}}</td>
