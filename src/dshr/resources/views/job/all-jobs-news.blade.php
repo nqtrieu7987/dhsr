@@ -7,13 +7,16 @@
 @section('template_linked_css')
   @include('partials.dataTableStyle')
   <style type="text/css">
-      .dataTables_filter{display: none;}
-      .users-table .form-control {width: 70px;text-align: center;}
-      .table-responsive{overflow-x:inherit;}
-      .help-block{
-  position: absolute;
-  font-size: 12px;
-}
+    .dataTables_filter{display: none;}
+    .users-table .form-control {width: 70px;text-align: center;}
+    .table-responsive{overflow-x:inherit;}
+    .help-block{
+      position: absolute;
+      font-size: 12px;
+    }
+    .table thead th {
+        vertical-align: top;
+    }
   </style>
 @endsection
 
@@ -44,7 +47,7 @@
                 <div>
                     <span class="bg-danger h4">Requires Attention</span>
                 </div>
-                <div class="card-body-white">
+                <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
@@ -55,8 +58,8 @@
                                     <th>Shift start</th>
                                     <th>Shift end</th>
                                     <th>Hours</th>
-                                    <th>Actual Time In</th>
-                                    <th>Actual Time Out</th>
+                                    <th>Actual T-in</th>
+                                    <th>Actual T-out</th>
                                     <th>Paid Time In</th>
                                     <th>Paid Time Out</th>
                                     <th>Break Time</th>
@@ -115,11 +118,11 @@
                                                 <option value="2">Job Failure</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td class="align-center">
                                           <input type="hidden" name="id" id="id_{{$data->id}}">
                                           <a onclick="saveChange({{$data->id}}, 1)"><i style="font-size: 24px" id="save{{$data->id}}" class="fa fa-fw fa-save" aria-hidden="true"></i></a>
                                         </td>
-                                        <td>
+                                        <td class="align-center">
                                           <input type="hidden" name="id" id="id_{{$data->id}}">
                                           <a onclick="saveChange({{$data->id}}, 2)"><i style="font-size: 24px" id="approved{{$data->id}}" class="fa fa-check-circle" aria-hidden="true"></i></a>
                                         </td>
@@ -140,7 +143,7 @@
                 <div>
                     <span class="bg-warning h4">Pending</span>
                 </div>
-                <div class="card-body-white">
+                <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
@@ -151,8 +154,8 @@
                                     <th>Shift start</th>
                                     <th>Shift end</th>
                                     <th>Hours</th>
-                                    <th>Actual Time In</th>
-                                    <th>Actual Time Out</th>
+                                    <th>Actual T-in</th>
+                                    <th>Actual T-out</th>
                                     <th>Paid Time In</th>
                                     <th>Paid Time Out</th>
                                     <th>Break Time</th>
@@ -210,7 +213,7 @@
                                                 <option value="2">Job Failure</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td class="align-center">
                                           <input type="hidden" name="id" id="id_{{$data->id}}">
                                           <a onclick="saveChange({{$data->id}}, 2)"><i style="font-size: 24px" id="approved{{$data->id}}" class="fa fa-check-circle" aria-hidden="true"></i></a>
                                         </td>
@@ -230,7 +233,7 @@
                 <div>
                     <span class="bg-success h4">Approved</span>
                 </div>
-                <div class="card-body-white">
+                <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
@@ -241,8 +244,8 @@
                                     <th>Shift start</th>
                                     <th>Shift end</th>
                                     <th>Hours</th>
-                                    <th>Actual Time In</th>
-                                    <th>Actual Time Out</th>
+                                    <th>Actual T-in</th>
+                                    <th>Actual T-out</th>
                                     <th>Paid Time In</th>
                                     <th>Paid Time Out</th>
                                     <th>Break Time</th>
