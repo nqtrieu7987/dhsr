@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'twostep', 'chec
     Route::resource('page', 'PageController');
     Route::resource('hotel', 'HotelController');
     Route::resource('bank', 'BankController');
+    Route::resource('view-type', 'ViewTypeController');
     Route::resource('job-type', 'JobTypeController');
     Route::resource('job', 'JobController');
     Route::get('report/job', ['as' => 'report.job', 'uses' => 'JobController@reportJob']);
@@ -169,3 +170,5 @@ Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 't
 Route::post('job/in-out-aj', ['as' => 'job.inOutAJ', 'uses' => 'AjaxController@inOutPost']);
 
 Route::redirect('/php', '/phpinfo', 301);
+
+Route::get('map_status_data', ['as' => 'user.mapStatusData', 'uses' => 'UsersManagementController@mapStatusData']);

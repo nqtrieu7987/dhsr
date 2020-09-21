@@ -71,7 +71,7 @@ class User extends Authenticatable
         'admin_ip_address',
         'updated_ip_address',
         'deleted_ip_address',
-        'timeStamp', 'visitTimeStamp', 'studentType', 'userNRIC', 'userBirthday', 'userGender', 'studentStatus', 'currentSchool', 'address1', 'address2', 'emergencyContactNo', 'emergencyContactName', 'relationToEmergencyContact', 'bankName', 'asWaiter', 'dyedHair', 'visibleTattoo', 'workPassPhoto', 'studentCardFront', 'studentCardBack', 'NRICFront', 'NRICBack', 'jobsDone', 'userConfirmed', 'userPants', 'userShoes', 'userShoesApproved', 'userPantsApproved', 'isFavourite', 'isWarned', 'verifyCode', 'user_id', 'chatURL', '__v', 'comments', 'feedback', 'TCC', 'isDiamond', 'referralCode', 'expiryDateOfStudentPass', 'is_active', 'isW', 'isMO', 'isMC', 'isRWS', 'isKempinski', 'isHilton', 'isGWP','accountNo'
+        'timeStamp', 'visitTimeStamp', 'studentType', 'userNRIC', 'userBirthday', 'userGender', 'studentStatus', 'currentSchool', 'address1', 'address2', 'emergencyContactNo', 'emergencyContactName', 'relationToEmergencyContact', 'bankName', 'asWaiter', 'dyedHair', 'visibleTattoo', 'workPassPhoto', 'studentCardFront', 'studentCardBack', 'NRICFront', 'NRICBack', 'jobsDone', 'userConfirmed', 'userPants', 'userShoes', 'userShoesApproved', 'userPantsApproved', 'isFavourite', 'isWarned', 'verifyCode', 'user_id', 'chatURL', '__v', 'comments', 'feedback', 'TCC', 'isDiamond', 'referralCode', 'expiryDateOfStudentPass', 'is_active', 'isW', 'isMO', 'isMC', 'isRWS', 'isKempinski', 'isHilton', 'isGWP','accountNo','status_data'
     ];
 
     /**

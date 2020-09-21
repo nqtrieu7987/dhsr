@@ -40,39 +40,6 @@ if($user->userPantsApproved == 1) {$userPantsApproved = ['checked' => 'checked',
 $userShoesApproved = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
 if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
 
-$isFavourite = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isFavourite == 1) {$isFavourite = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isWarned = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isWarned == 1) {$isWarned = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isDiamond = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isDiamond == 1) {$isDiamond = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isW = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isW == 1) {$isW = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isMO = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isMO == 1) {$isMO = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isMC = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isMC == 1) {$isMC = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isRWS = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isRWS == 1) {$isRWS = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isKempinski = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isKempinski == 1) {$isKempinski = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isHilton = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isHilton == 1) {$isHilton = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$isGWP = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->isGWP == 1) {$isGWP = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
-$TCC = ['checked' => '','value' => 0,'true'  => '','false' => 'checked'];
-if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'checked','false' => ''];}
-
 @endphp
 
 @section('content')
@@ -374,7 +341,11 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                 </div>
                                 <div class="card-body">                                        
                                     <div class="row">
-                                        {!! \App\Helper\VtHelper::checkStatusUser('isFavourite', 1, $user->isFavourite)!!}
+                                        @php $status_datas = json_decode($user->status_data, true); @endphp
+                                        @foreach($viewTypes as $key => $type)
+                                            {!! \App\Helper\VtHelper::checkStatusUser($key, $key, $type)!!}
+                                        @endforeach
+                                        {{-- {!! \App\Helper\VtHelper::checkStatusUser('isFavourite', 1, $user->isFavourite)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('isWarned', 2, $user->isWarned)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('isDiamond', 3, $user->isDiamond)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('isW', 4, $user->isW)!!}
@@ -384,7 +355,7 @@ if($user->TCC == 1) {$TCC = ['checked' => 'checked','value' => 1,'true'  => 'che
                                         {!! \App\Helper\VtHelper::checkStatusUser('isKempinski', 8, $user->isKempinski)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('isHilton', 9, $user->isHilton)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('TCC', 10, $user->TCC)!!}
-                                        {!! \App\Helper\VtHelper::checkStatusUser('isGWP', 11, $user->isGWP)!!}
+                                        {!! \App\Helper\VtHelper::checkStatusUser('isGWP', 11, $user->isGWP)!!} --}}
                                     </div>
                                 </div>
                                 </div>

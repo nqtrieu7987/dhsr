@@ -8,6 +8,7 @@ use App\Models\Theme;
 use App\Models\Job;
 use App\Models\AllJob;
 use App\Models\JobType;
+use App\Models\ViewType;
 use App\Traits\CaptureIpTrait;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -244,9 +245,11 @@ class UsersManagementController extends Controller
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','>=',date('Y-m-d'))
             ->paginate(20);
+
+        $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
         
         $link_url = ['url' => '/users', 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('usersmanagement.update-user', compact('jobsPrev','jobsOngoing','jobType','status','color_status','link_url'))->with($data)->with('site', 'Users: '.$id);
+        return view('usersmanagement.update-user', compact('jobsPrev','jobsOngoing','jobType','status','color_status','viewTypes','link_url'))->with($data)->with('site', 'Users: '.$id);
     }
 
     public function editUserPost(Request $request, $id){
@@ -558,5 +561,30 @@ SELECT * FROM ds_users  WHERE MATCH(userName, email, currentSchool, address1, ad
         }
 
         return back()->with('error', trans('usersmanagement.deleteSelfError'));
+    }
+
+    public function mapStatusData(){
+        $users = User::whereNull('status_data')->get();
+        $status_data = [];
+        foreach ($users as $key => $user) {
+            $status_data[1] = $user->isFavourite == true ? 1 : 0;
+            $status_data[2] = false;
+            $status_data[3] = $user->isW == true ? 1 : 0;
+            $status_data[4] = $user->isMO == true ? 1 : 0;
+            $status_data[5] = $user->isRWS == true ? 1 : 0;
+            $status_data[6] = $user->isKempinski == true ? 1 : 0;
+            $status_data[7] = $user->isHilton == true ? 1 : 0;
+            $status_data[8] = $user->isGWP == true ? 1 : 0;
+            $status_data[9] = $user->isRaffles == true ? 1 : 0;
+            $status_data[10] = $user->isDiamond == true ? 1 : 0;
+            $status_data[11] = $user->isWarned == true ? 1 : 0;
+            $status_data[12] = $user->isMC == true ? 1 : 0;
+            $status_data[13] = $user->isJCActive == true ? 1 : 0;
+            
+            $user->update(['status_data' => json_encode($status_data)]);
+        }
+        dd('xxx');
+
+
     }
 }
