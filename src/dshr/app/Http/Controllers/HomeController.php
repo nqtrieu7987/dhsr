@@ -127,63 +127,22 @@ class HomeController extends Controller
     }
 
     public function changeStatusUser(Request $request){
-        $data = User::find($request->id);
-        switch ($request->type) {
-            case 'isFavourite':
-                $data->update(['isFavourite' => abs($data->isFavourite - 1)]);
-                $status = $data->isFavourite;
-                break;
-            case 'isWarned':
-                $data->update(['isWarned' => abs($data->isWarned - 1)]);
-                $status = $data->isWarned;
-                break;
-            case 'isDiamond':
-                $data->update(['isDiamond' => abs($data->isDiamond - 1)]);
-                $status = $data->isDiamond;
-                break;
-            case 'isW':
-                $data->update(['isW' => abs($data->isW - 1)]);
-                $status = $data->isW;
-                break;
-            case 'isMO':
-                $data->update(['isMO' => abs($data->isMO - 1)]);
-                $status = $data->isMO;
-                break;
-            case 'isMC':
-                $data->update(['isMC' => abs($data->isMC - 1)]);
-                $status = $data->isMC;
-                break;
-            case 'isRWS':
-                $data->update(['isRWS' => abs($data->isRWS - 1)]);
-                $status = $data->isRWS;
-                break;
-            case 'isKempinski':
-                $data->update(['isKempinski' => abs($data->isKempinski - 1)]);
-                $status = $data->isKempinski;
-                break;
-            case 'isHilton':
-                $data->update(['isHilton' => abs($data->isHilton - 1)]);
-                $status = $data->isHilton;
-                break;
-            case 'TCC':
-                $data->update(['TCC' => abs($data->TCC - 1)]);
-                $status = $data->TCC;
-                break;
-            case 'isGWP':
-                $data->update(['isGWP' => abs($data->isGWP - 1)]);
-                $status = $data->isGWP;
-                break;
-            default:
-                # code...
-                break;
-        }
-        $statusName = 'active';
+        $user = User::find($request->id);
+        $status_data = json_decode($user->status_data, true);
+        $status = $request->stt;
+        $type = $request->type;
+        
+        $status_data[$type] = abs($status - 1);
+        $user->update(['status_data' => json_encode($status_data)]);
+
+        $statusName = 'deactive';
         if($status == 0){
-            $statusName = 'deactive';
+            $statusName = 'active';
         }
         return response()->json([
             'status' => $status,
-            'img' => '/images/status/'.$request->stt.'-'.$statusName.'.png'
+            'img' => MEDIADOMAIN.'/uploads/images/view-type/'.$type.'-'.$statusName.'.png',
+            'stt' => $type
         ]);
     }
 

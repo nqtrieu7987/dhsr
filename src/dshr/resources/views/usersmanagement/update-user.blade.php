@@ -52,9 +52,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                             <div class="row">
                                 <div class="col-12 col-sm-4 col-md-3 profile-sidebar text-white rounded-left-sm-up">
                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                        {{-- <a class="nav-link active" data-toggle="pill" href=".edit-profile-tab" role="tab" aria-controls="edit-profile-tab" aria-selected="true">
-                                            Avatar
-                                        </a> --}}
                                         <a class="nav-link" data-toggle="pill" href=".workPassPhoto-tab" role="tab" aria-controls="edit-profile-tab" aria-selected="true">
                                             Work Pass Photo
                                         </a>
@@ -71,29 +68,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                 </div>
                                 <div class="col-12 col-sm-8 col-md-9 mb-3">
                                     <div class="tab-content" id="v-pills-tabContent">
-                                        {{-- <div class="tab-pane fade show active edit-profile-tab" role="tabpanel" aria-labelledby="edit-profile-tab">
-                                            <div class="row mb-1">
-                                                <div class="col-sm-12">
-                                                    <div id="avatar_container">
-                                                        <div class="card-body">
-                                                            <div class="dz-preview"></div>
-                                                            {!! Form::open(array('route' => 'avatar.upload', 'method' => 'POST', 'name' => 'avatarDropzone','id' => 'avatarDropzone', 'class' => 'form single-dropzone dropzone single', 'files' => true)) !!}
-                                                                <img id="user_selected_avatar" onclick="showModalImage(this)" class="user-avatar-200 avatarImage" src="@if ($user->avatar != NULL) {{ $user->avatar }} @endif" alt="avatar">
-                                                                {!! Form::hidden("type", "avatar") !!}
-                                                                {!! Form::hidden("id", $user->id) !!}
-                                                            {!! Form::close() !!}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-5">
-                                                <div class="col-10 offset-1 col-sm-10 offset-sm-1 mb-1">
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="row mt-5"></div>
-                                        </div> --}}
-
                                         <div class="tab-pane fade show active workPassPhoto-tab" role="tabpanel" aria-labelledby="workPassPhoto-tab">
                                             <div class="row mb-1">
                                                 <div class="col-sm-12">
@@ -107,19 +81,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                                             {!! Form::close() !!}
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-5">
-                                                <div class="col-10 offset-1 col-sm-10 offset-sm-1 mb-1">
-                                                    {{-- <div class="row" data-toggle="buttons">
-                                                        <div class="col-3 col-xs-6"></div>
-                                                        <div class="col-6 col-xs-6 left-btn-container">
-                                                            <label class="btn bg-main @if($user->workPassPhoto != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne.show, .collapseTwo:not(.show)">
-                                                                <input type="radio" name="avatar_status" id="option2" autocomplete="off" value="1" @if($user->workPassPhoto != null) checked @endif> Use workPassPhoto
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-3 col-xs-6"></div>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -153,19 +114,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                             </div>
                                             <div class="row mt-5">
                                                 <div class="col-10 offset-1 col-sm-10 offset-sm-1 mb-1">
-                                                    {{-- <div class="row" data-toggle="buttons">
-                                                        <div class="col-5 col-xs-6 right-btn-container">
-                                                            <label class="btn bg-main @if($user->NRICFront != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne:not(.show), .collapseTwo.show">
-                                                                <input type="radio" name="avatar_status" id="option1" autocomplete="off" value="0" @if($user->NRICFront != null) checked @endif> User NRICFront
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-2"></div>
-                                                        <div class="col-5 col-xs-6 left-btn-container">
-                                                            <label class="btn bg-main @if($user->NRICBack != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne.show, .collapseTwo:not(.show)">
-                                                                <input type="radio" name="avatar_status" id="option2" autocomplete="off" value="1" @if($user->NRICBack != null) checked @endif> User NRICBack
-                                                            </label>
-                                                        </div>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -200,19 +148,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                             </div>
                                             <div class="row mt-5">
                                                 <div class="col-10 offset-1 col-sm-10 offset-sm-1 mb-1">
-                                                    {{-- <div class="row" data-toggle="buttons">
-                                                        <div class="col-5 col-xs-6 right-btn-container">
-                                                            <label class="btn bg-main @if($user->studentCardFront != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne:not(.show), .collapseTwo.show">
-                                                                <input type="radio" name="avatar_status" id="option1" autocomplete="off" value="0" @if($user->studentCardFront != null) checked @endif> User studentCardFront
-                                                            </label>
-                                                        </div>
-                                                        <div class="col-2"></div>
-                                                        <div class="col-5 col-xs-6 left-btn-container">
-                                                            <label class="btn bg-main @if($user->studentCardBack != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne.show, .collapseTwo:not(.show)">
-                                                                <input type="radio" name="avatar_status" id="option2" autocomplete="off" value="1" @if($user->studentCardBack != null) checked @endif> User studentCardBack
-                                                            </label>
-                                                        </div>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -247,24 +182,9 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- {!! Form::model($user, ['method' => 'POST', 'route' => ['user.approved-pant-shose', $user->id], 'id' => 'user_profile_form', 'class' => 'form-horizontal', 'role' => 'form', 'enctype' => 'multipart/form-data']) !!}
-                                                {{ csrf_field() }}
-                                                {!! Form::hidden("id", $user->id) !!} --}}
+                                            
                                                 <div class="row mt-5">
                                                     <div class="col-10 offset-1 col-sm-10 offset-sm-1 mb-1">
-                                                        {{-- <div class="row" data-toggle="buttons">
-                                                            <div class="col-5 col-xs-6 right-btn-container">
-                                                                <label class="btn bg-main @if($user->userPants != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne:not(.show), .collapseTwo.show">
-                                                                    <input type="radio" name="avatar_status" id="option1" autocomplete="off" value="0" @if($user->userPantsApproved != null) checked @endif> User Pants
-                                                                </label>
-                                                            </div>
-                                                            <div class="col-2"></div>
-                                                            <div class="col-5 col-xs-6 left-btn-container">
-                                                                <label class="btn bg-main @if($user->userShoes != null) active @endif btn-block btn-sm" data-toggle="collapse" data-target=".collapseOne.show, .collapseTwo:not(.show)">
-                                                                    <input type="radio" name="avatar_status" id="option2" autocomplete="off" value="1" @if($user->userShoes != null) checked @endif> User Shoes
-                                                                </label>
-                                                            </div>
-                                                        </div> --}}
                                                     </div>
                                                 </div>
                                                 <form>
@@ -292,16 +212,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                                     </div>
                                                 </div>
                                                 </form>
-
-                                                {{-- <div class="form-group margin-bottom-2 row">
-                                                    <div class="col-4"></div>
-                                                    <div class="col-4">
-                                                        {!! Form::button(trans('forms.save-changes'), array('class' => 'btn bg-main btn-block margin-bottom-1 mt-3 mb-2','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => trans('modals.edit_user__modal_text_confirm_title'), 'data-message' => trans('modals.edit_user__modal_text_confirm_message'))) !!}
-
-                                                    </div>
-                                                    <div class="col-4"></div>
-                                                </div>
-                                            {!! Form::close() !!} --}}
                                         </div>
                                         
                                     </div>
@@ -319,17 +229,6 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    {{-- <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                           <b> {!! trans('usersmanagement.editing-user', ['name' => $user->name]) !!}</b>
-                            <div class="pull-right">
-                                <a href="/users" class="btn btn-blue-light btn-xs pull-right">
-                                  <i class="fa fa-fw fa-mail-reply" aria-hidden="true"></i>
-                                  <span class="hidden-xs">Back to list </span><br/>
-                                </a>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -341,9 +240,11 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                 </div>
                                 <div class="card-body">                                        
                                     <div class="row">
-                                        @php $status_datas = json_decode($user->status_data, true); @endphp
+                                        @php
+                                            $status_datas = json_decode($user->status_data, true);
+                                        @endphp
                                         @foreach($viewTypes as $key => $type)
-                                            {!! \App\Helper\VtHelper::checkStatusUser($key, $key, $type)!!}
+                                            {!! \App\Helper\VtHelper::checkStatusUser($key, $key, array_get($status_datas, $key, 0))!!}
                                         @endforeach
                                         {{-- {!! \App\Helper\VtHelper::checkStatusUser('isFavourite', 1, $user->isFavourite)!!}
                                         {!! \App\Helper\VtHelper::checkStatusUser('isWarned', 2, $user->isWarned)!!}
@@ -988,15 +889,16 @@ $('.changeStatusUser').click(function(){
         data : data,
         success  : function (data) {
             $('#waiting').hide();
-            console.log("img="+data.img+" status="+ data.status);
+            console.log(data);
             if(data.status == 1){
-                $('#img'+stt).parent().removeClass('deactive');
-                $('#img'+stt).parent().addClass('active');
+                $('#img'+data.stt).parent().removeClass('deactive');
+                $('#img'+data.stt).parent().addClass('active');
             }else{
-                $('#img'+stt).parent().removeClass('active');
-                $('#img'+stt).parent().addClass('deactive');
+                $('#img'+data.stt).parent().removeClass('active');
+                $('#img'+data.stt).parent().addClass('deactive');
             }
-            $('#img'+stt).attr("src", data.img);
+            $('#img'+data.stt).attr("src", data.img);
+            $('#img'+data.stt).parent().data('stt', Math.abs(data.status - 1));
         }
     });
 });

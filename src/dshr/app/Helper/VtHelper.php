@@ -936,7 +936,7 @@ class VtHelper {
         }else{
             $statusName = 'deactive';
         }
-        return '<a class="changeStatusUser '.$statusName.'" data-type="'.$type.'" data-stt="'.$stt.'"><img id="img'.$stt.'" src="/uploads/images/view-type/'.$stt.'-'.$statusName.'.png"></a>';
+        return '<a class="changeStatusUser '.$statusName.'" data-type="'.$type.'" data-stt="'.$status.'"><img id="img'.$stt.'" src="/uploads/images/view-type/'.$stt.'-'.$statusName.'.png"></a>';
     }
 
     public static function base64_to_jpeg($base64_string, $output_file) {

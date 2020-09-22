@@ -17,7 +17,7 @@
 | loading any of our classes later on. It feels nice to relax.
 |
 */
-define('MEDIADOMAIN', 'https://mdcspace.vn');
+define('MEDIADOMAIN', 'http://localhost:8004');
 require __DIR__.'/../bootstrap/autoload.php';
 
 /*
