@@ -268,6 +268,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('view-type.index')}}" class="nav-link {{in_array(Route::currentRouteName(), ['view-type.index']) ? 'active' : ''}}">
+              <img class="icon-menu-left" src="{{ url('/images/register_sidebar_icon.png') }}"/>
+              <p>
+                View Type
+              </p>
+            </a>
+          </li>
           {{-- <li class="nav-item">
             <a href="#" class="nav-link">
               <img class="icon-menu-left" src="{{ url('/images/summary_sidebar_icon.png') }}"/>

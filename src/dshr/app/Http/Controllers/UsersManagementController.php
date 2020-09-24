@@ -568,7 +568,7 @@ SELECT * FROM ds_users  WHERE MATCH(userName, email, currentSchool, address1, ad
         $status_data = [];
         foreach ($users as $key => $user) {
             $status_data[1] = $user->isFavourite == true ? 1 : 0;
-            $status_data[2] = false;
+            $status_data[2] = 0;
             $status_data[3] = $user->isW == true ? 1 : 0;
             $status_data[4] = $user->isMO == true ? 1 : 0;
             $status_data[5] = $user->isRWS == true ? 1 : 0;
