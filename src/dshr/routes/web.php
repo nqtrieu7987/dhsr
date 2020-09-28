@@ -47,11 +47,12 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'checkblocked']]
     Route::get('/logout', ['uses' => 'Auth\LoginController@logout'])->name('logout');
 });
 
-// Registered and Activated User Routes
-Route::group(['middleware' => ['auth', 'activated', 'activity', 'twostep', 'checkblocked']], function () {
+//  Homepage Route - Redirect based on user role is in controller.
+Route::get('/home', ['as' => 'public.home',   'uses' => 'UserController@index']);
 
-    //  Homepage Route - Redirect based on user role is in controller.
-    Route::get('/home', ['as' => 'public.home',   'uses' => 'UserController@index']);
+// Registered and Activated User Routes
+Route::group(['middleware' => ['auth', 'check_roles']], function () {
+
 
     // Show users profile - viewable by other users.
     Route::get('profile/{username}', [
@@ -90,7 +91,7 @@ Route::group(['middleware' => ['auth', 'activated', 'activity', 'twostep', 'chec
 });
 
 // Registered, activated, and is current user routes.
-Route::group(['middleware' => ['auth', 'activated', 'currentUser', 'activity', 'twostep', 'checkblocked']], function () {
+Route::group(['middleware' => ['auth', 'check_roles', 'currentUser', 'activity', 'twostep', 'checkblocked']], function () {
 
     // User Profile and Account Routes
     Route::resource(
@@ -131,7 +132,7 @@ Route::group(['middleware' => ['auth', 'activated', 'currentUser', 'activity', '
 });
 
 // Registered, activated, and is admin routes.
-Route::group(['middleware' => ['auth', 'activated', 'role:admin', 'activity', 'twostep', 'checkblocked']], function () {
+Route::group(['middleware' => ['auth', 'check_roles', 'role:admin', 'activity', 'twostep', 'checkblocked']], function () {
     Route::resource('/users/deleted', 'SoftDeletesController', [
         'only' => [
             'index', 'show', 'update', 'destroy',
@@ -172,3 +173,21 @@ Route::post('job/in-out-aj', ['as' => 'job.inOutAJ', 'uses' => 'AjaxController@i
 Route::redirect('/php', '/phpinfo', 301);
 
 Route::get('map_status_data', ['as' => 'user.mapStatusData', 'uses' => 'UsersManagementController@mapStatusData']);
+
+
+Route::prefix('admin')->group(function() {
+    Route::get('/', 'AdminController@index')->name('admin.home');
+    Route::get('/login', 'AuthAdmin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('/login', 'AuthAdmin\LoginController@login')->name('admin.login.submit');
+    Route::post('/logout', 'AuthAdmin\LoginController@logout')->name('admin.logout');
+    Route::get('/password/reset', 'AuthAdmin\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
+    Route::post('/password/email', 'AuthAdmin\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
+    Route::get('/password/reset/{token}', 'AuthAdmin\ResetPasswordController@showResetForm')->name('admin.password.reset');
+    Route::post('/password/reset', 'AuthAdmin\ResetPasswordController@reset');
+
+
+    Route::get('/register', 'AuthAdmin\RegisterController@showRegistrationForm')->name('admin.register');
+    Route::post('/register', 'AuthAdmin\RegisterController@register')->name('admin.register.submit');
+
+    Route::get('report/job', ['as' => 'report.job', 'uses' => 'JobController@reportJob']);
+});

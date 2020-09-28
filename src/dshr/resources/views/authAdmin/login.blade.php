@@ -5,16 +5,16 @@
 @endsection
 @section('content')
     <div _ngcontent-ygg-3="" class="login-page">
-        <form method="POST" action="{{ route('login') }}" _ngcontent-ygg-3="" class="ng-untouched ng-pristine ng-valid">
+        <form method="POST" action="{{ route('admin.login.submit') }}" _ngcontent-ygg-3="" class="ng-untouched ng-pristine ng-valid">
             @csrf
             <div _ngcontent-ygg-3="" class="form-group" align="center">
-                <img _ngcontent-ygg-3="" id="welcome" src="images/background.png" width="300px" height="200">
+                <img _ngcontent-ygg-3="" id="welcome" src="../images/background.png" width="300px" height="200">
             </div>
             <div _ngcontent-ygg-3="" class="form-group" align="center">
-                <input _ngcontent-ygg-3="" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }} myinput ng-untouched ng-pristine ng-valid" name="email" value="{{ old('email') }}" required autofocus placeholder="Email Address" style="width:300px" type="text">
-                @if ($errors->has('email'))
+                <input _ngcontent-ygg-3="" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }} myinput ng-untouched ng-pristine ng-valid" name="username" value="{{ old('username') }}" required autofocus placeholder="Username" style="width:300px" type="text">
+                @if ($errors->has('username'))
                     <span class="invalid-feedback">
-                        <strong>{{ $errors->first('email') }}</strong>
+                        <strong>{{ $errors->first('username') }}</strong>
                     </span>
                 @endif
             </div> 
@@ -26,7 +26,7 @@
                     </span>
                 @endif
             </div>
-            <input _ngcontent-ygg-3="" class="btn btn-primary" style="width:300px; text-transform:none; font-size:15px; color:#fff;" type="submit" value="Login" width="500">
+            <input _ngcontent-ygg-3="" class="btn btn-primary" style="width:300px; text-transform:none; font-size:15px; color:#fff;" type="submit" value="Login Admin" width="500">
         </form>
     </div>
 @endsection

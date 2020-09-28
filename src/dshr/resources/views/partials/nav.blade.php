@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             {{-- Left Side Of Navbar --}}
             <ul class="navbar-nav mr-auto">
-                @role('admin')
+                {{-- @role('admin')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {!! trans('titles.adminDropdownNav') !!}
@@ -57,11 +57,7 @@
                             </a>
                         </div>
                     </li>
-                    {{-- <li class="nav-item dropdown"><a href="{{url('/banner')}}" class="nav-link {{ Request::is('banner') ? 'btn-success' : null }}">Banner</a></li>
-                    <li class="nav-item dropdown"><a href="{{url('/command')}}" class="nav-link {{ Request::is('command') ? 'btn-success' : null }}">Command Code</a></li>
-                    <li class="nav-item dropdown"><a href="{{url('/page')}}" class="nav-link {{ Request::is('page') ? 'btn-success' : null }}">LandingPage</a></li>
-                    <li class="nav-item dropdown"><a href="{{url('/article')}}" class="nav-link {{ Request::is('article') ? 'btn-success' : null }}">Thông tin</a></li> --}}
-                @endrole
+                @endrole --}}
             </ul>
             {{-- Right Side Of Navbar --}}
             <ul class="navbar-nav ml-auto">

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckIsUserActivated;
+use App\Http\Middleware\CheckUserRoles;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,6 +44,9 @@ class Kernel extends HttpKernel
         ],
         'activated' => [
             CheckIsUserActivated::class,
+        ],
+        'check_roles' => [
+            CheckUserRoles::class,
         ],
     ];
 
