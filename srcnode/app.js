@@ -73,6 +73,9 @@ module.exports.create = function (server, host, port, publicDir) {
 	app.post('/service/user/login', function (req, res) {
 		mysqlTool.loginAuth(req, res);
 	});
+	app.post('/service/user/loginbyid', function (req, res) {
+		mysqlTool.loginAuthById(req, res);
+	});
 	app.post('/service/user/resetpass', function (req, res) {
 		mysqlTool.resetPass(req, res);
 	});

@@ -1186,6 +1186,33 @@ module.exports = {
       }
     });
   },
+  loginAuthById: function loginAuthById(req, res) {
+    var id = req.headers.id;
+    if (req.headers.id == undefined || utils.isEmptyObject(req.headers.id)) {
+      res.json({ message: 'id not null!', resultCode: 1 });
+      return "";
+    }
+    if (id.length < 5) {
+      res.json({ message: 'ID is incorrect!', resultCode: 1 });
+      return "";
+    }
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    User.where('id', Number(id)).fetch().then(function (user) {
+      try{
+        if (user != null) {
+          var email = user.toJSON().email;
+          var payload = { email: email };
+          var jwtToken = jwt.sign(payload, cert, { expiresIn: 365 * 24 * 60 * 60 });
+          res.json({ "info": user, 'access_token': jwtToken, message: 'Login successfully!', resultCode: 0 });
+        }else{
+          res.json({ message: 'ID is incorrect!', resultCode: 1 });
+            return "";
+        }
+      } catch (e) {
+        res.json({ message: 'Login failed!', resultCode: 1 });
+      }
+    });
+  },
   getUserInfor: function getUserInfor(req, res) {
     var email = req.headers.email;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');

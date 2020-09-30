@@ -2,19 +2,20 @@ var utils = require("../Utils.js");
 const database = require('../config/database.js');
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
+const { stringify } = require("querystring");
 var cert = fs.readFileSync('./educa.vn.key');  // get private key
 
 async function getListJobOnGoing(req, res) {
     var hotel_id = req.headers.hotel_id;
     if (req.headers.hotel_id == undefined || utils.isEmptyObject(req.headers.hotel_id)) {
         var sql =
-            `SELECT ds_job.id, ds_job.hotel_id, ds_hotel.name AS hotel_name, ds_job.is_active, ds_job.start_date, ds_job.job_type_id, ds_job_type.name, ds_job.start_time, ds_job.end_time, DATE_FORMAT(start_date, '%d %b') AS day_month, DATE_FORMAT(start_date, '%W') AS  weekyday
+            `SELECT ds_job.id, ds_job.view_type, ds_job.hotel_id, ds_hotel.name AS hotel_name, ds_job.is_active, ds_job.start_date, ds_job.job_type_id, ds_job_type.name, ds_job.start_time, ds_job.end_time, DATE_FORMAT(start_date, '%d %b') AS day_month, DATE_FORMAT(start_date, '%W') AS  weekyday
         FROM ds_job INNER JOIN ds_hotel ON ds_hotel.id = ds_job.hotel_id 
         INNER JOIN ds_job_type ON ds_job.job_type_id = ds_job_type.id 
         WHERE ds_hotel.is_active = 1 AND ds_job.is_active = 1 AND current_slot < slot AND start_date >= CURDATE() ORDER BY start_date
         `;
     } else {
-        var sql = `SELECT ds_job.id, ds_job.hotel_id, ds_hotel.name AS hotel_name, ds_job.is_active, ds_job.start_date, ds_job.job_type_id, ds_job_type.name, ds_job.start_time, ds_job.end_time, DATE_FORMAT(start_date, '%d %b') AS day_month, DATE_FORMAT(start_date, '%W') AS  weekyday
+        var sql = `SELECT ds_job.id, ds_job.view_type, ds_job.hotel_id, ds_hotel.name AS hotel_name, ds_job.is_active, ds_job.start_date, ds_job.job_type_id, ds_job_type.name, ds_job.start_time, ds_job.end_time, DATE_FORMAT(start_date, '%d %b') AS day_month, DATE_FORMAT(start_date, '%W') AS  weekyday
         FROM ds_job INNER JOIN ds_hotel ON ds_hotel.id = ds_job.hotel_id 
         INNER JOIN ds_job_type ON ds_job.job_type_id = ds_job_type.id 
         WHERE ds_job.hotel_id = `+ hotel_id + ` AND ds_hotel.is_active = 1 AND ds_job.is_active = 1 AND current_slot < slot AND start_date >= CURDATE() ORDER BY start_date`;
@@ -51,7 +52,31 @@ async function getListJobOnGoing(req, res) {
         utils.writeLog("Ongoing=" + sql);
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         var datas = await database.simpleExecute(sql);
-        res.json({ message: 'Success', resultCode: 0, data: datas });
+
+        var sqlUser = `SELECT status_data FROM ds_users WHERE email="`+ email+`"`;
+        //utils.writeLog("sqlUser=" + sqlUser);
+        var dataUser = await database.simpleExecute(sqlUser);
+        var status_data = Object.values(dataUser[0]);
+        var jsonUser = JSON.parse(status_data);
+        utils.writeLog('jsonUser='+JSON.stringify(jsonUser));
+
+        var objs = [];
+        var objectArray = Object.entries(datas);
+        objectArray.forEach(([key, value]) => {
+            utils.writeLog("key=" + key + " view_type=" + value.view_type);
+            if(value.view_type == 0){ //Nếu view_type = 0 thì tất cả các user đều được nhận job
+                objs.push(datas[key]);
+            }else{
+                for (const [k, v] of Object.entries(jsonUser)) {
+                    if(value.view_type == k && v == 1){ // User chỉ được nhận job nếu view_type có giá trị = 1
+                        console.log(`${k}: ${v}`);
+                        objs.push(datas[key]);
+                    }
+                }
+            }
+        });
+
+        res.json({ message: 'Success', resultCode: 0, data: objs });
         return "";
     }
 }
