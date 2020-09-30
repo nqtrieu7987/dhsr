@@ -10,6 +10,7 @@ use App\Models\Job;
 use App\Models\Hotel;
 use App\Models\Bank;
 use App\Models\User;
+use App\Models\Admin;
 use Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
@@ -225,5 +226,43 @@ class HomeController extends Controller
             'msg' => $msg,
             'status' => $stt
         ]);
+    }
+
+
+    public function listUsers(Request $request){
+        $users = Admin::paginate(20);
+
+        return view('admin.list-users', compact('users'))->with('site','HotelAdmin');
+    }
+
+    public function adminEdit(Request $request, $id){
+        $user = Admin::find($id);
+        $hotels = Hotel::pluck('name', 'id')->toArray();
+
+        $link_url = ['url' => route('admin.listUsers'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
+
+        return view('admin.admin-edit', compact('user','hotels','link_url'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request,[
+            'name' => 'required',
+            'email' => 'required'
+        ]);
+
+        $data = Admin::find($id)->update([
+            'hotel_id' => $request->hotel_id,
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
+
+        Session::flash('success', 'Update success!');
+        return back()->with('success', 'Update success!');
+    }
+
+    public function adminDelete($id){
+        Admin::find($id)->delete();
+        return redirect()->route('admin.listUsers')->with('success', 'Delete successfully!');
     }
 }

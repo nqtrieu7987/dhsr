@@ -88,6 +88,12 @@ Route::group(['middleware' => ['auth', 'check_roles']], function () {
 
     Route::get('pagination/fetch_data', ['as' => 'pagination.fetch_data', 'uses' => 'AjaxController@fetch_data']);
     Route::get('pagination/fetch_ongoing', ['as' => 'pagination.fetch_ongoing', 'uses' => 'AjaxController@fetch_ongoing']);
+
+
+    Route::get('/list-users', 'HomeController@listUsers')->name('admin.listUsers');
+    Route::get('/admin-edit/{id}/edit', 'HomeController@adminEdit')->name('admin.adminEdit');
+    Route::put('/admin-edit/{id}/edit', 'HomeController@update')->name('admin.update');
+    Route::delete('/admin-delete/{id}', 'HomeController@adminDelete')->name('admin.adminDelete');
 });
 
 // Registered, activated, and is current user routes.
@@ -189,5 +195,5 @@ Route::prefix('admin')->group(function() {
     Route::get('/register', 'AuthAdmin\RegisterController@showRegistrationForm')->name('admin.register');
     Route::post('/register', 'AuthAdmin\RegisterController@register')->name('admin.register.submit');
 
-    Route::get('report/job', ['as' => 'report.job', 'uses' => 'JobController@reportJob']);
+    Route::get('report/job', ['as' => 'admin.report.job', 'uses' => 'AdminController@reportJob']);
 });

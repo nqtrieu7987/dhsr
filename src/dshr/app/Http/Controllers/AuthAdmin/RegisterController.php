@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AuthAdmin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Traits\ActivationTrait;
@@ -11,6 +12,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use jeremykenedy\LaravelRoles\Models\Role;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -27,7 +30,7 @@ class RegisterController extends Controller
 
     use ActivationTrait;
     use CaptchaTrait;
-    use RegistersUsers;
+    //use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -43,9 +46,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', [
-            'except' => 'logout',
-        ]);
+        $this->middleware('guest:admin')->except(['logout']);
     }
 
     public function showRegistrationForm()
@@ -69,7 +70,7 @@ class RegisterController extends Controller
 
         return Validator::make($data,
             [
-                'username'              => 'required|min:6|max:255|unique:users',
+                'username'              => 'required|min:6|max:255|unique:adminusers',
                 'password'              => 'required|min:6|max:50',
                 //'email'                 => 'required|email|max:255|unique:users',
             ],
@@ -94,9 +95,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $ipAddress = new CaptureIpTrait();
-        $role = Role::where('slug', '=', 'hotel')->first();
-
         $user = Admin::create([
                 'name'          => $data['username'],
                 'username'          => $data['username'],
@@ -110,7 +108,58 @@ class RegisterController extends Controller
 
             /*$user->attachRole($role);
             $this->initiateEmailActivation($user);*/
+            $credential = [
+                'username' => $data['username'],
+                'password' => $data['password']
+            ];
 
-        return $user;
+            // Attempt to log the user in
+            if (Auth::guard('admin')->attempt($credential, null)){
+                // If login succesful, then redirect to their intended location
+                return redirect()->route('admin.home');
+            }
+        //return $user;
+    }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+        /*$this->guard()->login($user);
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());*/
+
+        $credential = [
+            'username' => $request->username,
+            'password' => $request->password
+        ];
+        if (Auth::guard('admin')->attempt($credential, $request->member)){
+            // If login succesful, then redirect to their intended location
+            return redirect()->route('admin.home');
+        }
+
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('admin');
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        //
+    }
+
+    public function redirectPath()
+    {
+        return redirect()->route('admin.home');
     }
 }

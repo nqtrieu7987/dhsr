@@ -123,7 +123,11 @@
           <span class="badge badge-danger navbar-badge">3</span>
         </a> --}}
         <a class="nav-link user-menu" data-toggle="dropdown" href="#">
-          @if(Auth::check())
+          @if(Auth::user()->adminType == 'hotel')
+            <div class="header-user">
+                <img src="/images/girl.png">
+            </div>
+          @elseif(Auth::check())
             <div class="header-user">
                 <img src="{{ Auth::user()->workPassPhoto }}">
             </div>
@@ -157,7 +161,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link">
+    <a href="{{Auth::user()->adminType == 'hotel' ? '/admin' : '/'}}" class="brand-link">
       <img src="{{ url('images/logo1.png') }}" alt="AdminLTE Logo" class="brand-image elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light"><b class="font-weight-bold">DS</b> Human <b class="font-weight-bold">Resource</b></span>
@@ -201,13 +205,13 @@
               </li>
             </ul>
           </li> --}}
-          
           <li class="nav-item">
-            <a href="/" class="nav-link {{ (Request::is('/')) ? 'active' : null }}">
+            <a href="{{Auth::user()->adminType == 'hotel' ? '/admin' : '/'}}" class="nav-link {{ (Request::is('/')) ? 'active' : null }}">
               <img class="icon-menu-left" src="{{ url('/images/home.png') }}"/>
               <p>Home</p>
             </a>
           </li>
+          @if(Auth::user()->adminType != 'hotel')
           <li class="nav-item">
             <a href="{{route('job.index')}}" class="nav-link {{ (Request::is('job')) ? 'active' : null }}">
               <img class="icon-menu-left" src="{{ url('/images/job_sidebar_icon.png') }}"/>
@@ -268,6 +272,17 @@
               </p>
             </a>
           </li>
+          @else
+          <li class="nav-item">
+            <a href="{{route('admin.report.job')}}" class="nav-link {{in_array(Route::currentRouteName(), ['admin.report.job']) ? 'active' : ''}}">
+              <img class="icon-menu-left" src="{{ url('/images/hotelattendance_sidebar_icon.png') }}"/>
+              <p>
+                Hotel Attendance
+              </p>
+            </a>
+          </li>
+          @endif
+          @if(Auth::user()->adminType != 'hotel')
           <li class="nav-item">
             <a href="{{route('view-type.index')}}" class="nav-link {{in_array(Route::currentRouteName(), ['view-type.index']) ? 'active' : ''}}">
               <img class="icon-menu-left" src="{{ url('/images/register_sidebar_icon.png') }}"/>
@@ -276,6 +291,21 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{url('/bank')}}" class="nav-link {{in_array(Route::currentRouteName(), ['bank']) ? 'active' : ''}}">
+              <i class="nav-icon fas fa-bank"></i>
+              <p>
+                Bank
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('admin.listUsers')}}" class="nav-link @if(isset($site) && $site == 'HotelAdmin') active @endif">
+              <img class="icon-menu-left" src="{{ url('/images/summary_sidebar_icon.png') }}"/>
+              <p>Hotel Admin</p>
+            </a>
+          </li>
+          @endif
           {{-- <li class="nav-item">
             <a href="#" class="nav-link">
               <img class="icon-menu-left" src="{{ url('/images/summary_sidebar_icon.png') }}"/>
@@ -309,14 +339,6 @@
               </p>
             </a>
           </li> --}}
-          <li class="nav-item">
-            <a href="{{url('/bank')}}" class="nav-link {{in_array(Route::currentRouteName(), ['bank']) ? 'active' : ''}}">
-              <i class="nav-icon fas fa-bank"></i>
-              <p>
-                Bank
-              </p>
-            </a>
-          </li>
           <li class="nav-item">
              <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                   <i style="font-size: 22px" class="fas fa-sign-out-alt"></i>
