@@ -196,4 +196,6 @@ Route::prefix('admin')->group(function() {
     Route::post('/register', 'AuthAdmin\RegisterController@register')->name('admin.register.submit');
 
     Route::get('report/job', ['as' => 'admin.report.job', 'uses' => 'AdminController@reportJob']);
+
+    Route::post('job/in-out-aj', ['as' => 'admin.job.inOutAJ', 'uses' => 'AdminController@inOutPost']);
 });

@@ -18,6 +18,7 @@ class VerifyCsrfToken extends BaseVerifier
         '/change/statusUser',
         '/job-create-multi',
         '/user/updateComment',
-        '/job/in-out-aj'
+        '/job/in-out-aj',
+        '/admin/job/in-out-aj',
     ];
 }
