@@ -222,6 +222,34 @@ module.exports.create = function (server, host, port, publicDir) {
 		});
 	});
 
+	app.post('/service/hotel/booking', function (req, res) {
+		var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 99 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				mysqlTool.hotelBooking(req, res);
+			}
+		});
+	});
+
 	app.post('/service/job/cancel', function (req, res) {
 		var email = req.headers.email;
 		var jwtToken = req.headers.token;
@@ -264,6 +292,10 @@ module.exports.create = function (server, host, port, publicDir) {
 
 	app.post('/service/job/check_in_check_out',async function (req, res) {
 		mysqlTool.checkInCheckOut(req, res);
+	});
+
+	app.post('/service/hotel/check_in_check_out',async function (req, res) {
+		mysqlTool.hotelCheckInCheckOut(req, res);
 	});
 
 	app.post('/service/user/upload_pants_shoes',async function (req, res) {

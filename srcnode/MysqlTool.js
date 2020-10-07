@@ -890,6 +890,133 @@ async function checkInCheckOut(req, res) {
   }
 }
 
+async function hotelCheckInCheckOut(req, res) {
+  //res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  if (!req.files)
+      return res.status(400).send('No files were uploaded.');
+  var email = req.query.email;
+  var id = req.query.id;
+  var jwtToken = req.query.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+    } catch (error) { }
+    var check = false;
+		await jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 99 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+        check = true;
+			}
+    });
+    utils.writeLog('check='+check);
+  if(check == true){
+    var job = await getAllJobsInOut(id);
+    utils.writeLog('job='+job);
+    if(job == false){
+      res.json({ resultCode: 1, message: 'Get All Job Failed'});
+      return "";
+    }
+      utils.writeLog('email: ' + email);
+      // upload userPants
+      let clocking = req.files.clocking;
+      
+      if(clocking == null || clocking == undefined){
+        res.json({ message: 'Photo not null!', resultCode: 1 });
+        return "";
+      }
+      
+      var d = new Date();
+      var t = d.getTime()+28800000;
+      var date = new Date(t);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      hours = hours < 10 ? '0'+hours: hours;
+      minutes = minutes < 10 ? '0'+minutes: minutes;
+      seconds = seconds < 10 ? '0'+seconds: seconds;
+      month = month < 10 ? '0'+month: month;
+      day = day < 10 ? '0'+day: day;
+      var dateCheck = year+"-"+month+"-"+day;
+      var dateFull = dateCheck+" "+hours+":"+minutes+":"+seconds
+      utils.writeLog('hours='+hours+":"+minutes);
+
+      var fileClocking = '/uploads/clockingdata/'+dateCheck+'/';
+      utils.generateFolder(fileClocking);
+      var time = new Date().getTime();
+      var path = fileClocking;
+      fileClocking += id + "_" + time + ".png";
+      var urlClocking = '/uploads/clockingdata/'+dateCheck+'/'+id+"_" + time + ".png";
+      utils.writeLog('name='+clocking.name+' mimetype='+ clocking.mimetype+' size='+ clocking.size);
+      await clocking.mv(fileClocking, function (err) {
+          thumb({
+            source: fileClocking,
+            destination: path,
+            concurrency: 4
+          }, function(files, err, stdout, stderr) {
+            console.log('Upload urlClocking='+urlClocking);
+          });
+
+          if (err)
+              return res.status(500).send(err);
+          utils.writeLog("Upload urlClocking." + fileClocking);
+      });
+
+      var sql = {};
+      real_start = job.toJSON().real_start;
+      real_end = job.toJSON().real_end;
+      var type = "in";
+      utils.writeLog('real_start='+real_start);
+      if(job.toJSON().status == 1){
+        sql["status"] = 2;
+        sql['real_start'] = hours+":"+minutes;
+        sql["timestamp"] = d.getTime()+3600000;
+
+        new Clockings({
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "in", path: urlClocking, timestamp: d.getTime()+3600000, date: (dateCheck), created_at: dateFull, updated_at: dateFull
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
+      }else{
+        sql["status"] = 3;
+        sql['real_end'] = hours+":"+minutes;
+        type = "out";
+
+        new Clockings({
+          job_id: job.toJSON().job_id, user_id: job.toJSON().user_id, type: "out", path: urlClocking, timestamp: d.getTime()+3600000, date: (dateCheck), created_at: dateFull, updated_at: dateFull
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
+      }
+      sql["updated_at"] = new Date();
+      await job.save(sql).then(function (row) {
+        utils.writeLog("CheckIn CheckOut Hotel="+email+" all_job_id="+job.toJSON().id+" "+type);
+      });
+
+      res.json({ message: 'Update all job successfully.', resultCode: 0 });
+  }else{
+    res.json({ message: 'Failed check in check out!', resultCode: 1 });
+				return "";
+  }
+}
+
 async function uploadPantsShoes(req, res) {
   //res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (!req.files) return res.status(400).send('No files were uploaded.');
@@ -980,6 +1107,7 @@ module.exports = {
   userUploadsImage: userUploadsImage,
   userUploadsImageThumb: userUploadsImageThumb,
   checkInCheckOut: checkInCheckOut,
+  hotelCheckInCheckOut: hotelCheckInCheckOut,
   uploadPantsShoes: uploadPantsShoes,
   validateUsername: function validateUsername(req, res) {
     var username = req.headers.username;
@@ -1415,7 +1543,7 @@ module.exports = {
     var user_id = req.headers.user_id;
     var email = req.headers.email;
     utils.writeLog("Job booking: user_id= "+user_id + ", job_id="+job_id);
-    if (req.headers.job_id == undefined || utils.isEmptyObject(req.headers.job_id)) {
+    if (req.headers.job_id == undefined || utils.isEmptyObject(req.heaedrs.job_id)) {
       res.json({ message: 'Please select job!', resultCode: 1 });
       return "";
     }
@@ -1454,6 +1582,54 @@ module.exports = {
         res.json({ message: 'Book job successfull!', resultCode: 0 });
       }else{
         res.json({ message: 'User not confirm userPantsApproved, userShoesApproved!', resultCode: 1 });
+      }    
+    } catch (e) {
+      res.json({ resultCode: 1, message: 'Fail'});
+      utils.writeLog("Error book job");
+      return "";
+    }
+  },
+
+  hotelBooking: async function hotelBooking(req, res) {
+    req.header("Content-Type", "text/html; charset=utf-8");
+    var job_id = req.headers.job_id;
+    var email = req.headers.email;
+    utils.writeLog("Job booking: email= "+email + ", job_id="+job_id);
+    if (job_id == undefined || utils.isEmptyObject(job_id)) {
+      res.json({ message: 'Please select job!', resultCode: 1 });
+      return "";
+    }
+
+    try {
+      var user = await getUserInfo(email);
+      
+      if(user == null){
+        res.json({ message: 'User not valiable!', resultCode: 1 });
+      }else{
+        var user_id = user.toJSON().id;
+        var job = await getJobValiable(job_id);
+        if(job == null){
+          res.json({ message: 'Job not valiable!', resultCode: 1 });
+        }
+        if(job.toJSON().current_slot >= job.toJSON().slot){
+          res.json({ message: 'Job full slot!', resultCode: 1 });
+          return "";
+        }
+        var allJob = await getAllJobsByUserId(job_id, user_id);
+        utils.writeLog('allJob='+allJob);
+        if(allJob != null){
+          res.json({ message: 'Job booked!', resultCode: 1 });
+          return "";
+        }
+        // Insert AllJobs
+        new AllJobs({
+          job_id: job_id, user_id: user_id, status: 0, workTime_confirmed: 0, created_at: new Date(), updated_at: new Date()
+        }).save().then((model) => {
+        }).catch(function (err) {
+          res.json({ message: 'Error!', resultCode: 1 });
+        });
+
+        res.json({ message: 'Book job successfull!', resultCode: 0 });
       }    
     } catch (e) {
       res.json({ resultCode: 1, message: 'Fail'});

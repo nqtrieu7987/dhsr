@@ -310,7 +310,7 @@ module.exports = {
             return false;
         }
     },
-    generateFolder: function generateFolder(path, username) {
+    generateFolder: function generateFolder(path) {
         var folder ="";
         var array = path.split("/");
         array.forEach(function (item, index) {
