@@ -26,7 +26,11 @@
                     </span>
                 @endif
             </div>
-            <input _ngcontent-ygg-3="" class="btn btn-primary" style="width:300px; text-transform:none; font-size:15px; color:#fff;" type="submit" value="Login Admin" width="500">
+            <input _ngcontent-ygg-3="" class="btn btn-primary" style="width:300px; text-transform:none; font-size:15px; color:#fff;" type="submit" value="Login Admin" width="500"><br><br>
+
+            <a href="/login" style="color: #fff">Login Width Admin&nbsp;&nbsp;|</a>&nbsp;&nbsp;
+
+            <a href="/admin/register" style="color: #fff">Register Hotel Admin</a>
         </form>
     </div>
 @endsection

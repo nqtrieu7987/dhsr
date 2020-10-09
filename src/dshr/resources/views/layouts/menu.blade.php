@@ -124,9 +124,9 @@
         </a> --}}
         <a class="nav-link user-menu" data-toggle="dropdown" href="#">
           @if(Auth::user()->adminType == 'hotel')
-            <div class="header-user">
+            {{-- <div class="header-user">
                 <img src="/images/girl.png">
-            </div>
+            </div> --}}
           @elseif(Auth::check())
             <div class="header-user">
                 <img src="{{ Auth::user()->workPassPhoto }}">
@@ -273,6 +273,14 @@
             </a>
           </li>
           @else
+          <li class="nav-item">
+            <a href="{{route('admin.clocking')}}" class="nav-link {{in_array(Route::currentRouteName(), ['admin.clocking']) ? 'active' : ''}}">
+              <img class="icon-menu-left" src="{{ url('/images/clocking_sidebar_icon.png') }}"/>
+              <p>
+                Attendance report
+              </p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="{{route('admin.report.job')}}" class="nav-link {{in_array(Route::currentRouteName(), ['admin.report.job']) ? 'active' : ''}}">
               <img class="icon-menu-left" src="{{ url('/images/hotelattendance_sidebar_icon.png') }}"/>

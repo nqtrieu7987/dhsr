@@ -190,12 +190,14 @@ Route::prefix('admin')->group(function() {
     Route::post('/password/email', 'AuthAdmin\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
     Route::get('/password/reset/{token}', 'AuthAdmin\ResetPasswordController@showResetForm')->name('admin.password.reset');
     Route::post('/password/reset', 'AuthAdmin\ResetPasswordController@reset');
-
-
     Route::get('/register', 'AuthAdmin\RegisterController@showRegistrationForm')->name('admin.register');
     Route::post('/register', 'AuthAdmin\RegisterController@register')->name('admin.register.submit');
+
+    Route::get('clocking', ['as' => 'admin.clocking', 'uses' => 'AdminController@clocking']);
 
     Route::get('report/job', ['as' => 'admin.report.job', 'uses' => 'AdminController@reportJob']);
 
     Route::post('job/in-out-aj', ['as' => 'admin.job.inOutAJ', 'uses' => 'AdminController@inOutPost']);
+
+    Route::get('change/update_status', ['as' => 'admin.changeUpdateStatus', 'uses' => 'AdminController@changeUpdateStatus']);
 });

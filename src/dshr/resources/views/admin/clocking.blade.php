@@ -37,7 +37,7 @@
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{$data->id}}</td>
-                                            <td><a href="{{route('user.edit', $data->Users()->id)}}">{{$data->Users()->userName}}</a></td>
+                                            <td>{{$data->Users()->userName}}</td>
                                             <td>{{ $data->Jobs() != null ? array_get($hotels, $data->Jobs()['hotel_id']): ''}}
                                             <td>{{ $data->Jobs() != null ? array_get($jobType, $data->Jobs()['job_type_id']): ''}}</td>
                                             <td>{{$data->Jobs()['start_time']}}</td>

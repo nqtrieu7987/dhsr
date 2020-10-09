@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Clocking;
 use App\Models\Job;
 use App\Models\AllJob;
 use App\Models\JobType;
@@ -10,9 +11,11 @@ use App\Models\Hotel;
 use App\Models\User;
 use App\Models\Admin;
 use App\Exports\JobExport;
+use Illuminate\Support\Facades\Log;
 use Auth;
 use Session, Excel;
 use Carbon\Carbon;
+use DB;
 
 class AdminController extends Controller
 {
@@ -32,7 +35,30 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.home');
+        $status = config('app.job_status');
+        $view_type = config('app.view_type');
+        $color_status = config('app.color_status');
+        $site = 'Admin';
+        $hotel = null;
+        $data = null;
+        if(Auth::user()->hotel_id > 0){
+            $hotel = Hotel::find(Auth::user()->hotel_id);
+            $data = AllJob::whereIn('job_id', function($query)
+                        {
+                            $query->select(DB::raw('id'))
+                                  ->from('job')
+                                  ->where('hotel_id', Auth::user()->hotel_id);
+                        })
+                        ->orderBy('id', 'DESC')->paginate(20);
+        }
+
+
+        $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
+        if($hotel){
+            $site = 'Hotel '.$hotel->name;
+        }
+
+        return view('admin.home', compact('status','view_type','data','link_url','color_status'))->with('site', $site);
     }
 
     public function reportJob(Request $request){
@@ -229,5 +255,63 @@ class AdminController extends Controller
         $lastTime=strtotime($lastTime);
         $timeDiff=$lastTime-$firstTime;
         return $timeDiff;
+    }
+
+    public function clocking(Request $request){
+        $datas = Clocking::whereIn('job_id', function($query)
+                    {
+                        $query->select(DB::raw('id'))
+                              ->from('job')
+                              ->where('hotel_id', Auth::user()->hotel_id);
+                    })
+        ->orderBy('created_at', 'DESC')->orderBy('user_id', 'DESC')->paginate(50);
+
+        $jobType = JobType::pluck('name', 'id')->toArray();
+        $hotels = Hotel::pluck('name', 'id')->toArray();
+        return view('admin.clocking', compact('datas','jobType','hotels'))
+                    ->with('site', 'Clocking');
+    }
+
+    public function changeUpdateStatus(Request $request){
+        $data = AllJob::find($request->id);
+        if($request->type == 'approve'){
+            $status = 1;
+            Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
+            if($data->Jobs()->current_slot >= $data->Jobs()->slot){
+                return response()->json([
+                    'msg' => 'Job full slot',
+                    'status' => 201
+                ]);
+            }else{
+                // Cập nhật current_slot của job lên 1 đơn vị
+                if(in_array($data->status, [0,4,5])){
+                    $data->status = $status;
+                    $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
+                    $msg = 'Approve Successfully!';
+                    $stt = 200;
+                }else{
+                    $msg = 'Failed!';
+                    $stt = 203;
+                }
+            }
+        }else{
+            $status = 4;
+            if(in_array($data->status, [1,2,3]) && $data->Jobs()->current_slot > 0){
+                $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot - 1]);
+            }
+            $data->status = $status;
+            $msg = 'Cancel Successfully!';
+            $stt = 202;
+
+            /*$data->userPants = null;
+            $data->userShoes = null;
+            $data->userPantsApproved = 0;
+            $data->userShoesApproved = 0;*/
+        }
+        $data->save();
+        return response()->json([
+            'msg' => $msg,
+            'status' => $stt
+        ]);
     }
 }
