@@ -14,13 +14,13 @@ use Auth;
 use Session, Excel;
 use Carbon\Carbon;
 
-class JobController extends Controller
+class JobAdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+    
     public function index(Request $request)
     {
         $jobs = Job::select("*");
@@ -511,12 +511,6 @@ class JobController extends Controller
             'remarks' => $request->get('remarks'),
         ]);
         
-        $details = [
-            'status' => $data->rwsConfirmed,
-            'body' => 'Job: '.$data->Jobs()->Types()->name.', Hotel: '.$data->Jobs()->Hotels()->name. '<br> Start time: '.$data->paidTimeIn. ', End time: '.$data->paidTimeOut. ', Break time: '.$data->breakTime. 'hours, Total: '.$data->totalHours.' hours, Remarks'.$data->remarks
-        ];
-        \Mail::to($user->email)->send(new \App\Mail\SendMail($details));
-
         \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
 
         Session::flash('success', 'Confirm success!');

@@ -35,6 +35,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+
         $status = config('app.job_status');
         $view_type = config('app.view_type');
         $color_status = config('app.color_status');
@@ -238,6 +239,12 @@ class AdminController extends Controller
             'rwsConfirmed' => $status,
             'remarks' => $request->get('remarks'),
         ]);
+
+        $details = [
+            'status' => $status,
+            'body' => 'Job: '.$data->Jobs()->Types()->name.', Hotel: '.$data->Jobs()->Hotels()->name. '<br> Start time: '.$data->paidTimeIn. ', End time: '.$data->paidTimeOut. ', Break time: '.$data->breakTime. 'hours, Total: '.$data->totalHours.' hours, Remarks'.$data->remarks
+        ];
+        \Mail::to($user->email)->send(new \App\Mail\SendMail($details));
         
         \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
 

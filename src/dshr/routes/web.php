@@ -200,4 +200,6 @@ Route::prefix('admin')->group(function() {
     Route::post('job/in-out-aj', ['as' => 'admin.job.inOutAJ', 'uses' => 'AdminController@inOutPost']);
 
     Route::get('change/update_status', ['as' => 'admin.changeUpdateStatus', 'uses' => 'AdminController@changeUpdateStatus']);
+
+    Route::resource('job', 'JobAdminController');
 });
