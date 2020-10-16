@@ -28,7 +28,7 @@
             </div>
             <input _ngcontent-ygg-3="" class="btn btn-primary" style="width:300px; text-transform:none; font-size:15px; color:#fff;" type="submit" value="Login" width="500"><br><br>
 
-            <a href="/admin/login" style="color: #fff">Login Width Hotel Admin</a>
+            <a href="/admin/login" style="color: #fff">Login as Hotel Manager</a>
         </form>
     </div>
 @endsection

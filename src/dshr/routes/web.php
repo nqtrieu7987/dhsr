@@ -201,5 +201,12 @@ Route::prefix('admin')->group(function() {
 
     Route::get('change/update_status', ['as' => 'admin.changeUpdateStatus', 'uses' => 'AdminController@changeUpdateStatus']);
 
-    Route::resource('job', 'JobAdminController');
+    //Route::resource('job', 'JobAdminController');
+    Route::get('/job', ['as' => 'admin.job.index', 'uses' => 'JobAdminController@index']);
+    Route::get('/job/create', ['as' => 'admin.job.create', 'uses' => 'JobAdminController@create']);
+    Route::post('/job/store', ['as' => 'admin.job.store', 'uses' => 'JobAdminController@store']);
+    Route::get('/job/{id}/edit', ['as' => 'admin.job.edit', 'uses' => 'JobAdminController@edit']);
+    Route::put('/job/{id}/update', ['as' => 'admin.job.update', 'uses' => 'JobAdminController@update']);
+    Route::get('job/in-out/{id}', ['as' => 'admin.job.inOut', 'uses' => 'JobAdminController@inOut']);
+    Route::post('job/in-out/{id}', ['as' => 'admin.job.inOut', 'uses' => 'JobAdminController@inOutPost']);
 });

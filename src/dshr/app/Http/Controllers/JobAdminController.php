@@ -24,10 +24,7 @@ class JobAdminController extends Controller
     public function index(Request $request)
     {
         $jobs = Job::select("*");
-        if($request->hotel_id > 0){
-            $jobs = $jobs->where('hotel_id', $request->hotel_id);
-            $check_search = true;
-        }
+        $jobs = $jobs->where('hotel_id', Auth::user()->hotel_id);
         if($request->job > 0){
             $jobs = $jobs->where('job_type_id', $request->job);
             $check_search = true;
@@ -51,9 +48,9 @@ class JobAdminController extends Controller
         ksort($slots);
         $view_type = config('app.view_type');
 
-        $link_url = ['url' => route('job.createMulti'), 'title' => 'Adds', 'icon' =>'fa fa-plus-circle'];
+        $link_url = ['url' => route('admin.job.create'), 'title' => 'Adds', 'icon' =>'fa fa-plus-circle'];
 
-        return view('job.index',compact('datas','types','hotels','view_type','slots','link_url'))
+        return view('admin.job-index',compact('datas','types','hotels','view_type','slots','link_url'))
                 ->with('site','Job');
     }
 
@@ -69,7 +66,7 @@ class JobAdminController extends Controller
         $view_type = config('app.view_type');
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('job.create', compact('types','hotels','view_type','link_url'))->with('site','Job');
+        return view('admin.job-create', compact('types','hotels','view_type','link_url'))->with('site','Job');
     }
 
     /**
@@ -89,7 +86,7 @@ class JobAdminController extends Controller
         
         $active = isset($request->is_active) ? "1" : "0";
         $data = Job::create([
-            'hotel_id' => $request->hotel_id,
+            'hotel_id' => Auth::user()->hotel_id,
             'job_type_id' => $request->job_type_id,
             'slot' => $request->slot,
             'start_time' => date("H:i", strtotime($request->start_time)),
@@ -132,7 +129,7 @@ class JobAdminController extends Controller
         $jobsPrev = AllJob::where('job_id', $id)->orderBy('timestamp', 'DESC')->paginate(20);
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
-        return view('job.edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url','color_status'))->with('site','Job: '.$id);
+        return view('admin.job-edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url','color_status'))->with('site','Job: '.$id);
     }
 
     /**
@@ -155,7 +152,7 @@ class JobAdminController extends Controller
 
         $active = $request->is_active;
         Job::find($id)->update([
-            'hotel_id' => $request->hotel_id,
+            /*'hotel_id' => $request->hotel_id,*/
             'job_type_id' => $request->job_type_id,
             'slot' => $request->slot,
             'start_time' => date("H:i", strtotime($request->start_time)),
@@ -441,7 +438,7 @@ class JobAdminController extends Controller
         $data = AllJob::find($id);
         $link_url = ['url' => route('job.edit', $data->job_id), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         $status = [1 =>'Job Done', 2 =>'Job Failure'];
-        return view('job.in-out',compact('data','link_url','status'))->with('site','Job');
+        return view('admin.job-in-out',compact('data','link_url','status'))->with('site','Job');
     }
 
     public function inOutPost(Request $request, $id){
@@ -477,7 +474,7 @@ class JobAdminController extends Controller
         }
         // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
         // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
-        if(file_exists(public_path().$data->userPants)){
+        /*if(file_exists(public_path().$data->userPants)){
             unlink(public_path().$data->userPants);
             $thumb = str_replace('.png', '_thumb.png', $data->userPants);
             if(file_exists(public_path().$thumb)){
@@ -490,7 +487,7 @@ class JobAdminController extends Controller
             if(file_exists(public_path().$thumb)){
                 unlink(public_path().$thumb);
             }
-        }
+        }*/
         $user->update([
             'userPants' => null,
             'userShoes' => null,

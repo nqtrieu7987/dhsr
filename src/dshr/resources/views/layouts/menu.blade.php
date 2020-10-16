@@ -213,7 +213,7 @@
           </li>
           @if(Auth::user()->adminType != 'hotel')
           <li class="nav-item">
-            <a href="{{route('job.index')}}" class="nav-link {{ (Request::is('job')) ? 'active' : null }}">
+            <a href="/job" class="nav-link {{ (Request::is('job')) ? 'active' : null }}">
               <img class="icon-menu-left" src="{{ url('/images/job_sidebar_icon.png') }}"/>
               <p>
                 Job
@@ -289,6 +289,14 @@
               </p>
             </a>
           </li>
+          {{-- <li class="nav-item">
+            <a href="/admin/job" class="nav-link {{ (Request::is('job')) ? 'active' : null }}">
+              <img class="icon-menu-left" src="{{ url('/images/job_sidebar_icon.png') }}"/>
+              <p>
+                Job
+              </p>
+            </a>
+          </li> --}}
           @endif
           @if(Auth::user()->adminType != 'hotel')
           <li class="nav-item">
@@ -347,6 +355,7 @@
               </p>
             </a>
           </li> --}}
+          @if(Auth::user()->adminType != 'hotel')
           <li class="nav-item">
              <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                   <i style="font-size: 22px" class="fas fa-sign-out-alt"></i>
@@ -356,6 +365,17 @@
                   @csrf
               </form>
           </li>
+          @else
+          <li class="nav-item">
+             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                  <i style="font-size: 22px" class="fas fa-sign-out-alt"></i>
+                  <p>{{ __('Logout') }}</p>
+              </a>
+              <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+          </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

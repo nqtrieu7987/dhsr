@@ -6,6 +6,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                        @if(Auth::user()->hotel_id > 0)
                         @if($data)
                         <div class="tab-content">
                             <div id="deleteAccount" class="tab-pane fade show active">
@@ -24,6 +25,7 @@
                                                 <th>Confirm</th>
                                                 <th>Cancel</th>
                                                 {{-- <th>In/Out</th> --}}
+                                                <th>Start_date</th>
                                                 <th class="hidden-xs">Paid TimeIn</th>
                                                 <th class="hidden-xs">Paid TimeOut</th>
                                                 <th class="hidden-xs">BreakTime</th>
@@ -60,6 +62,7 @@
                                                         <a href="{{route('job.inOut', $jobpv->id)}}" target="_blank" class="btn btn-warning btn-sm">In/Out</a>
                                                     @endif
                                                 </td> --}}
+                                                <td>{{$jobpv->Jobs()->start_date}}</td>
                                                 <td class="align-center">{{$jobpv->paidTimeIn}}</td>
                                                 <td class="align-center">{{$jobpv->paidTimeOut}}</td>
                                                 <td>{{$jobpv->breakTime}}</td>
@@ -76,6 +79,9 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @else
+                            <h3>The registration is completed. Please contact the system admin for approval.</h3>
                         @endif
                     </div>
                 </div>
