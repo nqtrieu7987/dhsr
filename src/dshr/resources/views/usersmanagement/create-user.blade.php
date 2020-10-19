@@ -32,15 +32,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
-                                {!! Form::label('name', trans('forms.create_user_label_username'), array('class' => 'col-md-3 control-label')); !!}
+                            <div class="form-group has-feedback row {{ $errors->has('userName') ? ' has-error ' : '' }}">
+                                {!! Form::label('userName', trans('forms.create_user_label_username'), array('class' => 'col-md-3 control-label')); !!}
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        {!! Form::text('name', NULL, array('id' => 'name', 'class' => 'form-control', 'placeholder' => trans('forms.create_user_ph_username'))) !!}
+                                        {!! Form::text('userName', NULL, array('id' => 'userName', 'class' => 'form-control', 'placeholder' => trans('forms.create_user_ph_username'))) !!}
                                     </div>
-                                    @if ($errors->has('name'))
+                                    @if ($errors->has('userName'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('name') }}</strong>
+                                            <strong>{{ $errors->first('userName') }}</strong>
                                         </span>
                                     @endif
                                 </div>

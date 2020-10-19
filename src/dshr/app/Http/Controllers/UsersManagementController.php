@@ -131,8 +131,8 @@ class UsersManagementController extends Controller
                 'role'                  => 'required',
             ],
             [
-                'name.unique'         => trans('auth.userNameTaken'),
-                'name.required'       => trans('auth.userNameRequired'),
+                'userName.unique'         => trans('auth.userNameTaken'),
+                'userName.required'       => trans('auth.userNameRequired'),
                 'first_name.required' => trans('auth.fNameRequired'),
                 'last_name.required'  => trans('auth.lNameRequired'),
                 'email.required'      => trans('auth.emailRequired'),
@@ -157,8 +157,8 @@ class UsersManagementController extends Controller
             'last_name'        => $request->input('last_name'),
             'email'            => $request->input('email'),
             'password'         => bcrypt($request->input('password')),
-            'token'            => str_random(64),
-            'admin_ip_address' => $ipAddress->getClientIp(),
+            /*'token'            => str_random(64),
+            'admin_ip_address' => $ipAddress->getClientIp(),*/
             'activated'        => 1,
         ]);
 
