@@ -896,6 +896,7 @@ async function hotelCheckInCheckOut(req, res) {
       return res.status(400).send('No files were uploaded.');
   var email = req.query.email;
   var id = req.query.id;
+  var remarks = req.query.remarks;
   var jwtToken = req.query.token;
 		if (email == undefined || utils.isEmptyObject(email)) {
 			res.json({ message: 'Email not null!', resultCode: 1 });
@@ -1006,6 +1007,7 @@ async function hotelCheckInCheckOut(req, res) {
         });
       }
       sql["updated_at"] = new Date();
+      sql["remarks"] = remarks;
       await job.save(sql).then(function (row) {
         utils.writeLog("CheckIn CheckOut Hotel="+email+" all_job_id="+job.toJSON().id+" "+type);
       });
@@ -1543,11 +1545,11 @@ module.exports = {
     var user_id = req.headers.user_id;
     var email = req.headers.email;
     utils.writeLog("Job booking: user_id= "+user_id + ", job_id="+job_id);
-    if (req.headers.job_id == undefined || utils.isEmptyObject(req.heaedrs.job_id)) {
+    if (job_id == undefined || utils.isEmptyObject(job_id)) {
       res.json({ message: 'Please select job!', resultCode: 1 });
       return "";
     }
-    if (req.headers.user_id == undefined || utils.isEmptyObject(req.headers.user_id)) {
+    if (user_id == undefined || utils.isEmptyObject(user_id)) {
       res.json({ message: 'User not null!', resultCode: 1 });
       return "";
     }
