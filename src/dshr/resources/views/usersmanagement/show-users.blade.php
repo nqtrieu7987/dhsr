@@ -76,6 +76,7 @@
                                 </caption>
                                 <thead class="thead">
                                     <tr>
+                                        <th class="hidden-xs">ID</th>
                                         @if(request()->get('type') =='all')
                                         <th class="hidden-xs">IC No</th>
                                         @endif
@@ -107,6 +108,7 @@
                                 <tbody id="users_table">
                                     @foreach($users as $user)
                                         <tr>
+                                            <td>{{$user->id}}</td>
                                             @if(request()->get('type') =='all')
                                             <td class="hidden-xs">{{$user->userNRIC}}</td>
                                             @endif

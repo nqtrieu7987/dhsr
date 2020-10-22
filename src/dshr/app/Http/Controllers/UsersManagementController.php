@@ -40,7 +40,7 @@ class UsersManagementController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'DESC');
+        $users = User::orderBy('id', 'DESC');
         if($request->has('keyword') && $request->get('keyword') != ''){
             $keyword = trim($request->get('keyword'));
             $users = $users->whereRaw("userName LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
