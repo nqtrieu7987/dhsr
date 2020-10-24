@@ -102,6 +102,7 @@
                                             <th class="hidden-sm hidden-xs hidden-md">Emg Name</th>
                                             <th class="no-search no-sort">Work in TCC before</th>
                                         @endif
+                                        <th class="no-search no-sort">Status</th>
                                         <th class="no-search no-sort">Appovals</th>
                                     </tr>
                                 </thead>
@@ -151,6 +152,10 @@
                                             <td class="align-center" id="img_status_{{$user->id}}">
                                                 {!! \App\Helper\VtHelper::checkStatusIcon($user->activated)!!}
                                             </td>
+                                            <td class="align-center">
+                                                @php $status = $user->activated == 1 ? 'Deactivated' : 'Active'; @endphp
+                                                <span class="{{$user->activated == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$user->id}}" id="status_{{$user->id}}" value="{{$status}}">{{$status}}</span>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -189,83 +194,32 @@
     @include('scripts.image-modal-script')
     <script type="text/javascript">
         $('.changeStatus').click(function(){
+            $('#waiting').show();
             var idstt = this.id;
             var id = $(this).data("id");
-            var type = $(this).data("type");
-            var value = $(this).data("value");
             var data = {
                 id: id,
-                type: type,
-                value: value,
                 model: 'user',
             };
-
-            if(value == 0){
-                var r = confirm("Do you want reject?");
-                if (r == true) {
-                    $('#waiting').show();
-                    $.ajax({
-                        type : 'POST',
-                        url  : '{{route('change.status')}}',
-                        data : data,
-                        success  : function (data) {
-                            $('#waiting').hide();
-                            $('#'+idstt).hide();
-                            if(type =='userPantsApproved'){
-                                $('#pants_'+id).hide();
-                                $('#pants_img_'+id).hide();
-                                $('#pants_check_'+id).hide();
-                            }else{
-                                $('#shoes_'+id).hide();
-                                $('#shoes_img_'+id).hide();
-                                $('#shoes_check_'+id).hide();
-                            }
-                            if(data.msg === 0){
-                                $('#'+idstt).removeClass('text-success');
-                                $('#'+idstt).addClass('text-danger');
-                                $('#'+idstt).text('Deactivated');
-                                $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
-                            }else{
-                                $('#'+idstt).removeClass('text-danger');
-                                $('#'+idstt).addClass('text-success');
-                                $('#'+idstt).text('Active');
-                                $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
-                            }
-                        }
-                    });
-                } else {
-                    
-                }
-            }else{
-                $('#waiting').show();
-                $.ajax({
-                    type : 'POST',
-                    url  : '{{route('change.status')}}',
-                    data : data,
-                    success  : function (data) {
-                        $('#waiting').hide();
-                        $('#'+idstt).hide();
-                        if(type =='userPantsApproved'){
-                            $('#pants_'+id).hide();
-                            $('#pants_check_'+id).show();
-                        }else{
-                            $('#shoes_'+id).hide();
-                            $('#shoes_check_'+id).show();
-                        }
-                        if(data.msg === 0){
-                            $('#'+idstt).removeClass('text-success');
-                            $('#'+idstt).addClass('text-danger');
-                            $('#'+idstt).text('Deactivated');
-                            $('#img_'+idstt).html('<i class="fa fa-check text-success" aria-hidden="true"></i>');
-                        }else{
-                            $('#'+idstt).removeClass('text-danger');
-                            $('#'+idstt).addClass('text-success');
-                            $('#'+idstt).text('Active');
-                            $('#img_'+idstt).html('<i class="fa fa-close text-danger" aria-hidden="true"></i>');
-                        }
+            $.ajax({
+                type : 'POST',
+                url  : '{{route('change.status')}}',
+                data : data,
+                success  : function (data) {
+                    $('#waiting').hide();
+                    if(data.msg === 0){
+                        $('#'+idstt).removeClass('text-success');
+                        $('#'+idstt).addClass('text-danger');
+                        $('#'+idstt).text('Deactivated');
+                        $('#img_'+idstt).html('<img class="status-icon" src="/images/Active.png">');
+                    }else{
+                        $('#'+idstt).removeClass('text-danger');
+                        $('#'+idstt).addClass('text-success');
+                        $('#'+idstt).text('Active');
+                        $('#img_'+idstt).html('<img class="status-icon" src="/images/Deactivated.png">');
                     }
-                });
-            }
+                }
+            });
         });
     </script>
 @endsection
