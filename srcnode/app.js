@@ -67,6 +67,10 @@ module.exports.create = function (server, host, port, publicDir) {
 		mysqlTool.updateUser(req, res);
 	});
 
+	app.post('/service/user/user-info', function (req, res) {
+		mysqlTool.userInfor(req, res);
+	});
+
 	app.post('/service/user/validate', function (req, res) {
 		mysqlTool.validateUsername(req, res);
 	});

@@ -1343,6 +1343,43 @@ module.exports = {
       }
     });
   },
+  userInfor: function userInfor(req, res) {
+    var email = req.headers.email;
+		var jwtToken = req.headers.token;
+		if (email == undefined || utils.isEmptyObject(email)) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+		if (jwtToken == undefined || utils.isEmptyObject(jwtToken)) {
+			res.json({ message: 'Token not null!', resultCode: 1 });
+			return "";
+		}
+		try {
+			email = email.toLowerCase();
+		} catch (error) { }
+		jwt.verify(jwtToken, cert, function (err, payload) {
+			if (err) {
+				res.json({ message: 'Token invalid!', resultCode: 99 });
+				return "";
+			}
+			if (payload.email != email) {
+				res.json({ message: 'Email invalid!', resultCode: 1 });
+				return "";
+			}else{
+				try {
+          User.where('email', email).fetch().then(function (user) {
+            if (user != null) {
+              res.json({ "data": user, message: 'get info successfully!', resultCode: 0 });
+            } else {
+              res.json({ message: 'Email is incorrect!', resultCode: 1 });
+            }
+          });
+        } catch (e) {
+          res.json({ message: 'Getinfor failed!', resultCode: 1 });
+        }
+			}
+    });
+  },
   getUserInfor: function getUserInfor(req, res) {
     var email = req.headers.email;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
