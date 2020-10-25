@@ -43,7 +43,7 @@ class UsersManagementController extends Controller
         $users = User::orderBy('id', 'DESC');
         if($request->has('keyword') && $request->get('keyword') != ''){
             $keyword = trim($request->get('keyword'));
-            $users = $users->whereRaw("userName LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
+            $users = $users->whereRaw("userName LIKE '%$keyword%' OR email LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
 
             //$users = $users->whereRaw('MATCH(userName, email, currentSchool, address1, address2, emergencyContactName, emergencyContactNo, relationToEmergencyContact, bankName,referralCode )AGAINST("'.$request->get('keyword').'" IN NATURAL LANGUAGE MODE)');
         }

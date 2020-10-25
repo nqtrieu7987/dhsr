@@ -71,7 +71,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                         <div class="tab-pane fade show active workPassPhoto-tab" role="tabpanel" aria-labelledby="workPassPhoto-tab">
                                             <div class="row mb-1">
                                                 <div class="col-sm-12">
-                                                    <div id="avatar_container">
+                                                    <div id="avatar_container" class="avatar_container">
                                                         <div class="card-body">
                                                             <div class="dz-preview"></div>
                                                             {!! Form::open(array('route' => 'upload.image', 'method' => 'POST', 'name' => 'workPassPhotoDZ','id' => 'workPassPhotoDZ', 'class' => 'form single-dropzone dropzone single', 'files' => true)) !!}
@@ -88,7 +88,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                         <div class="tab-pane fade edit-settings-tab" role="tabpanel" aria-labelledby="edit-settings-tab">
                                             <div class="row mb-1">
                                                 <div class="col-sm-12">
-                                                    <div id="avatar_container">
+                                                    <div id="avatar_container" class="avatar_container">
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-6">
@@ -122,7 +122,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                         <div class="tab-pane fade student-image-tab" role="tabpanel" aria-labelledby="student-image-tab">
                                             <div class="row mb-1">
                                                 <div class="col-sm-12">
-                                                    <div id="avatar_container">
+                                                    <div id="avatar_container" class="avatar_container">
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-6">
@@ -156,7 +156,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
                                         <div class="tab-pane fade edit-account-tab" role="tabpanel" aria-labelledby="edit-account-tab">
                                             <div class="row mb-1">
                                                 <div class="col-sm-12">
-                                                    <div id="avatar_container">
+                                                    <div id="avatar_container" class="avatar_container">
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-6 col-xs-6">
