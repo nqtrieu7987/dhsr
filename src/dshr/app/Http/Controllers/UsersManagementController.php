@@ -254,6 +254,14 @@ class UsersManagementController extends Controller
 
     public function editUserPost(Request $request, $id){
         $user = User::find($id);
+        $status_data = null;
+        if($user->status_data == null || $user->status_data ==''){
+            $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+            foreach ($viewTypes as $key => $value) {
+                $status_data[$key] = 0;
+            }
+            $user->status_data = json_encode($status_data);
+        }
         $validator = Validator::make($request->all(), [
             'userName'     => 'required|max:255',
             //'userNRIC'     => 'required|min:6|max:200',
