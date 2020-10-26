@@ -4,6 +4,32 @@ var fs = require('fs');
 var jwt = require('jsonwebtoken');
 const { stringify } = require("querystring");
 var cert = fs.readFileSync('./educa.vn.key');  // get private key
+var config = require('../config.json');
+var db_config = config.educadbLab;
+var knex = require('knex')({
+    dialect: 'pg',
+    acquireConnectionTimeout: 4 * 1000,
+    pool: {
+      min: 2,
+      max: 2,
+      idleTimeoutMillis: 5 * 1000,
+      acquireTimeoutMillis: 3 * 1000,
+      evictionRunIntervalMillis: 5 * 1000
+    },
+    client: 'mysql',
+    connection: db_config
+});
+var bookshelf = require('bookshelf')(knex);
+var User = bookshelf.Model.extend({
+    tableName: 'ds_users'
+});
+async function getUserInfo(email) {
+    return new Promise(resolve => {
+      User.where('email', email).where('activated', 1).fetch().then(function (user) {
+        resolve(user);
+      });
+    });
+}
 
 async function getListJobOnGoing(req, res) {
     var hotel_id = req.headers.hotel_id;
@@ -53,31 +79,41 @@ async function getListJobOnGoing(req, res) {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         var datas = await database.simpleExecute(sql);
 
-        var sqlUser = `SELECT status_data FROM ds_users WHERE email="`+ email+`"`;
+        var sqlUser = `SELECT status_data FROM ds_users WHERE activated=1 AND email="`+ email+`"`;
         //utils.writeLog("sqlUser=" + sqlUser);
-        var dataUser = await database.simpleExecute(sqlUser);
-        var status_data = Object.values(dataUser[0]);
-        var jsonUser = JSON.parse(status_data);
-        utils.writeLog('jsonUser='+JSON.stringify(jsonUser));
-
-        var objs = [];
-        var objectArray = Object.entries(datas);
-        objectArray.forEach(([key, value]) => {
-            utils.writeLog("key=" + key + " view_type=" + value.view_type);
-            if(value.view_type == 0){ //Nếu view_type = 0 thì tất cả các user đều được nhận job
-                objs.push(datas[key]);
+        //var dataUser = await database.simpleExecute(sqlUser);
+        var dataUser = await getUserInfo(email);
+        if(dataUser == null || dataUser === ""){
+            res.json({ message: 'User not activated!', resultCode: 1, data: null });
+            return "";
+        }else{
+            //var status_data = Object.values(dataUser[0]);
+            var jsonUser = dataUser.toJSON().status_data;
+            if(jsonUser == "undefined" || jsonUser == null){
+                res.json({ message: 'User status not found!', resultCode: 1, data: null });
+                return "";
             }else{
-                for (const [k, v] of Object.entries(jsonUser)) {
-                    if(value.view_type == k && v == 1){ // User chỉ được nhận job nếu view_type có giá trị = 1
-                        console.log(`${k}: ${v}`);
+                jsonUser = JSON.parse(jsonUser);
+                var objs = [];
+                var objectArray = Object.entries(datas);
+                objectArray.forEach(([key, value]) => {
+                    utils.writeLog("key=" + key + " view_type=" + value.view_type);
+                    if(value.view_type == 0){ //Nếu view_type = 0 thì tất cả các user đều được nhận job
                         objs.push(datas[key]);
+                    }else{
+                        for (const [k, v] of Object.entries(jsonUser)) {
+                            if(value.view_type == k && v == 1){ // User chỉ được nhận job nếu view_type có giá trị = 1
+                                console.log(`${k}: ${v}`);
+                                objs.push(datas[key]);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
 
-        res.json({ message: 'Success', resultCode: 0, data: objs });
-        return "";
+                res.json({ message: 'Success', resultCode: 0, data: objs });
+                return "";
+            }
+        }
     }
 }
 
