@@ -83,7 +83,7 @@ class UsersManagementController extends Controller
         $users = User::orderBy('created_at', 'DESC');
         if($request->has('keyword') && $request->get('keyword') != ''){
             $keyword = trim($request->get('keyword'));
-            $users = $users->whereRaw("userName LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
+            $users = $users->whereRaw("userName LIKE '%$keyword%' OR email LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
         }
         $users = $users->whereRaw('(userPantsApproved = 0 OR userPantsApproved IS NULL OR userShoesApproved = 0 OR userShoesApproved IS NULL)')->whereNotNull('userPants')->whereNotNull('userShoes');
         
