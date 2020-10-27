@@ -83,7 +83,7 @@ class UsersManagementController extends Controller
         $users = User::orderBy('created_at', 'DESC');
         if($request->has('keyword') && $request->get('keyword') != ''){
             $keyword = trim($request->get('keyword'));
-            $users = $users->whereRaw("userName LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
+            $users = $users->whereRaw("userName LIKE '%$keyword%' OR email LIKE '%$keyword%' OR emergencyContactName LIKE '%$keyword%' OR userNRIC LIKE '%$keyword%' OR contactNo LIKE '%$keyword%'");
         }
         $users = $users->whereRaw('(userPantsApproved = 0 OR userPantsApproved IS NULL OR userShoesApproved = 0 OR userShoesApproved IS NULL)')->whereNotNull('userPants')->whereNotNull('userShoes');
         
@@ -254,6 +254,14 @@ class UsersManagementController extends Controller
 
     public function editUserPost(Request $request, $id){
         $user = User::find($id);
+        $status_data = null;
+        if($user->status_data == null || $user->status_data ==''){
+            $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+            foreach ($viewTypes as $key => $value) {
+                $status_data[$key] = 0;
+            }
+            $user->status_data = json_encode($status_data);
+        }
         $validator = Validator::make($request->all(), [
             'userName'     => 'required|max:255',
             //'userNRIC'     => 'required|min:6|max:200',

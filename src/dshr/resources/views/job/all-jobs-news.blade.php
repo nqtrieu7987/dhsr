@@ -53,10 +53,11 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    {{-- <th>Hotel</th>
-                                    <th>Job</th> --}}
+                                    <th>Hotel</th>
+                                    <th>Job</th>
                                     <th>Shift start</th>
                                     <th>Shift end</th>
+                                    <th>Start date</th>
                                     <th>Hours</th>
                                     <th>Actual T-in</th>
                                     <th>Actual T-out</th>
@@ -76,10 +77,11 @@
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
+                                        <td>{{$data->Jobs()->Hotels()->name}}</td>
+                                        <td>{{$data->Jobs()->Types()->name}}</td>
                                         <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
+                                        <td>{{$data->Jobs()->start_date}}</td>
                                         <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
@@ -149,10 +151,11 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    {{-- <th>Hotel</th>
-                                    <th>Job</th> --}}
+                                    <th>Hotel</th>
+                                    <th>Job</th>
                                     <th>Shift start</th>
                                     <th>Shift end</th>
+                                    <th>Start date</th>
                                     <th>Hours</th>
                                     <th>Actual T-in</th>
                                     <th>Actual T-out</th>
@@ -171,10 +174,11 @@
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
+                                        <td>{{$data->Jobs()->Hotels()->name}}</td>
+                                        <td>{{$data->Jobs()->Types()->name}}</td>
                                         <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
+                                        <td>{{$data->Jobs()->start_date}}</td>
                                         <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
@@ -239,10 +243,11 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    {{-- <th>Hotel</th>
-                                    <th>Job</th> --}}
+                                    <th>Hotel</th>
+                                    <th>Job</th>
                                     <th>Shift start</th>
                                     <th>Shift end</th>
+                                    <th>Start date</th>
                                     <th>Hours</th>
                                     <th>Actual T-in</th>
                                     <th>Actual T-out</th>
@@ -260,10 +265,11 @@
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
                                         <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
+                                        <td>{{$data->Jobs()->Hotels()->name}}</td>
+                                        <td>{{$data->Jobs()->Types()->name}}</td>
                                         <td>{{$data->Jobs()->start_time}}</td>
                                         <td>{{$data->Jobs()->end_time}}</td>
+                                        <td>{{$data->Jobs()->start_date}}</td>
                                         <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>

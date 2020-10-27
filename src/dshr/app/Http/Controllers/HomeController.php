@@ -11,6 +11,7 @@ use App\Models\Hotel;
 use App\Models\Bank;
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\ViewType;
 use Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
@@ -113,6 +114,14 @@ class HomeController extends Controller
                 }else{
                     $data->activated = abs($data->activated - 1);
                     $msg = abs($data->activated - 1);
+
+                    if($data->status_data == null || $data->status_data ==''){
+                        $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+                        foreach ($viewTypes as $key => $value) {
+                            $status_data[$key] = 0;
+                        }
+                        $data->status_data = json_encode($status_data);
+                    }
                 }
                 break;
             default:
@@ -129,10 +138,16 @@ class HomeController extends Controller
 
     public function changeStatusUser(Request $request){
         $user = User::find($request->id);
+        if($user->status_data == null || $user->status_data ==''){
+            $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+            foreach ($viewTypes as $key => $value) {
+                $status_data[$key] = 0;
+            }
+            $user->status_data = json_encode($status_data);
+        }
         $status_data = json_decode($user->status_data, true);
         $status = $request->stt;
         $type = $request->type;
-        
         $status_data[$type] = abs($status - 1);
         $user->update(['status_data' => json_encode($status_data)]);
 
