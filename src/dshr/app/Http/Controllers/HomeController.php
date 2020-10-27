@@ -114,6 +114,14 @@ class HomeController extends Controller
                 }else{
                     $data->activated = abs($data->activated - 1);
                     $msg = abs($data->activated - 1);
+
+                    if($data->status_data == null || $data->status_data ==''){
+                        $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+                        foreach ($viewTypes as $key => $value) {
+                            $status_data[$key] = 0;
+                        }
+                        $data->status_data = json_encode($status_data);
+                    }
                 }
                 break;
             default:
