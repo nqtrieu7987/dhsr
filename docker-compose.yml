@@ -4,15 +4,16 @@ services:
         image: romeoz/docker-nginx-php:7.2
         volumes:
             - "./fpm/www.conf:/etc/php/7.2/fpm/pool.d/www.comf"
-#            - "./configs/nginx.conf:/etc/nginx/nginx.conf"
-            - "./configs/dshr.mdcspace.vn.conf:/etc/nginx/sites-enabled/app.conf"
+            - "./conf/nginx.conf:/etc/nginx/nginx.conf"
+            - "./configs:/etc/nginx/sites-enabled"
             - "./src/dshr:/var/www/app"
-            - "./configs/general.conf:/etc/nginx/general.conf"
+            - "./conf/general.conf:/etc/nginx/general.conf"
             - "./ssl:/etc/nginx/conf.d"
             - "./log:/var/log/nginx"
         ports:
             - "80:80"
             - "443:443"
+            - "8443:8443"
         environment:
             - NGINX_HOST=${NGINX_HOST}
         restart: always
@@ -46,7 +47,7 @@ services:
             - "./srcnode:/src"
             - "./src/dshr/public/uploads:/uploads"
         ports:
-            - "8443:8443"
+            - "8442:8443"
         restart: always
         networks:
             chain_net:
