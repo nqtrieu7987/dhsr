@@ -111,7 +111,7 @@ async function getAllJobsById(id) {
 }
 async function getAllJobsInOut(user_id) {
   return new Promise(resolve => {
-    AllJobs.where('user_id', user_id).where('status', 'in', [1,2]).orderBy('id', 'ASC').fetch().then(function (job) {
+    AllJobs.where('user_id', user_id).where('status', 'in', [1,2]).orderBy('id', 'DESC').fetch().then(function (job) {
       if (job == null) {
         resolve(false);
       } else {
