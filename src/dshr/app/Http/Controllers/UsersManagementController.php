@@ -237,6 +237,7 @@ class UsersManagementController extends Controller
             })
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','<',date('Y-m-d'))
+            ->orderBy('status', 'ASC')
             ->paginate(20);
 
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
@@ -244,6 +245,7 @@ class UsersManagementController extends Controller
             })
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','>=',date('Y-m-d'))
+            ->orderBy('status', 'ASC')
             ->paginate(20);
 
         $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();

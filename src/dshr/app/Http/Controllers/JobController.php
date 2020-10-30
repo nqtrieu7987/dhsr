@@ -129,7 +129,7 @@ class JobController extends Controller
         $view_type = config('app.view_type');
         $color_status = config('app.color_status');
 
-        $jobsPrev = AllJob::where('job_id', $id)->orderBy('timestamp', 'DESC')->paginate(20);
+        $jobsPrev = AllJob::where('job_id', $id)->orderBy('status', 'ASC')->orderBy('timestamp', 'DESC')->paginate(20);
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('job.edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url','color_status'))->with('site','Job: '.$id);
@@ -217,7 +217,8 @@ class JobController extends Controller
             })
             ->select('all_jobs.*', 'job.job_type_id', 'job.hotel_id')
             ->whereIn('all_jobs.job_id', $ids)
-            ->orderBy('updated_at', 'DESC')
+            ->orderBy('status', 'ASC')
+            ->orderBy('id', 'DESC')
             ->paginate(20);
         }
         $attentions = [];

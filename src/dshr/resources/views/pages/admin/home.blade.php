@@ -57,8 +57,8 @@
                                           <td><a href="{{route('user.edit', $job->Users()->id)}}">{{$job->Users()->userName}}</a></td>
                                           <td>{{$current_slot}}</td>
                                           <td>{{$job->Jobs()->start_time}}</td>
-                                          <td>{{$job->end_time}}</td>
-                                          <td>{{$job->start_date}}</td>
+                                          <td>{{$job->Jobs()->end_time}}</td>
+                                          <td>{{$job->Jobs()->start_date}}</td>
                                           <td>{{$job->paidTimeIn}}</td>
                                           <td>{{$job->paidTimeOut}}</td>
                                           <td>{{$job->breakTime}}</td>

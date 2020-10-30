@@ -231,10 +231,10 @@ class HomeController extends Controller
             $msg = 'Cancel Successfully!';
             $stt = 202;
 
-            $data->userPants = null;
+            /*$data->userPants = null;
             $data->userShoes = null;
             $data->userPantsApproved = 0;
-            $data->userShoesApproved = 0;
+            $data->userShoesApproved = 0;*/
         }
         $data->save();
         return response()->json([
