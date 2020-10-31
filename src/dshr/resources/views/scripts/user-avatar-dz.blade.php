@@ -5,7 +5,7 @@ Dropzone.autoDiscover = false;
 $(function() {
    Dropzone.options.avatarDropzone = {
         paramName: 'file',
-        maxFilesize: 1, // MB
+        maxFilesize: 10, // MB
         addRemoveLinks: true,
         maxFiles: 1,
         acceptedFiles: ".jpeg,.jpg",
@@ -39,7 +39,7 @@ $(function() {
                 html += '</div>';
                 $('#avatarDropzone .dz-message').html(html).show();
                 setTimeout(function() {
-                    $('#avatarDropzone .dz-message').html('<img src="/images/camera.png">').show();
+                    $('#avatarDropzone .dz-message').html('<span style="position: relative;top: -44px;right: -20px;"><img src="{{MEDIADOMAIN}}/images/camera.png"></span>').show();
                 }, 2000);
                 $('.avatarImage').attr('src', '/images/profile/{{ $user->id }}/avatar/avatar.jpg?' + new Date().getTime());
             });
@@ -51,7 +51,7 @@ $(function() {
                 html += '</div>';
                 $('#avatarDropzone .dz-message').html(html).show();
                 setTimeout(function() {
-                    $('#avatarDropzone .dz-message').html('<img src="/images/camera.png">').show();
+                    $('#avatarDropzone .dz-message').html('<span style="position: relative;top: -44px;right: -20px;"><img src="{{MEDIADOMAIN}}/images/camera.png"></span>').show();
                 }, 2000);
             });
         }

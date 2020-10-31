@@ -3,10 +3,10 @@ Dropzone.autoDiscover = false;
 $(function() {
    Dropzone.options.NRICFrontDZ = {
         paramName: 'file',
-        maxFilesize: 1, // MB
+        maxFilesize: 10, // MB
         addRemoveLinks: true,
         maxFiles: 1,
-        acceptedFiles: ".jpeg,.jpg",
+        acceptedFiles: ".jpeg,.jpg,.png",
         renameFile: 'nric.jpg',
         headers: {
             "Pragma": "no-cache"
@@ -37,7 +37,7 @@ $(function() {
                 html += '</div>';
                 $('#NRICFrontDZ .dz-message').html(html).show();
                 setTimeout(function() {
-                    $('#NRICFrontDZ .dz-message').text('<img src="/images/camera.png">').show();
+                    $('#NRICFrontDZ .dz-message').html('<span style="position: relative;top: -44px;right: -20px;"><img src="{{MEDIADOMAIN}}/images/camera.png"></span>').show();
                 }, 2000);
                 $('.NRICFront').attr('src', '/uploads/users/id/{{ $user->id }}/'+file.upload.filename+'?' + new Date().getTime());
             });
@@ -49,7 +49,7 @@ $(function() {
                 html += '</div>';
                 $('#NRICFrontDZ .dz-message').html(html).show();
                 setTimeout(function() {
-                    $('#NRICFrontDZ .dz-message').text('<img src="/images/camera.png">').show();
+                    $('#NRICFrontDZ .dz-message').html('<span style="position: relative;top: -44px;right: -20px;"><img src="{{MEDIADOMAIN}}/images/camera.png"></span>').show();
                 }, 2000);
             });
         }
