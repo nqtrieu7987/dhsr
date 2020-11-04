@@ -353,7 +353,7 @@ module.exports.create = function (server, host, port, publicDir) {
 			res.json({ message: 'hotel_name not null!', resultCode: 1 });
 			return "";
 		}
-		notification.sendMessageForJobStatus(email, type, status);
+		notification.sendMessageForJobStatus(email, status, jobName, hotelName);
 		res.setHeader('Content-Type', 'application/json; charset=utf-8');
 		res.send({ message: "Sending Successfull!", resultCode: 0 });
 	});
