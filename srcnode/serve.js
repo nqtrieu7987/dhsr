@@ -20,13 +20,13 @@ var querystring = require('querystring');
 //
 options = {
  // key: fs.readFileSync(path.join(certsPath, 'my-server.key.pem'))
-key: fs.readFileSync('./educa.vn.key')
+//key: fs.readFileSync('./educa.vn.key')
   // This certificate should be a bundle containing your server certificate and any intermediates
   // cat certs/cert.pem certs/chain.pem > certs/server-bundle.pem
-, cert: fs.readFileSync('./educa.vn.crt')
+//, cert: fs.readFileSync('./educa.vn.crt')
   // ca only needs to be specified for peer-certificates
 //, ca: [ fs.readFileSync(path.join(caCertsPath, 'my-root-ca.crt.pem')) ]
-, requestCert: false
+ requestCert: false
 , rejectUnauthorized: true
 };
 
@@ -34,26 +34,26 @@ key: fs.readFileSync('./educa.vn.key')
 //
 // Serve an Express App securely with HTTPS
 //
-server = https.createServer(options);
-checkip.getExternalIp().then(function (ip) {
-  var host = ip || 'local.helloworld3000.com';
+//server = https.createServer(options);
+//checkip.getExternalIp().then(function (ip) {
+//  var host = ip || 'local.helloworld3000.com';
 
-  function listen(app) {
-    server.on('request', app);
-    server.listen(port, function () {
-      port = server.address().port;
+//  function listen(app) {
+//    server.on('request', app);
+//    server.listen(port, function () {
+//      port = server.address().port;
       // utils.writeLog('Listening on https://127.0.0.1:' + port);
-      utils.writeLog('Listening on https://127.0.0.1:' + port);
-      if (ip) {
-        utils.writeLog('Listening on https://' + ip + ':' + port);
-      }
-    });
-  }
+//      utils.writeLog('Listening on https://127.0.0.1:' + port);
+//      if (ip) {
+//        utils.writeLog('Listening on https://' + ip + ':' + port);
+//      }
+//    });
+//  }
 
-  var publicDir = path.join(__dirname, 'public');
-  var app = require('./app').create(server, host, port, publicDir);
-  listen(app);
-});
+//  var publicDir = path.join(__dirname, 'public');
+//  var app = require('./app').create(server, host, port, publicDir);
+//  listen(app);
+//});
 
 
 //
@@ -61,16 +61,18 @@ checkip.getExternalIp().then(function (ip) {
 //
 // This simply redirects from the current insecure location to the encrypted location
 //
-insecureServer = http.createServer();
-insecureServer.on('request', function (req, res) {
-  // TODO also redirect websocket upgrades
-  res.setHeader(
-    'Location'
-  , 'https://' + req.headers.host.replace(/:\d+/, ':' + port) + req.url
-  );
-  res.statusCode = 302;
-  res.end();
-});
-insecureServer.listen(4080, function(){
-  // utils.writeLog("\nRedirecting all http traffic to https\n");
-});
+server= http.createServer();
+  var host = '127.0.0.1';
+  function listen(app) {
+    server.on('request', app);
+    server.listen(port, function () {
+      port = server.address().port;
+      // utils.writeLog('Listening on https://127.0.0.1:' + port);
+      utils.writeLog('Listening on https://127.0.0.1:' + port);
+     
+    });
+  }
+
+  var publicDir = path.join(__dirname, 'public');
+  var app = require('./app').create(server, host, port, publicDir);
+  listen(app);
