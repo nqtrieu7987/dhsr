@@ -69,7 +69,7 @@ class HomeController extends Controller
                     $msg = $request->value;
                     if($request->value == 0){
                         //Xoa file khi reject
-                        if(file_exists(public_path().$data->userPants)){
+                        if(file_exists(public_path().$data->userPants) && $data->userPants != ''){
                             unlink(public_path().$data->userPants);
                             $thumb = str_replace('.png', '_thumb.png', $data->userPants);
                             if(file_exists(public_path().$thumb)){
@@ -93,7 +93,7 @@ class HomeController extends Controller
                     $msg = $request->value;
                     if($request->value == 0){
                         //Xoa file khi reject
-                        if(file_exists(public_path().$data->userShoes)){
+                        if(file_exists(public_path().$data->userShoes) && $data->userShoes != ''){
                             unlink(public_path().$data->userShoes);
                             $thumb = str_replace('.png', '_thumb.png', $data->userShoes);
                             if(file_exists(public_path().$thumb)){
@@ -179,6 +179,14 @@ class HomeController extends Controller
                     $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
                     $msg = 'Approve Successfully!';
                     $stt = 200;
+
+                    //Push notify approved job
+                    $body = array('email' => $data->Users()->email,'status' => 1,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    try {
+                        $res = config('app.service')->post('user/notify_job_status', [
+                            'form_params' => $body
+                        ]);
+                    } catch (\GuzzleHttp\Exception\ClientException $e) {}
                 }else{
                     $msg = 'Failed!';
                     $stt = 203;
@@ -192,6 +200,16 @@ class HomeController extends Controller
             $data->status = $status;
             $msg = 'Cancel Successfully!';
             $stt = 202;
+
+            //Push notify cancel job
+            if($data->status != 4){
+                $body = array('email' => $data->Users()->email,'status' => 4,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                try {
+                    $res = config('app.service')->post('user/notify_job_status', [
+                        'form_params' => $body
+                    ]);
+                } catch (\GuzzleHttp\Exception\ClientException $e) {}
+            }
         }
         $data->save();
         return response()->json([
@@ -217,6 +235,14 @@ class HomeController extends Controller
                     $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
                     $msg = 'Approve Successfully!';
                     $stt = 200;
+
+                    //Push notify approved job
+                    $body = array('email' => $data->Users()->email,'status' => 1,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    try {
+                        $res = config('app.service')->post('user/notify_job_status', [
+                            'form_params' => $body
+                        ]);
+                    } catch (\GuzzleHttp\Exception\ClientException $e) {}
                 }else{
                     $msg = 'Failed!';
                     $stt = 203;
@@ -235,6 +261,16 @@ class HomeController extends Controller
             $data->userShoes = null;
             $data->userPantsApproved = 0;
             $data->userShoesApproved = 0;*/
+
+            //Push notify cancel job
+            if($data->status != 4){
+                $body = array('email' => $data->Users()->email,'status' => 4,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                try {
+                    $res = config('app.service')->post('user/notify_job_status', [
+                        'form_params' => $body
+                    ]);
+                } catch (\GuzzleHttp\Exception\ClientException $e) {}
+            }
         }
         $data->save();
         return response()->json([

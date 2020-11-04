@@ -197,9 +197,25 @@ class AdminController extends Controller
         if($request->type == 2){
             $user = User::find($data->user_id);
             // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
-            if($data->rwsConfirmed != 1 && $request->status == 1){
-                $user->update(['jobsDone' => $user->jobsDone + 1]);
+            if($data->rwsConfirmed != 1){
+                if($request->status == 1){
+                    $user->update(['jobsDone' => $user->jobsDone + 1]);
+                    // Cập nhật trạng thái cho job: 3: Complete, 5 Fail
+                    $data->update(['status' => 3]);
+                }else{
+                    //Push notify fail job
+                    if($data->status != 5){
+                        $data->update(['status' => 5]);
+                        $body = array('email' => $data->Users()->email,'status' => 5,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                        try {
+                            $res = config('app.service')->post('user/notify_job_status', [
+                                'form_params' => $body
+                            ]);
+                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
+                    }
+                }
             }
+
             // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
             // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
             if(file_exists(public_path().$data->userPants) && public_path().$data->userPants != public_path()){
@@ -296,6 +312,14 @@ class AdminController extends Controller
                     $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
                     $msg = 'Approve Successfully!';
                     $stt = 200;
+
+                    //Push notify approved job
+                    $body = array('email' => $data->Users()->email,'status' => 1,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    try {
+                        $res = config('app.service')->post('user/notify_job_status', [
+                            'form_params' => $body
+                        ]);
+                    } catch (\GuzzleHttp\Exception\ClientException $e) {}
                 }else{
                     $msg = 'Failed!';
                     $stt = 203;
@@ -314,6 +338,16 @@ class AdminController extends Controller
             $data->userShoes = null;
             $data->userPantsApproved = 0;
             $data->userShoesApproved = 0;*/
+
+            //Push notify cancel job
+            if($data->status != 4){
+                $body = array('email' => $data->Users()->email,'status' => 4,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                try {
+                    $res = config('app.service')->post('user/notify_job_status', [
+                        'form_params' => $body
+                    ]);
+                } catch (\GuzzleHttp\Exception\ClientException $e) {}
+            }
         }
         $data->save();
         return response()->json([

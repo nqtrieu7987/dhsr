@@ -60,9 +60,6 @@ Route::group(['middleware' => ['auth', 'check_roles']], function () {
         'uses' => 'ProfilesController@show',
     ]);
 
-    Route::resource('banner', 'BannerController');
-    Route::resource('article', 'ArticleController');
-    Route::resource('page', 'PageController');
     Route::resource('hotel', 'HotelController');
     Route::resource('bank', 'BankController');
     Route::resource('view-type', 'ViewTypeController');

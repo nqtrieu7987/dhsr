@@ -104,8 +104,23 @@ class AjaxController extends Controller
         if($request->type == 2){
             $user = User::find($data->user_id);
             // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
-            if($data->rwsConfirmed != 1 && $request->status == 1){
-                $user->update(['jobsDone' => $user->jobsDone + 1]);
+            if($data->rwsConfirmed != 1){
+                if($request->status == 1){
+                    $user->update(['jobsDone' => $user->jobsDone + 1]);
+                    // Cập nhật trạng thái cho job: 3: Complete, 5 Fail
+                    $data->update(['status' => 3]);
+                }else{
+                    //Push notify fail job
+                    if($data->status != 5){
+                        $data->update(['status' => 5]);
+                        $body = array('email' => $data->Users()->email,'status' => 5,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                        try {
+                            $res = config('app.service')->post('user/notify_job_status', [
+                                'form_params' => $body
+                            ]);
+                        } catch (\GuzzleHttp\Exception\ClientException $e) {}
+                    }
+                }
             }
             // Khi commit job done, failure, cancel => set 2 thuộc tính userPantsApproved, userShoesApproved về false 
             // Nếu user đã được phê duyệt cả Pants và Shoes thì set userPants, userShoes = null
@@ -147,6 +162,14 @@ class AjaxController extends Controller
             'remarks' => $request->get('remarks'),
         ]);
         
+        //Push notify job
+        $body = array('email' => $data->Users()->email,'status' => $data->status,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+        try {
+            $res = config('app.service')->post('user/notify_job_status', [
+                'form_params' => $body
+            ]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {}
+
         \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
 
         Session::flash('success', 'Confirm success!');
