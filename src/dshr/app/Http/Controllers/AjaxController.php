@@ -98,11 +98,11 @@ class AjaxController extends Controller
             $totalHours = round($timeDiff/3600, 2) - $request->get('breakTime');
         }
 
-        $data = AllJob::find($request->get('id'));
+        $data = AllJob::findOrFail($request->get('id'));
         //Neu bam approved => type = 2
         $status = null;
         if($request->type == 2){
-            $user = User::find($data->user_id);
+            $user = User::findOrFail($data->user_id);
             // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
             if($data->rwsConfirmed != 1){
                 if($request->status == 1){

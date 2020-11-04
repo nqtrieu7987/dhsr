@@ -85,7 +85,7 @@ class ThemesManagementController extends Controller
      */
     public function show($id)
     {
-        $theme = Theme::find($id);
+        $theme = Theme::findOrFail($id);
         $users = User::all();
         $themeUsers = [];
 
@@ -112,7 +112,7 @@ class ThemesManagementController extends Controller
      */
     public function edit($id)
     {
-        $theme = Theme::find($id);
+        $theme = Theme::findOrFail($id);
         $users = User::all();
         $themeUsers = [];
 
@@ -140,7 +140,7 @@ class ThemesManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $theme = Theme::find($id);
+        $theme = Theme::findOrFail($id);
 
         $input = Input::only('name', 'link', 'notes', 'status');
 

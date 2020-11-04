@@ -97,7 +97,7 @@ class ViewTypeController extends Controller
      */
     public function edit($id)
     {
-        $data = ViewType::find($id);
+        $data = ViewType::findOrFail($id);
 
         $link_url = ['url' => route('view-type.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('view-type.edit',compact('data','link_url'))->with('site','ViewType: '.$id);
@@ -116,7 +116,7 @@ class ViewTypeController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $data= ViewType::find($id);
+        $data= ViewType::findOrFail($id);
 
         $image = $data->image_active;
         if($request->image_active !=null && $data->image_active != $request->image_active)
@@ -139,7 +139,7 @@ class ViewTypeController extends Controller
         }
 
         $active = $request->is_active;
-        ViewType::find($id)->update([
+        ViewType::findOrFail($id)->update([
             'name' => $request->name,
             'image_active' => $image,
             'image_deactive' => $logo,
@@ -158,7 +158,7 @@ class ViewTypeController extends Controller
      */
     public function destroy($id)
     {
-        ViewType::find($id)->delete();
+        ViewType::findOrFail($id)->delete();
         return redirect()->back();
     }
 }

@@ -21,8 +21,6 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Schema::defaultStringLength(191);
-        $bannerHeader = Banner::where('is_active', 1)->where('type', 6)->first();
-        view()->share('bannerHeader', $bannerHeader);
     }
 
     /**

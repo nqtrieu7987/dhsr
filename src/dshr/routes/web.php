@@ -13,30 +13,29 @@
 |
 */
 
-// Homepage Route
-Route::group(['middleware' => ['web', 'checkblocked']], function () {
-    Route::get('/', 'UserController@index')->name('public.home');
-});
-
 // Authentication Routes
 Auth::routes();
 
 // Public Routes
-Route::group(['middleware' => ['web', 'activity', 'checkblocked']], function () {
+Route::group(['middleware' => ['web', 'checkblocked']], function () {
+    // Homepage Route
+    Route::get('/', 'UserController@index')->name('public.home');
 
-    // Activation Routes
-    Route::get('/activate', ['as' => 'activate', 'uses' => 'Auth\ActivateController@initial']);
+    Route::group(['middleware' => ['activity']], function () {
+        // Activation Routes
+        Route::get('/activate', ['as' => 'activate', 'uses' => 'Auth\ActivateController@initial']);
 
-    Route::get('/activate/{token}', ['as' => 'authenticated.activate', 'uses' => 'Auth\ActivateController@activate']);
-    Route::get('/activation', ['as' => 'authenticated.activation-resend', 'uses' => 'Auth\ActivateController@resend']);
-    Route::get('/exceeded', ['as' => 'exceeded', 'uses' => 'Auth\ActivateController@exceeded']);
+        Route::get('/activate/{token}', ['as' => 'authenticated.activate', 'uses' => 'Auth\ActivateController@activate']);
+        Route::get('/activation', ['as' => 'authenticated.activation-resend', 'uses' => 'Auth\ActivateController@resend']);
+        Route::get('/exceeded', ['as' => 'exceeded', 'uses' => 'Auth\ActivateController@exceeded']);
 
-    // Socialite Register Routes
-    Route::get('/social/redirect/{provider}', ['as' => 'social.redirect', 'uses' => 'Auth\SocialController@getSocialRedirect']);
-    Route::get('/social/handle/{provider}', ['as' => 'social.handle', 'uses' => 'Auth\SocialController@getSocialHandle']);
+        // Socialite Register Routes
+        Route::get('/social/redirect/{provider}', ['as' => 'social.redirect', 'uses' => 'Auth\SocialController@getSocialRedirect']);
+        Route::get('/social/handle/{provider}', ['as' => 'social.handle', 'uses' => 'Auth\SocialController@getSocialHandle']);
 
-    // Route to for user to reactivate their user deleted account.
-    Route::get('/re-activate/{token}', ['as' => 'user.reactivate', 'uses' => 'RestoreUserController@userReActivate']);
+        // Route to for user to reactivate their user deleted account.
+        Route::get('/re-activate/{token}', ['as' => 'user.reactivate', 'uses' => 'RestoreUserController@userReActivate']);
+    });
 });
 
 // Registered and Activated User Routes

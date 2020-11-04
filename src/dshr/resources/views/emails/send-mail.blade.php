@@ -12,10 +12,8 @@
                                 <tbody>
                                     <tr>
                                         <td style="padding:20px 0;text-align:center">
-                                            <a style="text-decoration: none;" href="http://email.mg.uplabs.com/c/eJxNjcsKwyAQRb8mLmXGqGMXLlJIf6OoMQ9qmpAYpH9f6apwV-fAuYO9aQrCs8UKQAMKCUGSVBw5kbhT3_UazA177BoJ68SvPTl_8rCtbLZVOGw90CgUjFEriQKCMQK8G3RLLNk55_1s2q4Rj7pSyl-hAnbY4Qp-y4KwHkyrW9Ivnq1fSoyv9Hm-YzlTzDkeX0HXNEA"
-                                                target="_blank"
-                                                data-saferedirecturl="https://www.google.com/url?q=http://email.mg.uplabs.com/c/eJxNjcsKwyAQRb8mLmXGqGMXLlJIf6OoMQ9qmpAYpH9f6apwV-fAuYO9aQrCs8UKQAMKCUGSVBw5kbhT3_UazA177BoJ68SvPTl_8rCtbLZVOGw90CgUjFEriQKCMQK8G3RLLNk55_1s2q4Rj7pSyl-hAnbY4Qp-y4KwHkyrW9Ivnq1fSoyv9Hm-YzlTzDkeX0HXNEA&amp;source=gmail&amp;ust=1602413978100000&amp;usg=AFQjCNFq2qQlqGNlLZ8ZtOhPOFWwj6QjUQ">
-                                                <img src="http://45.32.250.218/images/logo1.png" class="CToWUd" width="200" height="50" border="0" style="width: 50px;">
+                                            <a style="text-decoration: none;" href="https://mdcspace.vn" target="_blank">
+                                                <img src="https://mdcspace.vn/images/logo1.png" class="CToWUd" width="200" height="50" border="0" style="width: 50px;position: relative;top: 15px">
                                                 <span style="color: #4b545c;font-size: 32px;font-weight: bold;position: relative;top: -13px;">DSHR Human Resource</span>
                                             </a>
                                         </td>

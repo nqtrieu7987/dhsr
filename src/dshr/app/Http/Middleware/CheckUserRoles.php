@@ -36,7 +36,7 @@ class CheckUserRoles
             $roles = $roles->toArray();
 
             if ($user->hasRole(implode(',', $roles))) {
-                $currentRole = Role::find($user->roles[0]->id);
+                $currentRole = Role::findOrFail($user->roles[0]->id);
                 $role_permission = DB::table('permission_role')->where('role_id', $currentRole->id)->pluck('permission_id')->toArray();
                 $permissions = Permission::whereIn('id', $role_permission)->pluck('slug')->toArray();
 

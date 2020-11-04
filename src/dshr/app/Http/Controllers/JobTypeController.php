@@ -78,7 +78,7 @@ class JobTypeController extends Controller
      */
     public function edit($id)
     {
-        $data=JobType::find($id);
+        $data=JobType::findOrFail($id);
         $link_url = ['url' => route('job-type.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('job-type.edit',compact('data','link_url'))->with('site','Job Type: '.$id);
     }
@@ -96,10 +96,10 @@ class JobTypeController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $data= JobType::find($id);
+        $data= JobType::findOrFail($id);
 
         $active = $request->is_active;
-        JobType::find($id)->update([
+        JobType::findOrFail($id)->update([
             'name' => $request->name,
             'comment' => $request->comment,
             'is_active'  => $active,
@@ -117,7 +117,7 @@ class JobTypeController extends Controller
      */
     public function destroy($id)
     {
-        JobType::find($id)->delete();
+        JobType::findOrFail($id)->delete();
         Session::flash('success', 'Delete successfully!');
         return redirect()->route('job-type.index');
     }

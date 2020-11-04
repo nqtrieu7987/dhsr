@@ -99,7 +99,7 @@ class HotelController extends Controller
      */
     public function edit($id)
     {
-        $hotel=Hotel::find($id);
+        $hotel=Hotel::findOrFail($id);
 
         $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
         $status = config('app.job_status');
@@ -133,7 +133,7 @@ class HotelController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $hotel= Hotel::find($id);
+        $hotel= Hotel::findOrFail($id);
 
         $image = $hotel->image;
         if($request->image !=null && $hotel->image != $request->image)
@@ -158,7 +158,7 @@ class HotelController extends Controller
         }
 
         $active = $request->is_active;
-        Hotel::find($id)->update([
+        Hotel::findOrFail($id)->update([
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
@@ -179,7 +179,7 @@ class HotelController extends Controller
      */
     public function destroy($id)
     {
-        Hotel::find($id)->delete();
+        Hotel::findOrFail($id)->delete();
         return redirect()->back();
     }
 }

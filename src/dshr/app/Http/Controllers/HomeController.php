@@ -42,27 +42,27 @@ class HomeController extends Controller
         $type = $request->type;
         switch ($request->model) {
             case 'job':
-                $data = Job::find($request->id);
+                $data = Job::findOrFail($request->id);
                 $data->is_active = abs($data->is_active - 1);
                 $msg = abs($data->is_active - 1);
                 break;
             case 'job-type':
-                $data = JobType::find($request->id);
+                $data = JobType::findOrFail($request->id);
                 $data->is_active = abs($data->is_active - 1);
                 $msg = abs($data->is_active - 1);
                 break;
             case 'hotel':
-                $data = Hotel::find($request->id);
+                $data = Hotel::findOrFail($request->id);
                 $data->is_active = abs($data->is_active - 1);
                 $msg = abs($data->is_active - 1);
                 break;
             case 'bank':
-                $data = Bank::find($request->id);
+                $data = Bank::findOrFail($request->id);
                 $data->is_active = abs($data->is_active - 1);
                 $msg = abs($data->is_active - 1);
                 break;
             case 'user':
-                $data = User::find($request->id);
+                $data = User::findOrFail($request->id);
                 $status = true;
                 if($type == 'userPantsApproved'){
                     $data->userPantsApproved = $request->value;
@@ -137,7 +137,7 @@ class HomeController extends Controller
     }
 
     public function changeStatusUser(Request $request){
-        $user = User::find($request->id);
+        $user = User::findOrFail($request->id);
         if($user->status_data == null || $user->status_data ==''){
             $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
             foreach ($viewTypes as $key => $value) {
@@ -163,7 +163,7 @@ class HomeController extends Controller
     }
 
     public function changeJobStatus(Request $request){
-        $data = AllJob::find($request->id);
+        $data = AllJob::findOrFail($request->id);
         if($request->type == 'approve'){
             $status = 1;
             Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
@@ -219,7 +219,7 @@ class HomeController extends Controller
     }
 
     public function changeUpdateStatus(Request $request){
-        $data = AllJob::find($request->id);
+        $data = AllJob::findOrFail($request->id);
         if($request->type == 'approve'){
             $status = 1;
             Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
@@ -287,7 +287,7 @@ class HomeController extends Controller
     }
 
     public function adminEdit(Request $request, $id){
-        $user = Admin::find($id);
+        $user = Admin::findOrFail($id);
         $hotels = Hotel::pluck('name', 'id')->toArray();
 
         $link_url = ['url' => route('admin.listUsers'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
@@ -302,7 +302,7 @@ class HomeController extends Controller
             'email' => 'required'
         ]);
 
-        $data = Admin::find($id)->update([
+        $data = Admin::findOrFail($id)->update([
             'hotel_id' => $request->hotel_id,
             'name' => $request->name,
             'email' => $request->email
@@ -313,7 +313,7 @@ class HomeController extends Controller
     }
 
     public function adminDelete($id){
-        Admin::find($id)->delete();
+        Admin::findOrFail($id)->delete();
         return redirect()->route('admin.listUsers')->with('success', 'Delete successfully!');
     }
 }

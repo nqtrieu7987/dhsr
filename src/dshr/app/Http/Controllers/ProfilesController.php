@@ -63,7 +63,7 @@ class ProfilesController extends Controller
             abort(404);
         }
 
-        $currentTheme = Theme::find($user->profile->theme_id);
+        $currentTheme = Theme::findOrFail($user->profile->theme_id);
 
         $data = [
             'user'         => $user,
@@ -94,7 +94,7 @@ class ProfilesController extends Controller
                         ->orderBy('name', 'asc')
                         ->get();
 
-        $currentTheme = Theme::find($user->profile->theme_id);
+        $currentTheme = Theme::findOrFail($user->profile->theme_id);
 
         $data = [
             'user'         => $user,
@@ -233,7 +233,7 @@ class ProfilesController extends Controller
     public function upload(Request $request)
     {
         if (Input::hasFile('file')) {
-            $currentUser = User::find($request->id);
+            $currentUser = User::findOrFail($request->id);
             $avatar = Input::file('file');
             $filename = 'avatar.'.$avatar->getClientOriginalExtension();
             $save_path = storage_path().'/users/id/'.$currentUser->id.'/uploads/images/avatar/';

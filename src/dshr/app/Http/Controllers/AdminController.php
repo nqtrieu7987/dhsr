@@ -43,7 +43,7 @@ class AdminController extends Controller
         $hotel = null;
         $data = null;
         if(Auth::user()->hotel_id > 0){
-            $hotel = Hotel::find(Auth::user()->hotel_id);
+            $hotel = Hotel::findOrFail(Auth::user()->hotel_id);
             $data = AllJob::whereIn('job_id', function($query)
                         {
                             $query->select(DB::raw('id'))
@@ -79,7 +79,7 @@ class AdminController extends Controller
         $datas = null;
 
         if(Auth::user()->hotel_id > 0){
-            $hotel = Hotel::find(Auth::user()->hotel_id);
+            $hotel = Hotel::findOrFail(Auth::user()->hotel_id);
             //search
             $jobs = Job::select('*');
             $jobs = $jobs->where('hotel_id', Auth::user()->hotel_id);
@@ -153,7 +153,7 @@ class AdminController extends Controller
                 $timestamp = date('Y') . date('m') . date('d');
 
                 if($request->job > 0){
-                    $job = JobType::find($request->job);
+                    $job = JobType::findOrFail($request->job);
                 }else{
                     return redirect()->back()->withErrors(['job'=> 'You must select job.']);
                 }
@@ -191,11 +191,11 @@ class AdminController extends Controller
             $totalHours = round($timeDiff/3600, 2) - $request->get('breakTime');
         }
 
-        $data = AllJob::find($request->get('id'));
+        $data = AllJob::findOrFail($request->get('id'));
         //Neu bam approved => type = 2
         $status = null;
         if($request->type == 2){
-            $user = User::find($data->user_id);
+            $user = User::findOrFail($data->user_id);
             // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
             if($data->rwsConfirmed != 1){
                 if($request->status == 1){
@@ -260,7 +260,7 @@ class AdminController extends Controller
             'status' => $status,
             'body' => 'Job: '.$data->Jobs()->Types()->name.', Hotel: '.$data->Jobs()->Hotels()->name. '<br> Start time: '.$data->paidTimeIn. ', End time: '.$data->paidTimeOut. ', Break time: '.$data->breakTime. 'hours, Total: '.$data->totalHours.' hours, Remarks'.$data->remarks
         ];
-        \Mail::to($user->email)->send(new \App\Mail\SendMail($details));
+        \Mail::to($user->email)->queue(new \App\Mail\SendMail($details));
         
         \Log::channel('inOut')->info("User: ".Auth::user()->id. " data=". json_encode($data));
 
@@ -296,7 +296,7 @@ class AdminController extends Controller
     }
 
     public function changeUpdateStatus(Request $request){
-        $data = AllJob::find($request->id);
+        $data = AllJob::findOrFail($request->id);
         if($request->type == 'approve'){
             $status = 1;
             Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);

@@ -104,7 +104,7 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        $page = Page::find($id);
+        $page = Page::findOrFail($id);
         $commands = Command::where('is_active', 1)->pluck('name', 'id');
         $banners = Banner::where('is_active', 1)->pluck('name', 'id')->toArray();
         $banners[0] ='Chọn banner';
@@ -130,7 +130,7 @@ class PageController extends Controller
         $this->validate($request,[
         ]);
 
-        $page= Page::find($id);
+        $page= Page::findOrFail($id);
         $article_list = null;
         if($request->article_list != ''){
             $article_list = implode(',', $request->article_list);
@@ -163,7 +163,7 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        Page::find($id)->delete();
+        Page::findOrFail($id)->delete();
         return redirect()->back();
     }
 }

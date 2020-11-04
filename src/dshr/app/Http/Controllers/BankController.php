@@ -85,7 +85,7 @@ class BankController extends Controller
      */
     public function edit($id)
     {
-        $bank=Bank::find($id);
+        $bank=Bank::findOrFail($id);
         $link_url = ['url' => route('bank.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('bank.edit',compact('bank','link_url'))->with('site','Bank: '.$id);
     }
@@ -103,7 +103,7 @@ class BankController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $bank= Bank::find($id);
+        $bank= Bank::findOrFail($id);
 
         $logo = $bank->logo;
         if($request->logo !=null && $bank->logo != $request->logo)
@@ -117,7 +117,7 @@ class BankController extends Controller
         }
 
         $active = $request->is_active;
-        Bank::find($id)->update([
+        Bank::findOrFail($id)->update([
             'name' => $request->name,
             'logo' => $logo,
             'is_active'  => $active,
@@ -135,7 +135,7 @@ class BankController extends Controller
      */
     public function destroy($id)
     {
-        Bank::find($id)->delete();
+        Bank::findOrFail($id)->delete();
         return redirect()->back();
     }
 }

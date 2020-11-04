@@ -80,7 +80,7 @@ class CommandController extends Controller
      */
     public function edit($id)
     {
-        $command=Command::find($id);
+        $command=Command::findOrFail($id);
         $providers =config('app.provider');
         return view('command.edit',compact('command'))->with('site','command')->with('providers',$providers);
     }
@@ -97,10 +97,10 @@ class CommandController extends Controller
         $this->validate($request,[
         ]);
 
-        $command= Command::find($id);
+        $command= Command::findOrFail($id);
 
         $active = $request->is_active;
-        Command::find($id)->update([
+        Command::findOrFail($id)->update([
             'name' => $request->name,
             'viettel' => $request->viettel,
             'mobiphone' => $request->mobiphone,
@@ -121,7 +121,7 @@ class CommandController extends Controller
      */
     public function destroy($id)
     {
-        Command::find($id)->delete();
+        Command::findOrFail($id)->delete();
         return redirect()->back();
     }
 }

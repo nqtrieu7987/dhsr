@@ -119,7 +119,7 @@ class JobAdminController extends Controller
      */
     public function edit($id)
     {
-        $data=Job::find($id);
+        $data=Job::findOrFail($id);
         $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
         $status = config('app.job_status');
         $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
@@ -148,10 +148,10 @@ class JobAdminController extends Controller
             'start_date' => 'required'
         ]);
 
-        $data= Job::find($id);
+        $data= Job::findOrFail($id);
 
         $active = $request->is_active;
-        Job::find($id)->update([
+        Job::findOrFail($id)->update([
             /*'hotel_id' => $request->hotel_id,*/
             'job_type_id' => $request->job_type_id,
             'slot' => $request->slot,
@@ -174,7 +174,7 @@ class JobAdminController extends Controller
      */
     public function destroy($id)
     {
-        Job::find($id)->delete();
+        Job::findOrFail($id)->delete();
         Session::flash('success', 'Delete successfully!');
         return redirect()->route('job.index');
     }
@@ -241,7 +241,7 @@ class JobAdminController extends Controller
     }
 
     public function approved(Request $request, $id){
-        $data = AllJob::find($id);
+        $data = AllJob::findOrFail($id);
         $data->status = 1;
         $data->remarks = $request->remarks;
         $data->save();
@@ -255,12 +255,12 @@ class JobAdminController extends Controller
         if($request->hotel_id > 0){
             $jobs = $jobs->where('hotel_id', $request->hotel_id);
             $check_search = true;
-            $hotel = Hotel::find($request->hotel_id);
+            $hotel = Hotel::findOrFail($request->hotel_id);
         }
         if($request->job > 0){
             $jobs = $jobs->where('job_type_id', $request->job);
             $check_search = true;
-            $job = JobType::find($request->job);
+            $job = JobType::findOrFail($request->job);
         }
         if($request->start_date != ''){
             $start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
@@ -326,11 +326,11 @@ class JobAdminController extends Controller
         $jobs = Job::select('*');
         if($request->hotel_id > 0){
             $jobs = $jobs->where('hotel_id', $request->hotel_id);
-            $hotels = Hotel::find($request->hotel_id);
+            $hotels = Hotel::findOrFail($request->hotel_id);
         }
         if($request->job > 0){
             $jobs = $jobs->where('job_type_id', $request->job);
-            $job = JobType::find($request->job);
+            $job = JobType::findOrFail($request->job);
         }else{
             return redirect()->route('report.job');
         }
@@ -400,7 +400,7 @@ class JobAdminController extends Controller
         $end_time = str_replace(" ", "", $request->get('end_time'));
         $msg = 'Create successfully!';
         if($request->get('id') > 0){
-            $data = Job::find($request->get('id'));
+            $data = Job::findOrFail($request->get('id'));
             if($data){
                 $data->update([
                     'hotel_id' => $request->get('hotel_id'),
@@ -435,7 +435,7 @@ class JobAdminController extends Controller
     }
 
     public function inOut(Request $request, $id){
-        $data = AllJob::find($id);
+        $data = AllJob::findOrFail($id);
         $link_url = ['url' => route('job.edit', $data->job_id), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         $status = [1 =>'Job Done', 2 =>'Job Failure'];
         return view('admin.job-in-out',compact('data','link_url','status'))->with('site','Job');
@@ -466,8 +466,8 @@ class JobAdminController extends Controller
             $totalHours = round($timeDiff/3600, 2) - $request->get('breakTime');
         }
 
-        $data = AllJob::find($id);
-        $user = User::find($data->user_id);
+        $data = AllJob::findOrFail($id);
+        $user = User::findOrFail($data->user_id);
         // Chỉ khi chưa confirm lần nào và status = 1 mới tăng jobsDone trong user lên 1 đơn vị
         if($data->rwsConfirmed != 1){
             if($request->status == 1){

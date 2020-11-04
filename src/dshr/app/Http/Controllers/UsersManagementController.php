@@ -178,7 +178,7 @@ class UsersManagementController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
 
         return view('usersmanagement.show-user')->withUser($user)->with('site', 'Users');
     }
@@ -255,7 +255,7 @@ class UsersManagementController extends Controller
     }
 
     public function editUserPost(Request $request, $id){
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $status_data = null;
         if($user->status_data == null || $user->status_data ==''){
             $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
@@ -321,7 +321,7 @@ class UsersManagementController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $user = User::find($request->id);
+        $user = User::findOrFail($request->id);
         $data = [date('Y-m-d H:i:s', time()) => $request->comments];
         $comments =[];
         if($user->comments){
@@ -349,7 +349,7 @@ class UsersManagementController extends Controller
     public function update(Request $request, $id)
     {
         $currentUser = Auth::user();
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $emailCheck = ($request->input('email') != '') && ($request->input('email') != $user->email);
         $ipAddress = new CaptureIpTrait();
 
@@ -480,7 +480,7 @@ SELECT * FROM ds_users  WHERE MATCH(userName, email, currentSchool, address1, ad
     public function upload(Request $request)
     {
         if (Input::hasFile('file')) {
-            $currentUser = User::find($request->id);
+            $currentUser = User::findOrFail($request->id);
             $avatar = Input::file('file');
             $filename = $avatar->getClientOriginalName();
             $save_path = public_path().'/uploads/users/id/'.$currentUser->id.'/';
@@ -544,7 +544,7 @@ SELECT * FROM ds_users  WHERE MATCH(userName, email, currentSchool, address1, ad
     }
 
     public function approvedByType(Request $request){
-        $user = User::find($request->id);
+        $user = User::findOrFail($request->id);
         if($request->type == 1){
             $user->userPantsApproved = $request->checked;
         }elseif($request->type == 2){
