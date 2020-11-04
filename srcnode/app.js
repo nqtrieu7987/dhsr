@@ -105,8 +105,8 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
-				mysqlTool.getUserInfor(req, res);	
+			} else {
+				mysqlTool.getUserInfor(req, res);
 			}
 		});
 	});
@@ -160,11 +160,11 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
+			} else {
 				mysqlTool.getListHotel(req, res);
 			}
 		});
-		
+
 	});
 	app.post('/service/hotel/info', function (req, res) {
 		var email = req.headers.email;
@@ -188,7 +188,7 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
+			} else {
 				mysqlTool.getHotelInfo(req, res);
 			}
 		});
@@ -220,7 +220,7 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
+			} else {
 				mysqlTool.jobBooking(req, res);
 			}
 		});
@@ -248,7 +248,7 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
+			} else {
 				mysqlTool.hotelBooking(req, res);
 			}
 		});
@@ -276,7 +276,7 @@ module.exports.create = function (server, host, port, publicDir) {
 			if (payload.email != email) {
 				res.json({ message: 'Email invalid!', resultCode: 1 });
 				return "";
-			}else{
+			} else {
 				mysqlTool.jobCancel(req, res);
 			}
 		});
@@ -294,25 +294,25 @@ module.exports.create = function (server, host, port, publicDir) {
 		mysqlTool.userUploadsImageThumb(req, res);
 	});
 
-	app.post('/service/job/check_in_check_out',async function (req, res) {
+	app.post('/service/job/check_in_check_out', async function (req, res) {
 		mysqlTool.checkInCheckOut(req, res);
 	});
 
-	app.post('/service/hotel/check_in_check_out',async function (req, res) {
+	app.post('/service/hotel/check_in_check_out', async function (req, res) {
 		mysqlTool.hotelCheckInCheckOut(req, res);
 	});
 
-	app.post('/service/user/upload_pants_shoes',async function (req, res) {
+	app.post('/service/user/upload_pants_shoes', async function (req, res) {
 		mysqlTool.uploadPantsShoes(req, res);
 	});
 
 	notification.startSchedule();
 
 	// send notify pants shoes
-	app.post('/service/user/notify_pants_shoes',async function (req, res) {
+	app.post('/service/user/notify_pants_shoes', async function (req, res) {
 		var email = req.body.email;
-  		var type = req.body.type; // type = true: pant, false: shoe
-  		var status = req.body.status; // status = true: approve, false: reject
+		var type = req.body.type; // type = true: pant, false: shoe
+		var status = req.body.status; // status = true: approve, false: reject
 		if (email == undefined) {
 			res.json({ message: 'Email not null!', resultCode: 1 });
 			return "";
@@ -326,6 +326,34 @@ module.exports.create = function (server, host, port, publicDir) {
 			return "";
 		}
 		notification.sendMessageForAttire(email, type, status);
+		res.setHeader('Content-Type', 'application/json; charset=utf-8');
+		res.send({ message: "Sending Successfull!", resultCode: 0 });
+	});
+
+	app.post('/service/user/notify_job_status', async function (req, res) {
+		// Your job - ${jobName} at ${hotelName} was ${statusStr}.\nPlease check it!
+		var email = req.body.email;
+		var status = req.body.status; // 0 - Booked, 1 - Confirmed/Approved
+		var jobName = req.body.job_name;
+		var hotelName = req.body.hotel_name;
+		if (email == undefined) {
+			res.json({ message: 'Email not null!', resultCode: 1 });
+			return "";
+		}
+
+		if (status == undefined) {
+			res.json({ message: 'Status not null!', resultCode: 1 });
+			return "";
+		}
+		if (jobName == undefined) {
+			res.json({ message: 'job_name not null!', resultCode: 1 });
+			return "";
+		}
+		if (hotelName == undefined) {
+			res.json({ message: 'hotel_name not null!', resultCode: 1 });
+			return "";
+		}
+		notification.sendMessageForJobStatus(email, type, status);
 		res.setHeader('Content-Type', 'application/json; charset=utf-8');
 		res.send({ message: "Sending Successfull!", resultCode: 0 });
 	});

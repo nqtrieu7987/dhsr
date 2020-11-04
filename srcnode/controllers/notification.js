@@ -19,14 +19,15 @@ function createMessage(title, subtitle, content) {
     return message;
 }
 
-function createMessageWithEmail(title, subtitle, content, email) {
+function createMessageWithEmail(title, subtitle, content, email, data = null) {
     var message = {
         app_id: app_id,
         contents: { "en": content },
         headings: { "en": title },
         filters: [
             { "field": "tag", "key": "email", "relation": "=", "value": email },
-        ]
+        ],
+        data: data
     };
 
     if (subtitle !== null) {
@@ -82,12 +83,62 @@ function getMessageForAttire(email, forPant = true, approved = true) {
     var statusStr = (approved == true) ? "approved" : "cancel";
     var content =
         `Your ${itemName} photo was ${statusStr}.\nPlease check it!`;
-    var message = createMessageWithEmail(headingCont, null, content, email);
+    var data = {
+        push_type: 0,
+        data: {
+            forPant: forPant,
+            approved: approved
+        }
+    };
+    var message = createMessageWithEmail(headingCont, null, content, email, data);
+    return message;
+}
+
+function getContentWithJobStatus(status) {
+    switch (status) {
+        case 0:
+            return "booked"
+
+        case 1:
+            return "approved"
+
+        case 4:
+            return "canceled"
+
+        case 5:
+            return "fail"
+
+        default:
+            return "verified"
+
+    }
+}
+
+function getMessageForJobStatus(email, status, jobName, hotelName) {
+    var headingCont = "Job Verification";
+    var statusStr = getContentWithJobStatus(status);
+    var content =
+        `Your job - ${jobName} at ${hotelName} was ${statusStr}.\nPlease check it!`;
+    var data = {
+        push_type: 1,
+        data: {
+            status: status,
+            jobName: jobName,
+            hotelName: hotelName
+        }
+    };
+    var message = createMessageWithEmail(headingCont, null, content, email, data);
     return message;
 }
 
 function sendMessageForAttire(email, forPant = true, approved = true) {
     var message = getMessageForAttire(email, forPant, approved);
+
+    sendNotification(message);
+}
+
+function sendMessageForJobStatus(email, status, jobName, hotelName) {
+    var message = getMessageForJobStatus(email, status, jobName, hotelName);
 
     sendNotification(message);
 }
@@ -175,5 +226,6 @@ function startSchedule() {
 
 module.exports = {
     startSchedule: startSchedule,
-    sendMessageForAttire:sendMessageForAttire
+    sendMessageForAttire: sendMessageForAttire,
+    sendMessageForJobStatus: sendMessageForJobStatus
 };
