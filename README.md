@@ -34,11 +34,12 @@ mkdir debugbar
 mkdir users 
 chmod -R 777 storage
 sua file nginx host ve local neu khong dung host
- 
+
+bung file vendor.zip 
 Chạy ứng dụng kiểm tra
  
 1.       docker-compose up -d
-  docker run --volume $(pwd):/app prooph/composer:7.2 install
+  
 
  
 truy cap host/admin.php tao va import db.
