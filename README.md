@@ -15,12 +15,31 @@ Chien best of F*ck
 
 .env cifonfig database cluster (hien tai chi can chay master).
  
-edit 
+  
 
-add port 80 in dhsr nginx neu khong dung https
+ 
 
-docker run --volume $(pwd):/app prooph/composer:7.2 install
+build nodejs
+cd dockernodejs
+mkdir uploads
+docker build -t nodejspm2 .
 
+ 
+cd src/dshr/storage
+mkdir framework 
+mkdir framework/sessions
+mkdir framework/views
+mkdir framework/cache 
+mkdir debugbar
+mkdir users 
+chmod -R 777 storage
+sua file nginx host ve local neu khong dung host
+ 
 Chạy ứng dụng kiểm tra
  
- docker-compose up
+1.       docker-compose up -d
+  docker run --volume $(pwd):/app prooph/composer:7.2 install
+
+ 
+truy cap host/admin.php tao va import db.
+
