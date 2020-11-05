@@ -118,7 +118,7 @@ function getMessageForJobStatus(email, status, jobName, hotelName) {
     var headingCont = "Job Confirmation";
     var statusStr = getContentWithJobStatus(status);
     var content =
-        `Your job - ${jobName} at ${hotelName} has been ${statusStr}!`;
+        `Your job - ${jobName} at ${hotelName} has been ${statusStr}`;
     var data = {
         push_type: 1,
         data: {
