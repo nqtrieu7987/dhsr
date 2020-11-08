@@ -27,7 +27,7 @@ class CheckIsUserActivated
             $currentRoute = Route::currentRouteName();
             $routesAllowed = [
                 'activation-required',
-                'activate/{token}',
+                /*'activate/{token}',
                 'activate',
                 'activation',
                 'exceeded',
@@ -35,8 +35,8 @@ class CheckIsUserActivated
                 'authenticated.activation-resend',
                 'social/redirect/{provider}',
                 'social/handle/{provider}',
+                'welcome',*/
                 'logout',
-                'welcome',
             ];
 
             if (!in_array($currentRoute, $routesAllowed)) {
