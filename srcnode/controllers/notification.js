@@ -100,13 +100,13 @@ function getContentWithJobStatus(status) {
             return "booked"
 
         case 1:
-            return "approved"
+            return "confirmed"
 
         case 4:
             return "canceled"
 
         case 5:
-            return "fail"
+            return "failed"
 
         default:
             return "verified"
@@ -115,10 +115,10 @@ function getContentWithJobStatus(status) {
 }
 
 function getMessageForJobStatus(email, status, jobName, hotelName) {
-    var headingCont = "Job Verification";
+    var headingCont = "Job Confirmation";
     var statusStr = getContentWithJobStatus(status);
     var content =
-        `Your job - ${jobName} at ${hotelName} was ${statusStr}.\nPlease check it!`;
+        `Your job - ${jobName} at ${hotelName} has been ${statusStr}`;
     var data = {
         push_type: 1,
         data: {
