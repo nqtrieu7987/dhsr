@@ -65,8 +65,8 @@
                                     @foreach($datas as $k => $data)
                                         <tr>
                                             <td>{{$k+1}}</td>
-                                            <td><a href="{{route('user.edit', $data->Users()->id)}}">{{$data->Users()->userName}}</a></td>
-                                            <td>{{ $data->Jobs() != null ? array_get($jobType, $data->Jobs()['job_type_id']): ''}}</td>
+                                            <td><a href="{{route('user.edit', $data->users->id)}}">{{$data->users->userName}}</a></td>
+                                            <td>{{ $data->jobs != null ? array_get($jobType, $data->jobs['job_type_id']): ''}}</td>
                                             <td>
                                                 @if($data->status == 3)
                                                     {!! Form::open(array('url' => 'job/approved/' . $data->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Approved')) !!}

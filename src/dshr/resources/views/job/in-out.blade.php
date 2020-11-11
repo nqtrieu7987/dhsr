@@ -39,14 +39,14 @@
                     <label class="col-md-3 control-label">Username:</label>
                     <div class="col-md-3">
                         <div class="input-group">
-                            <input type="text" name="userName" value="{{$data->Users()->userName}}" class="form-control col-md-7 col-xs-12" disabled="">
+                            <input type="text" name="userName" value="{{$data->users->userName}}" class="form-control col-md-7 col-xs-12" disabled="">
                         </div>
                     </div>
                     
                     <label class="col-md-3 control-label">Job:</label>
                     <div class="col-md-3">
                         <div class="input-group">
-                            <input type="text" name="job" value="{{$data->Jobs()->Types()->name}}" class="form-control col-md-7 col-xs-12" disabled="">
+                            <input type="text" name="job" value="{{$data->jobs->types->name}}" class="form-control col-md-7 col-xs-12" disabled="">
                         </div>
                     </div>
                 </div>

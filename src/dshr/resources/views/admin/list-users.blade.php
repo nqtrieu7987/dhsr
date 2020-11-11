@@ -31,7 +31,7 @@
                                             <td>{{$user->name}}</td>
                                             <td><a href="{{ URL::to('admin-edit/' . $user->id . '/edit') }}">{{$user->username}}</a></td>
                                             <td>{{$user->email}}</td>
-                                            <td>{{$user->Hotels['name']}}</td>
+                                            <td>{{$user->hotels->name}}</td>
                                             <td>
                                                 {!! Form::open(array('url' => 'admin-delete/' . $user->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Delete')) !!}
                                                     {!! Form::hidden('_method', 'DELETE') !!}

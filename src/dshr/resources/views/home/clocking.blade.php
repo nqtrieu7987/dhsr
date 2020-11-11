@@ -37,11 +37,11 @@
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{$data->id}}</td>
-                                            <td><a href="{{route('user.edit', $data->Users()->id)}}">{{$data->Users()->userName}}</a></td>
-                                            <td>{{ $data->Jobs() != null ? array_get($hotels, $data->Jobs()['hotel_id']): ''}}
-                                            <td>{{ $data->Jobs() != null ? array_get($jobType, $data->Jobs()['job_type_id']): ''}}</td>
-                                            <td>{{$data->Jobs()['start_time']}}</td>
-                                            <td>{{$data->Jobs()['end_time']}}</td>
+                                            <td><a href="{{route('user.edit', $data->users->id)}}">{{$data->users->userName}}</a></td>
+                                            <td>{{ $data->jobs != null ? array_get($hotels, $data->jobs['hotel_id']): ''}}
+                                            <td>{{ $data->jobs != null ? array_get($jobType, $data->jobs['job_type_id']): ''}}</td>
+                                            <td>{{$data->jobs['start_time']}}</td>
+                                            <td>{{$data->jobs['end_time']}}</td>
                                             <td class="align-center">{{$data->type}}</td>
                                             <td class="align-center">
                                                 @if($data->path)

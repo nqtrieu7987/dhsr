@@ -26,11 +26,11 @@
         <tr>
             <td>{{(20 * (request()->get('page', 1) - 1)) + $j++}}</td>
             @if(\Route::current()->getName() === "user.edit")
-                <td><a href="{{route('hotel.edit', $jobpv->Jobs()->hotel_id)}}">{{$jobpv->Jobs()->Hotels()->name}}</a></td>
+                <td><a href="{{route('hotel.edit', $jobpv->jobs->hotel_id)}}">{{$jobpv->jobs->hotels->name}}</a></td>
             @else
-                <td><a href="{{route('user.edit', $jobpv->Users()->id)}}">{{$jobpv->Users()->userName}}</a></td>
+                <td><a href="{{route('user.edit', $jobpv->users->id)}}">{{$jobpv->users->userName}}</a></td>
             @endif
-            <td>{{ $jobpv->Jobs() != null ? array_get($jobType, $jobpv->Jobs()['job_type_id']): ''}}</td>
+            <td>{{ $jobpv->jobs != null ? array_get($jobType, $jobpv->jobs['job_type_id']): ''}}</td>
             <td>
                 <span class="btn text-{{array_get($color_status, $jobpv->status)}} btn-sm">{{array_get($status, $jobpv->status)}}</span>
             </td>

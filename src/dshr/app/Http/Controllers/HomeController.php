@@ -166,8 +166,8 @@ class HomeController extends Controller
         $data = AllJob::findOrFail($request->id);
         if($request->type == 'approve'){
             $status = 1;
-            Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
-            if($data->Jobs()->current_slot >= $data->Jobs()->slot){
+            Log::info($data->jobs->slot.' - '.$data->jobs->current_slot);
+            if($data->jobs->current_slot >= $data->jobs->slot){
                 return response()->json([
                     'msg' => 'Job full slot',
                     'status' => 201
@@ -176,12 +176,12 @@ class HomeController extends Controller
                 // Cập nhật current_slot của job lên 1 đơn vị
                 if(in_array($data->status, [0,4,5])){
                     $data->status = $status;
-                    $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
+                    $data->jobs->update(['current_slot' => $data->jobs->current_slot + 1]);
                     $msg = 'Approve Successfully!';
                     $stt = 200;
 
                     //Push notify approved job
-                    $body = array('email' => $data->Users()->email,'status' => 1,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    $body = array('email' => $data->users->email,'status' => 1,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                     try {
                         $res = config('app.service')->post('user/notify_job_status', [
                             'form_params' => $body
@@ -194,8 +194,8 @@ class HomeController extends Controller
             }
         }else{
             $status = 4;
-            if(in_array($data->status, [1,2,3]) && $data->Jobs()->current_slot > 0){
-                $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot - 1]);
+            if(in_array($data->status, [1,2,3]) && $data->jobs->current_slot > 0){
+                $data->jobs->update(['current_slot' => $data->jobs->current_slot - 1]);
             }
             $data->status = $status;
             $msg = 'Cancel Successfully!';
@@ -203,7 +203,7 @@ class HomeController extends Controller
 
             //Push notify cancel job
             if($data->status != 4){
-                $body = array('email' => $data->Users()->email,'status' => 4,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                $body = array('email' => $data->users->email,'status' => 4,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                 try {
                     $res = config('app.service')->post('user/notify_job_status', [
                         'form_params' => $body
@@ -222,8 +222,8 @@ class HomeController extends Controller
         $data = AllJob::findOrFail($request->id);
         if($request->type == 'approve'){
             $status = 1;
-            Log::info($data->Jobs()->slot.' - '.$data->Jobs()->current_slot);
-            if($data->Jobs()->current_slot >= $data->Jobs()->slot){
+            Log::info($data->jobs->slot.' - '.$data->jobs->current_slot);
+            if($data->jobs->current_slot >= $data->jobs->slot){
                 return response()->json([
                     'msg' => 'Job full slot',
                     'status' => 201
@@ -232,12 +232,12 @@ class HomeController extends Controller
                 // Cập nhật current_slot của job lên 1 đơn vị
                 if(in_array($data->status, [0,4,5])){
                     $data->status = $status;
-                    $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot + 1]);
+                    $data->jobs->update(['current_slot' => $data->jobs->current_slot + 1]);
                     $msg = 'Approve Successfully!';
                     $stt = 200;
 
                     //Push notify approved job
-                    $body = array('email' => $data->Users()->email,'status' => 1,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    $body = array('email' => $data->users->email,'status' => 1,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                     try {
                         $res = config('app.service')->post('user/notify_job_status', [
                             'form_params' => $body
@@ -250,8 +250,8 @@ class HomeController extends Controller
             }
         }else{
             $status = 4;
-            if(in_array($data->status, [1,2,3]) && $data->Jobs()->current_slot > 0){
-                $data->Jobs()->update(['current_slot' => $data->Jobs()->current_slot - 1]);
+            if(in_array($data->status, [1,2,3]) && $data->jobs->current_slot > 0){
+                $data->jobs->update(['current_slot' => $data->jobs->current_slot - 1]);
             }
             $data->status = $status;
             $msg = 'Cancel Successfully!';
@@ -264,7 +264,7 @@ class HomeController extends Controller
 
             //Push notify cancel job
             if($data->status != 4){
-                $body = array('email' => $data->Users()->email,'status' => 4,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                $body = array('email' => $data->users->email,'status' => 4,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                 try {
                     $res = config('app.service')->post('user/notify_job_status', [
                         'form_params' => $body

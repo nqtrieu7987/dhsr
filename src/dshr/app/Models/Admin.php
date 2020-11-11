@@ -24,7 +24,7 @@ class Admin extends Authenticatable
         'id','name','email','username','password','adminType','hotel_id','created_at','updated_at'
     ];
 
-    public function Hotels() {
+    public function hotels() {
         return $this->hasOne('App\Models\Hotel', 'id', 'hotel_id');
     }
     /*protected $fillable = [

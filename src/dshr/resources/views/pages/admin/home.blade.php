@@ -45,8 +45,8 @@
                                   @php $j++ @endphp
                                   @php $current_job =''; $current_slot=0 @endphp 
                                   @foreach($jobs as $job)
-                                      @if (($current_job) !== ($job->Jobs()->Types()->name))
-                                        @php $current_job = ($job->Jobs()->Types()->name);
+                                      @if (($current_job) !== ($job->jobs->types->name))
+                                        @php $current_job = ($job->jobs->types->name);
                                         $current_slot = 1; @endphp
                                       @else 
                                         @php $current_slot++; @endphp
@@ -54,11 +54,11 @@
                                       <tr @if($i % 2 == 0) style="background-color: rgba(0,0,0,.05)" @else style="background-color: rgba(0,0,0,0)" @endif>
                                           <td>{{$i}}.</td>
                                           <td>{{$current_job}}</td>
-                                          <td><a href="{{route('user.edit', $job->Users()->id)}}">{{$job->Users()->userName}}</a></td>
+                                          <td><a href="{{route('user.edit', $job->users->id)}}">{{$job->users->userName}}</a></td>
                                           <td>{{$current_slot}}</td>
-                                          <td>{{$job->Jobs()->start_time}}</td>
-                                          <td>{{$job->Jobs()->end_time}}</td>
-                                          <td>{{$job->Jobs()->start_date}}</td>
+                                          <td>{{$job->jobs->start_time}}</td>
+                                          <td>{{$job->jobs->end_time}}</td>
+                                          <td>{{$job->jobs->start_date}}</td>
                                           <td>{{$job->paidTimeIn}}</td>
                                           <td>{{$job->paidTimeOut}}</td>
                                           <td>{{$job->breakTime}}</td>
@@ -141,9 +141,9 @@
       labels  : [
         @foreach($datas as $k => $data)
             @if($k < count($datas)-1)
-            '{{$data->Hotels()->name}}',
+            '{{$data->hotels->name}}',
             @else
-            '{{$data->Hotels()->name}}'
+            '{{$data->hotels->name}}'
             @endif
         @endforeach
       ],

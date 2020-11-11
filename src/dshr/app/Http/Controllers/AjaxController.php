@@ -113,7 +113,7 @@ class AjaxController extends Controller
                     //Push notify fail job
                     if($data->status != 5){
                         $data->update(['status' => 5]);
-                        $body = array('email' => $data->Users()->email,'status' => 5,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                        $body = array('email' => $data->users->email,'status' => 5,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                         try {
                             $res = config('app.service')->post('user/notify_job_status', [
                                 'form_params' => $body
@@ -163,7 +163,7 @@ class AjaxController extends Controller
         ]);
         
         //Push notify job
-        $body = array('email' => $data->Users()->email,'status' => $data->status,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+        $body = array('email' => $data->users->email,'status' => $data->status,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
         try {
             $res = config('app.service')->post('user/notify_job_status', [
                 'form_params' => $body

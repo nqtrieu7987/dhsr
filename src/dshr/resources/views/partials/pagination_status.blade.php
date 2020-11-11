@@ -25,9 +25,9 @@
         <tr>
             <td>{{(20 * (request()->get('page', 1) - 1)) + $j++}}</td>
             @if($site === 'users')
-                <td><a href="{{route('jobpv.edit', $jobpv->Jobs()->jobpv_id)}}">{{$jobpv->Jobs()->jobpvs()->name}}</a></td>
+                <td><a href="{{route('jobpv.edit', $jobpv->jobs->jobpv_id)}}">{{$jobpv->jobs->jobpvs()->name}}</a></td>
             @else
-                <td><a href="{{route('user.edit', $jobpv->Users()->id)}}">{{$jobpv->Users()->userName}}</a></td>
+                <td><a href="{{route('user.edit', $jobpv->users->id)}}">{{$jobpv->users->userName}}</a></td>
             @endif
             <td>
                 <span class="btn text-{{array_get($color_status, $jobpv->status)}} btn-sm" id="text_{{$jobpv->id}}">{{array_get($status, $jobpv->status)}}</span>

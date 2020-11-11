@@ -76,9 +76,9 @@
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{$data->id}}</td>
-                                            <td><a href="{{route('user.edit', $data->Users()->id)}}">{{$data->Users()->userName}}</a></td>
-                                            <td>{{ $data->Jobs() != null ? array_get($hotels, $data->Jobs()['hotel_id']): ''}}</td>
-                                            <td>{{ $data->Jobs() != null ? array_get($jobType, $data->Jobs()['job_type_id']): ''}}</td>
+                                            <td><a href="{{route('user.edit', $data->users->id)}}">{{$data->users->userName}}</a></td>
+                                            <td>{{ $data->jobs != null ? array_get($hotels, $data->jobs['hotel_id']): ''}}</td>
+                                            <td>{{ $data->jobs != null ? array_get($jobType, $data->jobs['job_type_id']): ''}}</td>
                                             <td>
                                                 <span class="btn text-{{array_get($color_status, $data->status)}} btn-sm" id="text_{{$data->id}}">{{array_get($status, $data->status)}}</span>
                                             </td>

@@ -294,12 +294,12 @@ class JobAdminController extends Controller
                 $data_export[] = [
                     'No' => $k+1,
                     'Date Of Work' => date('Y-m-d H:i:s', $v['timestamp']/1000),
-                    'Name' => $v->Users()['userName'],
+                    'Name' => $v->users->userName,
                     'Exp' => $v['status'] == 3 ? 'Yes' : 'No',
-                    'Sex' => $v->Users()->userGender == 1 ? 'M' : 'F',
+                    'Sex' => $v->users->userGender == 1 ? 'M' : 'F',
                     'Feedback' => $v['remarks'],
-                    'IC/FIN No.' => $v->Users()['userNRIC'],
-                    'Shift' => $v->Jobs()['start_time'].' - '.$v->Jobs()['end_time'],
+                    'IC/FIN No.' => $v->users->userNRIC,
+                    'Shift' => $v->jobs->start_time.' - '.$v->jobs->end_time,
                     'Actual Time In' => $v['real_start'],
                     'Signature' => '',
                     'Meal Break' => $v['breakTime'],
@@ -358,12 +358,12 @@ class JobAdminController extends Controller
                 $data_export[] = [
                     'No' => $k+1,
                     'Date Of Work' => date('Y-m-d H:i:s', $v['timestamp']/1000),
-                    'Name' => $v->Users()['name'],
-                    'Exp' => $v->Users()['jobsDone'] > 0 ? 'Yes' : 'No',
-                    'Sex' => $v->Users()['gender'] = 1 ? 'M' : 'F',
-                    'Feedback' => $v->Users()['feedback'],
-                    'IC/FIN No.' => $v->Users()['userNRIC'],
-                    'Shift' => $v->Jobs()['start_time'].' - '.$v->Jobs()['end_time'],
+                    'Name' => $v->users->name,
+                    'Exp' => $v->users->jobsDone > 0 ? 'Yes' : 'No',
+                    'Sex' => $v->users->gender = 1 ? 'M' : 'F',
+                    'Feedback' => $v->users->feedback,
+                    'IC/FIN No.' => $v->users->userNRIC,
+                    'Shift' => $v->jobs->start_time.' - '.$v->jobs->end_time,
                     'Actual Time In' => $v['real_start'],
                     'Signature' => '',
                     'Meal Break' => $v['breakTime'],
@@ -478,7 +478,7 @@ class JobAdminController extends Controller
                 //Push notify fail job
                 if($data->status != 5){
                     $data->update(['status' => 5]);
-                    $body = array('email' => $data->Users()->email,'status' => 5,'job_name' => $data->Jobs()->Types()->name,'hotel_name' => $data->Jobs()->Hotels()->name);
+                    $body = array('email' => $data->users->email,'status' => 5,'job_name' => $data->jobs->types->name,'hotel_name' => $data->jobs->hotels->name);
                     try {
                         $res = config('app.service')->post('user/notify_job_status', [
                             'form_params' => $body

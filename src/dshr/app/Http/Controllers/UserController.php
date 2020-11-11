@@ -48,10 +48,10 @@ class UserController extends Controller
         ]);
         $dataJobs = [];
         foreach ($jobsOngoing as $key => $value) {
-            if(!isset($dataJobs[$value->Jobs()->Hotels()->name])){
-                $dataJobs[$value->Jobs()->Hotels()->name] = [];
+            if(!isset($dataJobs[$value->jobs->hotels->name])){
+                $dataJobs[$value->jobs->hotels->name] = [];
             }
-            array_push($dataJobs[$value->Jobs()->Hotels()->name], $value);
+            array_push($dataJobs[$value->jobs->hotels->name], $value);
         }
         $user = Auth::user();
         $link_url = ['url' => route('public.home'), 'title' => 'Ongoing Jobs', 'icon' =>'fa fa-refresh'];

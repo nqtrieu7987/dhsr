@@ -77,12 +77,12 @@
                                 @foreach($attentions as $i => $data)
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
-                                        <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        <td>{{$data->Jobs()->start_time}}</td>
-                                        <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
+                                        <td style="min-width: 100px;">{{$data->users->userName}}</td>
+                                        {{-- <td>{{$data->jobs->hotels->name}}</td>
+                                        <td>{{$data->jobs->types->name}}</td> --}}
+                                        <td>{{$data->jobs->start_time}}</td>
+                                        <td>{{$data->jobs->end_time}}</td>
+                                        <td>{{getHours($data->jobs->start_time, $data->jobs->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>
@@ -172,12 +172,12 @@
                                 @foreach($pendings as $i => $data)
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
-                                        <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        <td>{{$data->Jobs()->start_time}}</td>
-                                        <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
+                                        <td style="min-width: 100px;">{{$data->users->userName}}</td>
+                                        {{-- <td>{{$data->jobs->hotels->name}}</td>
+                                        <td>{{$data->jobs->types->name}}</td> --}}
+                                        <td>{{$data->jobs->start_time}}</td>
+                                        <td>{{$data->jobs->end_time}}</td>
+                                        <td>{{getHours($data->jobs->start_time, $data->jobs->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>
@@ -261,12 +261,12 @@
                                 @foreach($approveds as $i => $data)
                                 {!! csrf_field() !!}
                                     <tr id="row-{{$data->id}}">
-                                        <td style="min-width: 100px;">{{$data->Users()->userName}}</td>
-                                        {{-- <td>{{$data->Jobs()->Hotels()->name}}</td>
-                                        <td>{{$data->Jobs()->Types()->name}}</td> --}}
-                                        <td>{{$data->Jobs()->start_time}}</td>
-                                        <td>{{$data->Jobs()->end_time}}</td>
-                                        <td>{{getHours($data->Jobs()->start_time, $data->Jobs()->end_time)}}</td>
+                                        <td style="min-width: 100px;">{{$data->users->userName}}</td>
+                                        {{-- <td>{{$data->jobs->hotels->name}}</td>
+                                        <td>{{$data->jobs->types->name}}</td> --}}
+                                        <td>{{$data->jobs->start_time}}</td>
+                                        <td>{{$data->jobs->end_time}}</td>
+                                        <td>{{getHours($data->jobs->start_time, $data->jobs->end_time)}}</td>
                                         <td>{{$data->real_start}}</td>
                                         <td>{{$data->real_end}}</td>
                                         <td>{{$data->paidTimeIn}}</td>

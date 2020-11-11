@@ -73,8 +73,8 @@ Job List
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{$data->id}}</td>
-                                            <td><a href="{{ URL::to('job/' . $data->id . '/edit') }}">{{$data->Types()['name']}}</a></td>
-                                            <td>{{$data->Hotels()['name']}}</td>
+                                            <td><a href="{{ URL::to('job/' . $data->id . '/edit') }}">{{$data->types->name}}</a></td>
+                                            <td>{{$data->hotels->name}}</td>
                                             <td>{{$data->slot}}</td>
                                             <td>{{$data->current_slot}}</td>
                                             <td class="align-center">{{$data->start_time}}</td>

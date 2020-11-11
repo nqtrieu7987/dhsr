@@ -17,7 +17,7 @@
                                             <tr>
                                                 <th>ID</th>
                                                 @if($site === 'users')
-                                                    <th>jobpv</th>
+                                                    <th>Job</th>
                                                 @else
                                                     <th>Username</th>
                                                 @endif
@@ -40,9 +40,9 @@
                                             <tr>
                                                 <td>{{(20 * (request()->get('page', 1) - 1)) + $j++}}</td>
                                                 @if($site === 'users')
-                                                    <td><a href="{{route('jobpv.edit', $jobpv->Jobs()->jobpv_id)}}">{{$jobpv->Jobs()->jobpvs()->name}}</a></td>
+                                                    <td><a href="{{route('admin.job.edit', $jobpv->job_id)}}">{{$jobpv->jobs->types->name}}</a></td>
                                                 @else
-                                                    <td><a href="{{route('user.edit', $jobpv->Users()->id)}}">{{$jobpv->Users()->userName}}</a></td>
+                                                    <td><a href="{{route('user.edit', $jobpv->users->id)}}">{{$jobpv->users->userName}}</a></td>
                                                 @endif
                                                 <td>
                                                     <span class="btn text-{{array_get($color_status, $jobpv->status)}} btn-sm" id="text_{{$jobpv->id}}">{{array_get($status, $jobpv->status)}}</span>
@@ -62,7 +62,7 @@
                                                         <a href="{{route('job.inOut', $jobpv->id)}}" target="_blank" class="btn btn-warning btn-sm">In/Out</a>
                                                     @endif
                                                 </td> --}}
-                                                <td>{{$jobpv->Jobs()->start_date}}</td>
+                                                <td>{{$jobpv->jobs->start_date}}</td>
                                                 <td class="align-center">{{$jobpv->paidTimeIn}}</td>
                                                 <td class="align-center">{{$jobpv->paidTimeOut}}</td>
                                                 <td>{{$jobpv->breakTime}}</td>

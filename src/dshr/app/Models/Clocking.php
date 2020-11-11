@@ -11,11 +11,11 @@ class Clocking extends Model
     	'id','user_id','job_id','type','path','date','created_at','updated_at'
     ];
 
-    public function Users() {
-        return $this->hasOne('App\Models\User', 'id', 'user_id')->first();
+    public function users() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
-    public function Jobs() {
-        return $this->hasOne('App\Models\Job', 'id', 'job_id')->first();
+    public function jobs() {
+        return $this->hasOne('App\Models\Job', 'id', 'job_id');
     }
 }
