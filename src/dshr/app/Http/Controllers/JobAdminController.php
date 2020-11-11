@@ -502,13 +502,13 @@ class JobAdminController extends Controller
             if(file_exists(public_path().$thumb)){
                 unlink(public_path().$thumb);
             }
-        }*/
+        }
         $user->update([
             'userPants' => null,
             'userShoes' => null,
             'userPantsApproved' => 0,
             'userShoesApproved' => 0,
-        ]);
+        ]);*/
 
         $data->update([
             'real_start' => $real_start,
