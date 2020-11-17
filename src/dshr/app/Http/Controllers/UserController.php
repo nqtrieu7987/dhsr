@@ -31,11 +31,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $datas = Job::selectRaw("hotel_id, COUNT(*) AS 'tong'")->groupBy('hotel_id')->get();
-
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
+            ->with('jobs', 'users')
             ->where('job.start_date','>=', date('Y-m-d'))
             ->where('job.is_active', 1)
             ->orderBy('job.start_date', 'ASC')
@@ -56,7 +55,7 @@ class UserController extends Controller
         $user = Auth::user();
         $link_url = ['url' => route('public.home'), 'title' => 'Ongoing Jobs', 'icon' =>'fa fa-refresh'];
         if ($user->isAdmin()) {
-            return view('pages.admin.home', compact('datas','dataJobs','link_url'));
+            return view('pages.admin.home', compact('dataJobs','link_url'));
         }
 
         return view('pages.user.home');

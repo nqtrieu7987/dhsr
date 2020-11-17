@@ -235,7 +235,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('users')}}" class="nav-link @if(isset($site) && $site == 'Users') active @endif">
+            <a href="{{route('users')}}" class="nav-link @if(isset($site) && strpos($site, 'Users') !== false) active @endif">
               <img class="icon-menu-left" src="{{ url('/images/users_sidebar_icon.png') }}"/>
               <p>Users</p>
             </a>

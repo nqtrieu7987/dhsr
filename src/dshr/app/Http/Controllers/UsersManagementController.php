@@ -235,6 +235,7 @@ class UsersManagementController extends Controller
         $jobsPrev = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
+            ->with('jobs', 'users')
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','<',date('Y-m-d'))
             ->orderBy('status', 'ASC')
@@ -243,6 +244,7 @@ class UsersManagementController extends Controller
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
+            ->with('jobs', 'users')
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','>=',date('Y-m-d'))
             ->orderBy('status', 'ASC')

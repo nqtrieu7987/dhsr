@@ -25,16 +25,17 @@ class AjaxController extends Controller
 
         	if($request->type == 'hotel'){
         		$idPrev = Job::where('hotel_id', $request->id)->where('start_date', '<', now())->pluck('id')->toArray();
-	        	$data = AllJob::whereIn('job_id', $idPrev)->orderBy('status', 'ASC')->orderBy('id', 'DESC')->paginate(20);
+	        	$data = AllJob::with('jobs', 'users')->whereIn('job_id', $idPrev)->orderBy('status', 'ASC')->orderBy('id', 'DESC')->paginate(20);
         	}elseif($request->type =='user'){
         		$data = AllJob::leftJoin('job', function($join) {
 	                $join->on('all_jobs.job_id', '=', 'job.id');
 	            })
-	            ->where('all_jobs.user_id', $request->id)
+	            ->with('jobs', 'users')
+                ->where('all_jobs.user_id', $request->id)
 	            ->where('job.start_date','<',date('Y-m-d'))
 	            ->paginate(20);
         	}elseif($request->type =='job'){
-        		$data = AllJob::where('job_id', $request->id)->orderBy('status', 'ASC')->orderBy('id', 'DESC')->paginate(20);
+        		$data = AllJob::with('jobs', 'users')->where('job_id', $request->id)->orderBy('status', 'ASC')->orderBy('id', 'DESC')->paginate(20);
         	}
 			
 	        //$idOn = Job::where('hotel_id', $request->id)->where('start_date', '>=', now())->pluck('id')->toArray();
@@ -57,16 +58,17 @@ class AjaxController extends Controller
 
         	if($request->type == 'hotel'){
         		$idPrev = Job::where('hotel_id', $request->id)->where('start_date', '>', now())->pluck('id')->toArray();
-	        	$data = AllJob::whereIn('job_id', $idPrev)->orderBy('id', 'DESC')->paginate(20);
+	        	$data = AllJob::with('jobs', 'users')->whereIn('job_id', $idPrev)->orderBy('id', 'DESC')->paginate(20);
         	}elseif($request->type =='user'){
         		$data = AllJob::leftJoin('job', function($join) {
 	                $join->on('all_jobs.job_id', '=', 'job.id');
 	            })
-	            ->where('all_jobs.user_id', $request->id)
+	            ->with('jobs', 'users')
+                ->where('all_jobs.user_id', $request->id)
 	            ->where('job.start_date','>=',date('Y-m-d'))
 	            ->paginate(20);
         	}elseif($request->type =='job'){
-        		$data = AllJob::where('job_id', $request->id)->orderBy('id', 'DESC')->paginate(20);
+        		$data = AllJob::with('jobs', 'users')->where('job_id', $request->id)->orderBy('id', 'DESC')->paginate(20);
         	}
 	        $site = $request->site;
 			return view('partials/pagination_ongoing', compact('data','jobType','status','color_status','site'))->render();

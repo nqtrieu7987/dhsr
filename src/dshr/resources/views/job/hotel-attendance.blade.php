@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div>
-                    <span class="bg-danger h4">Requires Attention</span>
+                    <span class="bg-danger h4 pl-0 pr-0">Requires Attention</span>
                 </div>
                 <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">
@@ -143,7 +143,7 @@
         <div class="row mt-5">
             <div class="col-sm-12">
                 <div>
-                    <span class="bg-warning h4">Pending</span>
+                    <span class="bg-warning h4 pl-0 pr-0">Pending</span>
                 </div>
                 <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">
@@ -233,7 +233,7 @@
         <div class="row mt-5">
             <div class="col-sm-12">
                 <div>
-                    <span class="bg-success h4">Approved</span>
+                    <span class="bg-success h4 pl-0 pr-0">Approved</span>
                 </div>
                 <div class="card-body-white mt-3">
                     <div class="table-responsive users-table">

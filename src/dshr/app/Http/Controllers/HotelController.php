@@ -110,12 +110,12 @@ class HotelController extends Controller
         $jobsPrev = AllJob::leftJoin('job', function($join) {
                         $join->on('all_jobs.job_id', '=', 'job.id');
                     })
-                    ->whereIn('all_jobs.job_id', $idPrev)->orderBy('all_jobs.timestamp', 'DESC')->paginate(20);
+                    ->with('jobs', 'users')->whereIn('all_jobs.job_id', $idPrev)->orderBy('all_jobs.timestamp', 'DESC')->paginate(20);
 
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
                         $join->on('all_jobs.job_id', '=', 'job.id');
                     })
-                    ->whereIn('job_id', $idOn)->orderBy('all_jobs.timestamp', 'DESC')->paginate(20);
+                    ->with('jobs', 'users')->whereIn('job_id', $idOn)->orderBy('all_jobs.timestamp', 'DESC')->paginate(20);
         $link_url = ['url' => route('hotel.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('hotel.edit',compact('hotel','jobsPrev','jobsOngoing','jobType','status','link_url','color_status'))->with('site','Hotel: '.$id);
     }
@@ -179,7 +179,13 @@ class HotelController extends Controller
      */
     public function destroy($id)
     {
-        Hotel::findOrFail($id)->delete();
+        $hotel = Hotel::findOrFail($id);
+        if($hotel->jobs()->count() > 0){
+            Session::flash('messageErr', 'Delete error!');
+        }else{
+            $hotel->delete();
+            Session::flash('messageSS', 'Delete success!');
+        }
         return redirect()->back();
     }
 }

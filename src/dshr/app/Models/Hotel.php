@@ -10,4 +10,8 @@ class Hotel extends Model
     public $fillable = [
     	'id','name','is_active','phone','address','image','logo','created_at','updated_at'
     ];
+
+    public function jobs() {
+        return $this->hasMany('App\Models\Job', 'hotel_id', 'id');
+    }
 }

@@ -35,17 +35,9 @@ class JobAdminController extends Controller
         }
         $datas= $jobs->orderBy('created_at','DESC')->paginate(50);
 
-        $types = JobType::pluck('name', 'id')->toArray();
-        $types[0] ='Select Job';
-        ksort($types);
-
-        $hotels = Hotel::pluck('name', 'id')->toArray();
-        $hotels[0] ='Select Hotel';
-        ksort($hotels);
-
-        $slots = Job::pluck('slot', 'slot')->toArray();
-        $slots[0] ='Slot';
-        ksort($slots);
+        $types = ['Select Job'] + JobType::pluck('name', 'id')->toArray();
+        $hotels = ['Select Hotel'] + Hotel::pluck('name', 'id')->toArray();
+        $slots = ['Slot'] + Job::pluck('slot', 'slot')->toArray();
         $view_type = config('app.view_type');
 
         $link_url = ['url' => route('admin.job.create'), 'title' => 'Adds', 'icon' =>'fa fa-plus-circle'];
@@ -126,7 +118,7 @@ class JobAdminController extends Controller
         $view_type = config('app.view_type');
         $color_status = config('app.color_status');
 
-        $jobsPrev = AllJob::where('job_id', $id)->orderBy('timestamp', 'DESC')->paginate(20);
+        $jobsPrev = AllJob::with('jobs', 'users')->where('job_id', $id)->orderBy('timestamp', 'DESC')->paginate(20);
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('admin.job-edit',compact('data','jobType','status','hotels','view_type','jobsPrev','link_url','color_status'))->with('site','Job: '.$id);
@@ -184,9 +176,7 @@ class JobAdminController extends Controller
         $status = config('app.job_status');
         $color_status = config('app.color_status');
 
-        $hotels = Hotel::pluck('name', 'id')->toArray();
-        $hotels[0] ='Select Hotel';
-        ksort($hotels);
+        $hotels = ['Select Hotel'] + Hotel::pluck('name', 'id')->toArray();
 
         //search
         $jobs = Job::select('*');
@@ -213,6 +203,7 @@ class JobAdminController extends Controller
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
             ->select('all_jobs.*', 'job.job_type_id', 'job.hotel_id')
+            ->with('jobs', 'users')
             ->whereIn('all_jobs.job_id', $ids)
             ->orderBy('updated_at', 'DESC')
             ->paginate(20);
@@ -277,16 +268,11 @@ class JobAdminController extends Controller
 
         $datas = null;
         if(count($ids) > 0){
-            $datas = AllJob::whereIn('job_id', $ids)->get();
+            $datas = AllJob::with('jobs', 'users')->whereIn('job_id', $ids)->get();
         }
 
-        $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $jobType[0] ='Select Job';
-        ksort($jobType);
-
-        $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $hotels[0] ='Select Hotel';
-        ksort($hotels);
+        $jobType = ['Select Job'] + JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $hotels = ['Select Hotel'] + Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
 
         $status = config('app.job_status');
         if($request->submit == 'export' && $datas != null){
@@ -350,7 +336,7 @@ class JobAdminController extends Controller
 
         $datas = null;
         if(count($ids) > 0){
-            $datas = AllJob::whereIn('job_id', $ids)->get();
+            $datas = AllJob::with('jobs', 'users')->whereIn('job_id', $ids)->get();
         }
 
         if ($datas != null) {

@@ -23,7 +23,7 @@ use Auth;
 class HomeController extends Controller
 {
     public function clocking(Request $request){
-		$datas = Clocking::orderBy('created_at', 'DESC')->orderBy('user_id', 'DESC')->paginate(50);
+		$datas = Clocking::with('jobs', 'users')->orderBy('created_at', 'DESC')->orderBy('user_id', 'DESC')->paginate(50);
 		$jobType = JobType::pluck('name', 'id')->toArray();
         $hotels = Hotel::pluck('name', 'id')->toArray();
     	return view('home.clocking', compact('datas','jobType','hotels'))
