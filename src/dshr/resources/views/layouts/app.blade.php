@@ -23,8 +23,8 @@
         @yield('template_linked_fonts')
 
         {{-- Styles --}}
-        <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}?v=end">
+        <link href="{{ mix('/css/dshr.css') }}" rel="stylesheet">
         @yield('template_linked_css')
 
         <style type="text/css">
@@ -83,7 +83,8 @@
         </div>
 
         {{-- Scripts --}}
-        <script src="{{ mix('/js/app.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ mix('/js/dshr.js') }}"></script>
         <script src="{{ asset('plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="{{ url('plugins/select2/js/select2.min.js') }}"></script>
         <script src="{{ url('js/jquery.minicolors.min.js') }}"></script>
