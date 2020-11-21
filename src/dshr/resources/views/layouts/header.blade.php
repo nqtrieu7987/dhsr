@@ -32,6 +32,7 @@
 {{-- <link href="{{ URL::asset('/css/lobibox.min.css')}}" rel="stylesheet" media="all"> --}}
 <link href="{{ URL::asset('/css/lobibox.css')}}?v=2" rel="stylesheet" media="all">
 
-<link href="{{ mix('/css/app.css') }}?v=27" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}?v=end">
+<link href="{{ mix('/css/dshr.css') }}" rel="stylesheet">
 @yield('template_linked_css')
 </head>
