@@ -101,7 +101,7 @@ class HotelController extends Controller
     {
         $hotel=Hotel::findOrFail($id);
 
-        $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $jobType = JobType::active()->pluck('name', 'id')->toArray();
         $status = config('app.job_status');
         $color_status = config('app.color_status');
 
@@ -133,7 +133,7 @@ class HotelController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $hotel= Hotel::findOrFail($id);
+        $hotel = Hotel::findOrFail($id);
 
         $image = $hotel->image;
         if($request->image !=null && $hotel->image != $request->image)
@@ -158,7 +158,7 @@ class HotelController extends Controller
         }
 
         $active = $request->is_active;
-        Hotel::findOrFail($id)->update([
+        $hotel->update([
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,

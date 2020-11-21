@@ -235,7 +235,7 @@ class UsersManagementController extends Controller
         $jobsPrev = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->with('jobs', 'users')
+            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','<',date('Y-m-d'))
             ->orderBy('status', 'ASC')
@@ -244,13 +244,13 @@ class UsersManagementController extends Controller
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->with('jobs', 'users')
+            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
             ->where('all_jobs.user_id', $id)
             ->where('job.start_date','>=',date('Y-m-d'))
             ->orderBy('status', 'ASC')
             ->paginate(20);
 
-        $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+        $viewTypes = ViewType::active()->pluck('name','id')->toArray();
         
         $link_url = ['url' => '/users', 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('usersmanagement.update-user', compact('jobsPrev','jobsOngoing','jobType','status','color_status','viewTypes','link_url'))->with($data)->with('site', 'Users: '.$id);
@@ -260,7 +260,7 @@ class UsersManagementController extends Controller
         $user = User::findOrFail($id);
         $status_data = null;
         if($user->status_data == null || $user->status_data ==''){
-            $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+            $viewTypes = ViewType::active()->pluck('name','id')->toArray();
             foreach ($viewTypes as $key => $value) {
                 $status_data[$key] = 0;
             }

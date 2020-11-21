@@ -117,7 +117,7 @@ class BankController extends Controller
         }
 
         $active = $request->is_active;
-        Bank::findOrFail($id)->update([
+        $bank->update([
             'name' => $request->name,
             'logo' => $logo,
             'is_active'  => $active,

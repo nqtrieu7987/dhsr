@@ -30,7 +30,7 @@ class AjaxController extends Controller
         		$data = AllJob::leftJoin('job', function($join) {
 	                $join->on('all_jobs.job_id', '=', 'job.id');
 	            })
-	            ->with('jobs', 'users')
+	            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
                 ->where('all_jobs.user_id', $request->id)
 	            ->where('job.start_date','<',date('Y-m-d'))
 	            ->paginate(20);
@@ -63,7 +63,7 @@ class AjaxController extends Controller
         		$data = AllJob::leftJoin('job', function($join) {
 	                $join->on('all_jobs.job_id', '=', 'job.id');
 	            })
-	            ->with('jobs', 'users')
+	            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
                 ->where('all_jobs.user_id', $request->id)
 	            ->where('job.start_date','>=',date('Y-m-d'))
 	            ->paginate(20);

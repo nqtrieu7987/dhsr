@@ -96,10 +96,10 @@ class JobTypeController extends Controller
             'name' => 'required|max:255',
         ]);
 
-        $data= JobType::findOrFail($id);
+        $data = JobType::findOrFail($id);
 
         $active = $request->is_active;
-        JobType::findOrFail($id)->update([
+        $data->update([
             'name' => $request->name,
             'comment' => $request->comment,
             'is_active'  => $active,

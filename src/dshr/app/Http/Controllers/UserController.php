@@ -34,7 +34,7 @@ class UserController extends Controller
         $jobsOngoing = AllJob::leftJoin('job', function($join) {
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
-            ->with('jobs', 'users')
+            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
             ->where('job.start_date','>=', date('Y-m-d'))
             ->where('job.is_active', 1)
             ->orderBy('job.start_date', 'ASC')

@@ -116,7 +116,7 @@ class HomeController extends Controller
                     $msg = abs($data->activated - 1);
 
                     if($data->status_data == null || $data->status_data ==''){
-                        $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+                        $viewTypes = ViewType::active()->pluck('name','id')->toArray();
                         foreach ($viewTypes as $key => $value) {
                             $status_data[$key] = 0;
                         }
@@ -139,7 +139,7 @@ class HomeController extends Controller
     public function changeStatusUser(Request $request){
         $user = User::findOrFail($request->id);
         if($user->status_data == null || $user->status_data ==''){
-            $viewTypes = ViewType::where('is_active', 1)->pluck('name','id')->toArray();
+            $viewTypes = ViewType::active()->pluck('name','id')->toArray();
             foreach ($viewTypes as $key => $value) {
                 $status_data[$key] = 0;
             }
@@ -281,7 +281,7 @@ class HomeController extends Controller
 
 
     public function listUsers(Request $request){
-        $users = Admin::paginate(20);
+        $users = Admin::with('hotels')->paginate(20);
 
         return view('admin.list-users', compact('users'))->with('site','HotelAdmin');
     }

@@ -10,4 +10,8 @@ class ViewType extends Model
     public $fillable = [
     	'id','name','created_at','updated_at','image_active','image_deactive','is_active'
     ];
+
+    public function scopeActive($query){
+        return $query->where('is_active', 1);
+    }
 }

@@ -82,8 +82,11 @@ Job List
                                                 {!! \App\Helper\VtHelper::checkStatusIcon($data->is_active)!!}
                                             </td>
                                             <td class="align-center">
-                                                @php $status = $data->is_active == 1 ? 'Deactivated' : 'Active'; @endphp
-                                                <span class="{{$data->is_active == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$data->id}}" id="status_{{$data->id}}" value="{{$status}}">{{$status}}</span>
+                                                @if( $data->is_active == 1)
+                                                    <span class="{{$data->is_active == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$data->id}}" id="status_{{$data->id}}" value="Deactivated">Deactivated</span>
+                                                @else
+                                                    <span class="{{$data->is_active == 1 ? 'text-danger' : 'text-success'}} changeStatus" data-id="{{$data->id}}" id="status_{{$data->id}}" value="Active">Active</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -53,8 +53,8 @@ class JobAdminController extends Controller
      */
     public function create()
     {
-        $types = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $types = JobType::active()->pluck('name', 'id')->toArray();
+        $hotels = Hotel::active()->pluck('name', 'id')->toArray();
         $view_type = config('app.view_type');
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
@@ -112,9 +112,9 @@ class JobAdminController extends Controller
     public function edit($id)
     {
         $data=Job::findOrFail($id);
-        $jobType = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $jobType = JobType::active()->pluck('name', 'id')->toArray();
         $status = config('app.job_status');
-        $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $hotels = Hotel::active()->pluck('name', 'id')->toArray();
         $view_type = config('app.view_type');
         $color_status = config('app.color_status');
 
@@ -140,10 +140,10 @@ class JobAdminController extends Controller
             'start_date' => 'required'
         ]);
 
-        $data= Job::findOrFail($id);
+        $data = Job::findOrFail($id);
 
         $active = $request->is_active;
-        Job::findOrFail($id)->update([
+        $data->update([
             /*'hotel_id' => $request->hotel_id,*/
             'job_type_id' => $request->job_type_id,
             'slot' => $request->slot,
@@ -203,7 +203,7 @@ class JobAdminController extends Controller
                 $join->on('all_jobs.job_id', '=', 'job.id');
             })
             ->select('all_jobs.*', 'job.job_type_id', 'job.hotel_id')
-            ->with('jobs', 'users')
+            ->with(['users', 'jobs' => function($jobs){$jobs->with('hotels','types');}])
             ->whereIn('all_jobs.job_id', $ids)
             ->orderBy('updated_at', 'DESC')
             ->paginate(20);
@@ -271,8 +271,8 @@ class JobAdminController extends Controller
             $datas = AllJob::with('jobs', 'users')->whereIn('job_id', $ids)->get();
         }
 
-        $jobType = ['Select Job'] + JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $hotels = ['Select Hotel'] + Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $jobType = ['Select Job'] + JobType::active()->pluck('name', 'id')->toArray();
+        $hotels = ['Select Hotel'] + Hotel::active()->pluck('name', 'id')->toArray();
 
         $status = config('app.job_status');
         if($request->submit == 'export' && $datas != null){
@@ -372,8 +372,8 @@ class JobAdminController extends Controller
 
     public function createMulti()
     {
-        $types = JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $hotels = Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $types = JobType::active()->pluck('name', 'id')->toArray();
+        $hotels = Hotel::active()->pluck('name', 'id')->toArray();
         $view_type = config('app.view_type');
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];

@@ -10,4 +10,8 @@ class Bank extends Model
     public $fillable = [
     	'id','name','is_active','logo','created_at','updated_at'
     ];
+
+    public function scopeActive($query){
+        return $query->where('is_active', 1);
+    }
 }

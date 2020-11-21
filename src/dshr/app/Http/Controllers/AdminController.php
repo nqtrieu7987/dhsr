@@ -66,8 +66,8 @@ class AdminController extends Controller
         $check_search = false;
         $jobs = Job::select('id');
         $status = config('app.job_status');
-        $jobType = ['Select Job'] + JobType::where('is_active', 1)->pluck('name', 'id')->toArray();
-        $hotels = ['Select Hotel'] + Hotel::where('is_active', 1)->pluck('name', 'id')->toArray();
+        $jobType = ['Select Job'] + JobType::active()->pluck('name', 'id')->toArray();
+        $hotels = ['Select Hotel'] + Hotel::active()->pluck('name', 'id')->toArray();
         $view_type = config('app.view_type');
         $color_status = config('app.color_status');
 
