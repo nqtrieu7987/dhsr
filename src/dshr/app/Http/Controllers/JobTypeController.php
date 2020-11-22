@@ -117,8 +117,8 @@ class JobTypeController extends Controller
      */
     public function destroy($id)
     {
-        JobType::findOrFail($id)->delete();
+        /*JobType::findOrFail($id)->delete();
         Session::flash('success', 'Delete successfully!');
-        return redirect()->route('job-type.index');
+        return redirect()->route('job-type.index');*/
     }
 }

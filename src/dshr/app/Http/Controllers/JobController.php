@@ -172,9 +172,9 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        Job::findOrFail($id)->delete();
+        /*Job::findOrFail($id)->delete();
         Session::flash('success', 'Delete successfully!');
-        return redirect()->route('job.index');
+        return redirect()->route('job.index');*/
     }
 
     public function AllJobs(Request $request){

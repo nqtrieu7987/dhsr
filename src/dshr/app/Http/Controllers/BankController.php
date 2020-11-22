@@ -135,7 +135,7 @@ class BankController extends Controller
      */
     public function destroy($id)
     {
-        Bank::findOrFail($id)->delete();
-        return redirect()->back();
+        /*Bank::findOrFail($id)->delete();
+        return redirect()->back();*/
     }
 }

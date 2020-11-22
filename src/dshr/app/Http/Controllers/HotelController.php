@@ -179,13 +179,13 @@ class HotelController extends Controller
      */
     public function destroy($id)
     {
-        $hotel = Hotel::findOrFail($id);
+        /*$hotel = Hotel::findOrFail($id);
         if($hotel->jobs()->count() > 0){
             Session::flash('messageErr', 'Delete error!');
         }else{
             $hotel->delete();
             Session::flash('messageSS', 'Delete success!');
         }
-        return redirect()->back();
+        return redirect()->back();*/
     }
 }
