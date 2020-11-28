@@ -129,7 +129,7 @@ class AdminController extends Controller
                         'Date Of Work' => date('Y-m-d H:i:s', $v['timestamp']/1000),
                         'Name' => $v->users->name,
                         'Exp' => $v->users->jobsDone > 0 ? 'Yes' : 'No',
-                        'Sex' => $v->users->gender = 1 ? 'M' : 'F',
+                        'Sex' => $v->users->userGender = 1 ? 'M' : 'F',
                         'Feedback' => $v->users->feedback,
                         'IC/FIN No.' => $v->users->userNRIC,
                         'Shift' => $v->jobs->start_time.' - '.$v->jobs->end_time,
