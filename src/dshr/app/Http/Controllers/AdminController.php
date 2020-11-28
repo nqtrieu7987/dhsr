@@ -127,7 +127,7 @@ class AdminController extends Controller
                     $data_export[] = [
                         'No' => $k+1,
                         'Date Of Work' => date('Y-m-d H:i:s', $v['timestamp']/1000),
-                        'Name' => $v->users->name,
+                        'Name' => $v->users->userName,
                         'Exp' => $v->users->jobsDone > 0 ? 'Yes' : 'No',
                         'Sex' => $v->users->userGender = 1 ? 'M' : 'F',
                         'Feedback' => $v->users->feedback,
