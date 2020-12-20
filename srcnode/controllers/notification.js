@@ -40,7 +40,7 @@ function createMessageWithEmail(title, subtitle, content, email, data = null) {
 function isAfternoonTime() {
     let nowDate = new Date(Date.now());
     let nowHours = nowDate.getHours();
-    if (nowHours > 12) {
+    if (nowHours < 12) {
         return false;
     }
 
