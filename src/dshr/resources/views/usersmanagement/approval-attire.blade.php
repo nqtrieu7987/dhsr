@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="card-body pd-xs-0">
-                        <div class="table-responsive users-table">
+                        <div class="table-responsive users-table overflow-auto">
                             <table class="table table-striped table-condensed data-table">
                                 <caption id="user_count">
                                     {{ trans_choice('usersmanagement.users-table.caption', 1, ['userscount' => $users->count()]) }}

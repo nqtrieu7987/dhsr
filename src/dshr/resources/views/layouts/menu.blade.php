@@ -229,7 +229,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('user.approvalAttire')}}" class="nav-link @if(isset($site) && $site == 'approval-attire') active @endif">
+            <a href="{{route('user.approvalAttire')}}" class="nav-link @if(isset($site) && $site == 'Approval Attire') active @endif">
               <img class="icon-menu-left" src="{{ url('/images/approval-icon.png') }}"/>
               <p>Approval Attire</p>
             </a>

@@ -635,7 +635,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
 
                             <div id="changepw" class="tab-pane fade show active">
                                 <div class="table-responsive users-table">
-                                    <div id="table_ongoing">
+                                    <div id="table_ongoing" class="overflow-auto">
                                         @include('partials/pagination_ongoing', ['data' => $jobsOngoing, 'name' => 'ongoing'])
                                     </div>
                                 </div>
@@ -643,7 +643,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
 
                             <div id="deleteAccount" class="tab-pane fade">
                                 <div class="table-responsive users-table">
-                                    <div id="table_data">
+                                    <div id="table_data" class="overflow-auto">
                                         @include('partials/pagination_data', ['data' => $jobsPrev, 'name' => 'prev'])
                                     </div>
                                 </div>
@@ -653,7 +653,7 @@ if($user->userShoesApproved == 1) {$userShoesApproved = ['checked' => 'checked',
 
                                     <div class="row">
                                         <div class="col-12">
-                                            <div class="table-responsive users-table">
+                                            <div class="table-responsive users-table overflow-auto">
                                                 <table class="table table-striped table-condensed data-table">
                                                     <thead>
                                                         <tr>

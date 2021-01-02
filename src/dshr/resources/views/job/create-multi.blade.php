@@ -37,7 +37,7 @@
         <div class="card card-default">
 
           <div class="card-body">
-            <div class="table-responsive users-table">
+            <div class="table-responsive users-table overflow-auto">
                 <table class="table table-striped table-condensed data-table" id="ct_blah">
                     <thead>
                         <tr>

@@ -48,7 +48,7 @@
                     <span class="bg-danger h4 pl-2 pr-2">Requires Attention</span>
                 </div>
                 <div class="card-body-white mt-3">
-                    <div class="table-responsive users-table">
+                    <div class="table-responsive users-table overflow-auto">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
                                 <tr>
@@ -146,7 +146,7 @@
                     <span class="bg-warning h4 pl-2 pr-2">Pending</span>
                 </div>
                 <div class="card-body-white mt-3">
-                    <div class="table-responsive users-table">
+                    <div class="table-responsive users-table overflow-auto">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
                                 <tr>
@@ -238,7 +238,7 @@
                     <span class="bg-success h4 pl-2 pr-2">Approved</span>
                 </div>
                 <div class="card-body-white mt-3">
-                    <div class="table-responsive users-table">
+                    <div class="table-responsive users-table overflow-auto">
                         <table class="table table-striped table-condensed data-table" id="ct_blah">
                             <thead>
                                 <tr>

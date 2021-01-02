@@ -283,7 +283,10 @@ class JobController extends Controller
         $hotels = ['Select Hotel'] + Hotel::active()->pluck('name', 'id')->toArray();
 
         $status = config('app.job_status');
+        $colors = config('app.color_status');
+
         if($request->submit == 'export' && $datas != null){
+            $data_export = [];
             foreach ($datas as $k => $v) {
                 $data_export[] = [
                     'No' => $k+1,
@@ -311,7 +314,7 @@ class JobController extends Controller
             return Excel::download(new JobExport($data_export, $hotel, $job), $hotel->name.' ('.$job->name.') '.date('Y-m-d', time()).'.xlsx');
         }
 
-        return view('job.report-job',compact('datas','status','jobType','hotels','check_search'))
+        return view('job.report-job',compact('datas','status','colors','jobType','hotels','check_search'))
                 ->with('site','Hotel Attendance');
     }
 

@@ -11,7 +11,7 @@
                         <div class="tab-content">
                             <div id="deleteAccount" class="tab-pane fade show active">
                                 <div class="table-responsive users-table">
-                                  <div id="table_data">
+                                  <div id="table_data" class="overflow-auto">
                                     <table class="table table-striped table-condensed data-table">
                                         <thead>
                                             <tr>

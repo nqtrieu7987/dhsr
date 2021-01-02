@@ -179,7 +179,7 @@
 
                             <div id="changepw" class="tab-pane fade show active">
                                 <div class="table-responsive users-table">
-                                    <div id="table_ongoing">
+                                    <div id="table_ongoing" class="overflow-auto">
                                         @include('partials/pagination_ongoing', ['data' => $jobsOngoing, 'name' => 'ongoing'])
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
 
                             <div id="deleteAccount" class="tab-pane fade">
                                 <div class="table-responsive users-table">
-                                  <div id="table_data">
+                                  <div id="table_data" class="overflow-auto">
                                     @include('partials/pagination_data', ['data' => $jobsPrev, 'name' => 'prev'])
                                   </div>
                                 </div>

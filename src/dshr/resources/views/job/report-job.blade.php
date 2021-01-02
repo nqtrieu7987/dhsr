@@ -42,7 +42,7 @@
                 <div class="card panel-default">
 
                     <div class="card-body pd-xs-0">
-                        <div class="table-responsive users-table">
+                        <div class="table-responsive users-table overflow-auto">
                             <table class="table table-striped table-condensed data-table">
                                 <thead>
                                     <tr>
@@ -68,15 +68,7 @@
                                             <td><a href="{{route('user.edit', $data->users->id)}}">{{$data->users->userName}}</a></td>
                                             <td>{{ $data->jobs != null ? array_get($jobType, $data->jobs['job_type_id']): ''}}</td>
                                             <td>
-                                                @if($data->status == 3)
-                                                    {!! Form::open(array('url' => 'job/approved/' . $data->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Approved')) !!}
-                                                        {!! Form::hidden('_method', 'DELETE') !!}
-                                                        {!! Form::hidden('remarks', $data->remarks) !!}
-                                                        {!! Form::button('<span class="hidden-xs hidden-sm">Approved</span><span class="hidden-xs hidden-sm hidden-md"></span>', array('class' => 'btn btn-warning btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmApproved', 'data-title' => 'Approved', 'data-message' => 'Are you sure?')) !!}
-                                                    {!! Form::close() !!}
-                                                @else
-                                                    <span class="btn btn-success btn-sm">{{array_get($status, $data->status)}}</span>
-                                                @endif
+                                                <span class="btn btn-{{array_get($colors, $data->status)}} btn-sm">{{array_get($status, $data->status)}}</span>
                                             </td>
                                             <td>{{$data->real_start}}</td>
                                             <td>{{$data->real_end}}</td>
@@ -97,7 +89,7 @@
             </div>
         </div>
     </div>
-
+    
 @endsection
 
 @section('footer_scripts')

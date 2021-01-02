@@ -28,7 +28,7 @@
 
                     <div class="panel-body">
 
-                        <div class="table-responsive users-table">
+                        <div class="table-responsive users-table overflow-auto">
                             <table class="table table-striped table-condensed data-table">
                                 <thead>
                                     <tr>

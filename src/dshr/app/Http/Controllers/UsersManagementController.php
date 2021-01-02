@@ -92,7 +92,7 @@ class UsersManagementController extends Controller
         $roles = Role::all();
 
         $link_url = ['url' => '/users/create', 'title' => 'Add', 'icon' =>'fa fa-plus-circle'];
-        return View('usersmanagement.approval-attire', compact('users', 'roles','link_url'))->with('site', 'approval-attire');
+        return View('usersmanagement.approval-attire', compact('users', 'roles','link_url'))->with('site', 'Approval Attire');
     }
 
     /**

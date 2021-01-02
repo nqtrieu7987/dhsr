@@ -55,7 +55,7 @@
 
                         @else
 
-                            <div class="table-responsive users-table">
+                            <div class="table-responsive users-table overflow-auto">
                                 <table class="table table-striped table-sm data-table">
                                     <caption id="user_count">
                                         {{ trans_choice('usersmanagement.users-table.caption', 1, ['userscount' => $users->count()]) }}
