@@ -72,7 +72,7 @@
                                             </td>
                                             <td>{{$data->real_start}}</td>
                                             <td>{{$data->real_end}}</td>
-                                            <td>{{request()->get('start_date')}}</td>
+                                            <td>{{$data->jobs->start_date}}</td>
                                             <td>{{$data->paidTimeIn}}</td>
                                             <td>{{$data->paidTimeOut}}</td>
                                             <td>{{$data->breakTime}}</td>
