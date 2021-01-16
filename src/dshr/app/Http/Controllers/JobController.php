@@ -383,16 +383,33 @@ class JobController extends Controller
 
     public function createMulti()
     {
-        $types = JobType::active()->pluck('name', 'id')->toArray();
-        $hotels = Hotel::active()->pluck('name', 'id')->toArray();
+        $types = JobType::active()->get();
+        $hotels = Hotel::active()->get();
         $view_type = config('app.view_type');
+        $view_type = collect($view_type);
 
         $link_url = ['url' => route('job.index'), 'title' => 'Back', 'icon' =>'fa fa-reply'];
         return view('job.create-multi', compact('types','hotels','view_type','link_url'))->with('site','Job');
     }
 
     public function createMultiPost(Request $request){
-        $start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
+        $data = Job::create([
+            'hotel_id' => $request->hotel['id'],
+            'job_type_id' => $request->type['id'],
+            'view_type' => $request->view['value'],
+            'slot' => $request->slot,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'start_date' => $request->start_date,
+            'is_active'  => 1,
+        ]);
+        Session::flash('success', 'Create successfully!');
+        return response()->json([
+            'id' => $data->id,
+            'msg' => 'Create successfully'
+        ]);
+
+        /*$start_date = Carbon::createFromFormat('d/m/Y', $request->start_date)->toDateString();
         $start_time = str_replace(" ", "", $request->get('start_time'));
         $end_time = str_replace(" ", "", $request->get('end_time'));
         $msg = 'Create successfully!';
@@ -429,6 +446,7 @@ class JobController extends Controller
             'id' => $data->id,
             'msg' => $msg
         ]);
+        */
     }
 
     public function inOut(Request $request, $id){

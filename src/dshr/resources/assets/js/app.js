@@ -21,9 +21,20 @@ window.Vue = require('vue');
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('users-count', require('./components/UsersCount.vue').default);
+Vue.component('create-jobs', require('./components/CreateJobs.vue').default);
+Vue.component('job-item', require('./components/JobItem.vue').default);
+Vue.component('form-status', require('./components/FormStatus.vue').default);
+
+
+import vSelect from 'vue-select';
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+
+Vue.component('v-select', vSelect)
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons);
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });
 
 $.fn.extend({

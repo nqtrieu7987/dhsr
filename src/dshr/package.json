@@ -19,18 +19,22 @@
         "lodash": "^4.17.11",
         "popper.js": "^1.14",
         "resolve-url-loader": "2.3.1",
-        "sass": "^1.17.2",
+        "sass": "^1.32.4",
         "sass-loader": "7.*",
         "vue": "^2.6.8",
         "vue-template-compiler": "^2.6.8"
     },
     "dependencies": {
+        "bootstrap-vue": "^2.21.2",
         "chart.js": "^2.7.3",
         "dropzone": "^5.5.1",
         "hideshowpassword": "^2.1.1",
         "laravel-echo": "^1.5.3",
         "moment": "^2.24.0",
         "password-strength-meter": "^1.2.2",
-        "pusher-js": "^4.4.0"
+        "pusher-js": "^4.4.0",
+        "v-calendar": "^2.2.0",
+        "vue-select": "^3.11.2",
+        "vue2-datepicker": "^3.8.2"
     }
 }

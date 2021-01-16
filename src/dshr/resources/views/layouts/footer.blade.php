@@ -43,3 +43,4 @@ function goBack() {
 <script src="{{ url('dist/js/demo.js') }}"></script>
 <script src="{{ url('plugins/select2/js/select2.min.js') }}"></script>
 <script src="{{ URL::asset('/js/lobibox.js')}}" type="text/javascript"></script>
+<script src="{{ mix('/dist/js/app.js') }}"></script>

@@ -14,3 +14,13 @@ table.table {
 .form-inline{
 	overflow: auto;
 }
+.require-select{
+    .vs__dropdown-toggle {
+        border-color: brown !important;
+    }
+}
+.require-select{
+    .mx-input {
+        border-color: brown !important;
+    }
+}
