@@ -36,7 +36,7 @@
       <div class="col-md-12 col-md-offset-1">
         <div class="card card-default">
             <div class="card-body">
-                <div class="table-responsive users-table overflow-auto">
+                <div>
                     <create-jobs :hotels="{{ json_encode($hotels) }}" :types="{{ json_encode($types) }}" :view_type="{{ json_encode($view_type) }}" :showErrorItem="false"></create-jobs>
                 </div>
             </div>
