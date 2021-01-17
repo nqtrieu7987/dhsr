@@ -1,8 +1,8 @@
 <template>
 <div class="form-row">
 	<div class="col-md-1">
-        <i style="font-size: 24px" class="fa fa-trash-o fa-fw" @click="removeItem" aria-hidden="true"></i>
-        <i style="font-size: 24px" class="fa fa-fw fa-save" @click="saveAndClose" aria-hidden="true"></i>
+        <i style="font-size: 24px;cursor: pointer;" class="fa fa-trash-o fa-fw" @click="removeItem" aria-hidden="true"></i>
+        <i style="font-size: 24px;cursor: pointer;" class="fa fa-fw fa-save" @click="saveAndClose" aria-hidden="true"></i>
     </div>
     <div class="col-md-3">
         <v-select :class="isWarningHotel ? 'require-select' : ''" v-model="hotel" label="name" :options="hotels" 

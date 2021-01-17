@@ -27,6 +27,7 @@
       <div class="row">
           <div class="col-12">
                 <div id="show-mess"></div>
+                <form-status></form-status>
           </div>
       </div>
   </div>
