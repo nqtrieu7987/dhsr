@@ -403,7 +403,7 @@ class JobController extends Controller
             'start_date' => $request->start_date,
             'is_active'  => 1,
         ]);
-        Session::flash('success', 'Create successfully!');
+        //Session::flash('success', 'Create successfully!');
         return response()->json([
             'id' => $data->id,
             'msg' => 'Create successfully'
